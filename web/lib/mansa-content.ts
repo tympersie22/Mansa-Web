@@ -1,7 +1,7 @@
 export const siteName = 'MANSA TOURS AND TRAVEL';
 
 export const heroVideo =
-  '/videos/web-mansa.mov?v=2';
+  '/videos/web-mansa.m4v?v=3';
 
 export const heroPoster =
   'https://images.unsplash.com/photo-1519046904884-53103b34b206?auto=format&fit=crop&w=1600&q=80';
