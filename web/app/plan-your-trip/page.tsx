@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import PageHero from '@/components/mansa/PageHero';
 import type { JourneyItem } from '@/lib/experience-data';
 import { readJourney, subscribeJourney } from '@/lib/journey-storage';
-import { submitContactInquiry } from '@/lib/contact-service';
+import { submitPlanningInquiry } from '@/lib/mansa-backend';
 import { contactHref, siteConfig } from '@/lib/site-config';
 
 export default function PlanYourTripPage() {
@@ -13,10 +13,12 @@ export default function PlanYourTripPage() {
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState('');
   const [formData, setFormData] = useState({
-    name: '',
+    fullName: '',
     email: '',
+    phoneWhatsapp: '',
     travelWindow: '',
-    guests: '',
+    isDateFlexible: false,
+    guests: '2',
     interests: '',
     notes: '',
   });
@@ -47,21 +49,17 @@ export default function PlanYourTripPage() {
     setError('');
 
     try {
-      await submitContactInquiry({
-        name: formData.name,
+      await submitPlanningInquiry({
+        fullName: formData.fullName,
         email: formData.email,
-        subject: 'Plan Your Trip Inquiry',
-        message: [
-          `Travel window: ${formData.travelWindow || 'Not provided'}`,
-          `Guests: ${formData.guests || 'Not provided'}`,
-          `Interests: ${formData.interests || 'Not provided'}`,
-          `Selected experiences: ${
-            selectedExperiences.length
-              ? selectedExperiences.map((item) => item.title).join(', ')
-              : 'None selected'
-          }`,
-          `Notes: ${formData.notes || 'Not provided'}`,
-        ].join('\n'),
+        phoneWhatsapp: formData.phoneWhatsapp,
+        travelWindow: formData.travelWindow,
+        isDateFlexible: formData.isDateFlexible,
+        guestCount: Number.parseInt(formData.guests, 10) || 1,
+        interests: formData.interests,
+        message: formData.notes,
+        sourcePage: '/plan-your-trip',
+        selectedExperiences,
       });
       setSubmitted(true);
     } catch (err) {
@@ -118,8 +116,8 @@ export default function PlanYourTripPage() {
                     Full Name
                     <input
                       className="input-dark"
-                      value={formData.name}
-                      onChange={(event) => setFormData({ ...formData, name: event.target.value })}
+                      value={formData.fullName}
+                      onChange={(event) => setFormData({ ...formData, fullName: event.target.value })}
                       required
                     />
                   </label>
@@ -136,6 +134,17 @@ export default function PlanYourTripPage() {
                 </div>
                 <div className="grid gap-5 md:grid-cols-2">
                   <label className="grid gap-2 text-sm text-text-secondary">
+                    Phone / WhatsApp
+                    <input
+                      className="input-dark"
+                      placeholder="+255..."
+                      value={formData.phoneWhatsapp}
+                      onChange={(event) =>
+                        setFormData({ ...formData, phoneWhatsapp: event.target.value })
+                      }
+                    />
+                  </label>
+                  <label className="grid gap-2 text-sm text-text-secondary">
                     Travel Window
                     <input
                       className="input-dark"
@@ -150,12 +159,23 @@ export default function PlanYourTripPage() {
                     Number of Guests
                     <input
                       className="input-dark"
-                      placeholder="2 adults, family of 4, etc."
+                      inputMode="numeric"
+                      placeholder="2"
                       value={formData.guests}
                       onChange={(event) => setFormData({ ...formData, guests: event.target.value })}
                     />
                   </label>
                 </div>
+                <label className="flex items-center gap-3 text-sm text-text-secondary">
+                  <input
+                    type="checkbox"
+                    checked={formData.isDateFlexible}
+                    onChange={(event) =>
+                      setFormData({ ...formData, isDateFlexible: event.target.checked })
+                    }
+                  />
+                  <span>My travel dates are flexible.</span>
+                </label>
                 <label className="grid gap-2 text-sm text-text-secondary">
                   Interests
                   <input

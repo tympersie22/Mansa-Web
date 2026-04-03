@@ -4,6 +4,23 @@ import type { JourneyItem } from '@/lib/experience-data';
 
 const STORAGE_KEY = 'mansa-journey';
 const EVENT_NAME = 'mansa-journey-updated';
+const SESSION_KEY = 'mansa-journey-session-id';
+const VISITOR_KEY = 'mansa-journey-visitor-token';
+
+function createToken(prefix: string) {
+  return `${prefix}-${Math.random().toString(36).slice(2, 10)}-${Date.now().toString(36)}`;
+}
+
+function readOrCreateKey(storageKey: string, prefix: string) {
+  if (typeof window === 'undefined') return `${prefix}-server`;
+
+  const existing = window.localStorage.getItem(storageKey);
+  if (existing) return existing;
+
+  const next = createToken(prefix);
+  window.localStorage.setItem(storageKey, next);
+  return next;
+}
 
 export function readJourney(): JourneyItem[] {
   if (typeof window === 'undefined') return [];
@@ -48,4 +65,12 @@ export function subscribeJourney(callback: () => void) {
     window.removeEventListener(EVENT_NAME, callback);
     window.removeEventListener('storage', callback);
   };
+}
+
+export function getJourneySessionId() {
+  return readOrCreateKey(SESSION_KEY, 'session');
+}
+
+export function getJourneyVisitorToken() {
+  return readOrCreateKey(VISITOR_KEY, 'visitor');
 }
