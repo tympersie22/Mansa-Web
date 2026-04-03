@@ -32,6 +32,22 @@ async function request<T>(url: string, method: 'PATCH', body: Record<string, unk
   }
 }
 
+async function requestWithMethod<T>(url: string, method: 'PATCH' | 'PUT', body: Record<string, unknown>): Promise<T | null> {
+  try {
+    const headers = await buildAuthHeaders();
+    const res = await fetch(url, {
+      method,
+      headers,
+      body: JSON.stringify(body),
+    });
+
+    if (!res.ok) return null;
+    return (await res.json()) as T;
+  } catch {
+    return null;
+  }
+}
+
 export const supabaseAdminApi = {
   updateRoomBasePrice(roomId: string, basePrice: number) {
     return request<{ ok: boolean }>(`/api/admin/rooms/${roomId}/price`, 'PATCH', { basePrice });
@@ -45,5 +61,12 @@ export const supabaseAdminApi = {
       status,
       reason,
     });
+  },
+  saveItinerary(slug: string, payload: Record<string, unknown>) {
+    return requestWithMethod<{ ok: boolean; slug: string; published: boolean }>(
+      `/api/admin/itineraries/${slug}`,
+      'PUT',
+      payload
+    );
   },
 };

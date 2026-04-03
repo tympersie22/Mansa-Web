@@ -4,8 +4,8 @@ import AdminLayout from '@/components/AdminLayout';
 import { AuthProvider } from '@/lib/AuthContext';
 
 export const metadata: Metadata = {
-  title: 'Twiga AGM Admin',
-  description: 'Property management dashboard for Twiga Residence',
+  title: 'Mansa Admin',
+  description: 'Itinerary builder and journey planning admin for Mansa Tours & Travel',
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

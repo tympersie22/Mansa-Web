@@ -44,17 +44,17 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-900 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-[#161715] flex items-center justify-center p-4">
       <motion.div className="w-full max-w-md" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
         <div className="text-center mb-8">
-          <div className="w-16 h-16 bg-green-600 rounded-2xl flex items-center justify-center mx-auto mb-4">
-            <span className="text-white font-bold text-2xl">T</span>
+          <div className="w-16 h-16 bg-[#fbb040] rounded-2xl flex items-center justify-center mx-auto mb-4">
+            <span className="text-[#2a2417] font-bold text-2xl">M</span>
           </div>
-          <h1 className="text-2xl font-bold text-white">Twiga AGM</h1>
-          <p className="text-gray-400 mt-1">Admin Dashboard</p>
+          <h1 className="text-2xl font-bold text-white">Mansa Tours & Travel</h1>
+          <p className="text-gray-400 mt-1">Itinerary Builder Admin</p>
         </div>
 
-        <div className="bg-gray-800 rounded-xl border border-gray-700 p-8">
+        <div className="bg-[#22231f] rounded-xl border border-[#3a3d36] p-8">
           <h2 className="text-xl font-semibold text-white mb-6">Sign in to your account</h2>
 
           <form onSubmit={handleSubmit} className="space-y-5">
@@ -66,8 +66,8 @@ export default function LoginPage() {
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  placeholder="admin@twiga-agm.com"
-                  className="w-full bg-gray-700 border border-gray-600 rounded-lg pl-10 pr-4 py-3 text-white placeholder-gray-400 focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                  placeholder="admin@mansa.travel"
+                  className="w-full bg-[#2d302a] border border-[#484c44] rounded-lg pl-10 pr-4 py-3 text-white placeholder-gray-400 focus:ring-2 focus:ring-[#fbb040] focus:border-transparent"
                 />
               </div>
             </div>
@@ -81,7 +81,7 @@ export default function LoginPage() {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="Enter your password"
-                  className="w-full bg-gray-700 border border-gray-600 rounded-lg pl-10 pr-12 py-3 text-white placeholder-gray-400 focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                  className="w-full bg-[#2d302a] border border-[#484c44] rounded-lg pl-10 pr-12 py-3 text-white placeholder-gray-400 focus:ring-2 focus:ring-[#fbb040] focus:border-transparent"
                 />
                 <button
                   type="button"
@@ -103,7 +103,7 @@ export default function LoginPage() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full bg-green-700 hover:bg-green-600 text-white py-3 rounded-lg font-semibold transition disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full bg-[#fbb040] hover:bg-[#f1a52f] text-[#241f15] py-3 rounded-lg font-semibold transition disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {loading ? (
                 <span className="flex items-center justify-center space-x-2">
@@ -117,7 +117,7 @@ export default function LoginPage() {
           </form>
         </div>
 
-        <p className="text-center text-gray-500 text-sm mt-6">Twiga AGM Property Management System</p>
+        <p className="text-center text-gray-500 text-sm mt-6">Mansa itinerary and journey planning workspace</p>
       </motion.div>
     </div>
   );

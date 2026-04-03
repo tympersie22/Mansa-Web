@@ -4,10 +4,6 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import {
-  LayoutDashboard,
-  Calendar,
-  BedDouble,
-  CreditCard,
   LogOut,
   Menu,
   X,
@@ -17,12 +13,8 @@ import {
   Bell,
   HelpCircle,
   Settings,
-  UserCog,
-  Megaphone,
-  ClipboardList,
-  Wrench,
-  BarChart3,
   FileText,
+  Map,
 } from 'lucide-react';
 import { useAuth } from '@/lib/AuthContext';
 
@@ -35,28 +27,15 @@ type NavItem = {
 
 const navSections: { title: string; items: NavItem[] }[] = [
   {
-    title: 'Daily Operation',
+    title: 'Travel Design',
     items: [
-      { href: '/', label: 'Dashboard', icon: LayoutDashboard },
-      { href: '/bookings', label: 'Reservation', icon: Calendar },
-      { href: '/rooms', label: 'Room Operation', icon: BedDouble },
-      { href: '/bookings', label: 'Manage Guests', icon: UserCog },
-      { href: '/payments', label: 'Promotions', icon: Megaphone },
+      { href: '/itineraries', label: 'Itineraries', icon: Map },
     ],
   },
   {
-    title: 'Accounting',
-    items: [
-      { href: '/payments', label: 'Report', icon: BarChart3 },
-      { href: '/rooms', label: 'Maintenance', icon: Wrench },
-    ],
-  },
-  {
-    title: 'System Options',
+    title: 'Workspace',
     items: [
       { href: '/logs', label: 'Activity Logs', icon: FileText },
-      { href: '/payments', label: 'Manage Platform', icon: ClipboardList },
-      { href: '/payments', label: 'Upgrade Plan', icon: CreditCard },
       { href: '/settings', label: 'Settings', icon: Settings },
     ],
   },
@@ -94,13 +73,13 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         }`}
       >
         <div className="flex items-center justify-between px-5 py-5 border-b border-[#e5ebe3]">
-          <Link href="/" className="flex items-center gap-3">
-            <div className="w-8 h-8 bg-[#dce9d8] rounded-lg flex items-center justify-center">
-              <span className="text-[#4f7252] font-bold text-sm">T</span>
+          <Link href="/itineraries" className="flex items-center gap-3">
+            <div className="w-8 h-8 bg-[#f3dfb2] rounded-lg flex items-center justify-center">
+              <span className="text-[#6e5523] font-bold text-sm">M</span>
             </div>
             <div>
-              <h1 className="text-[#1d2a22] font-semibold text-[22px] leading-tight">Twiga</h1>
-              <p className="text-[#738275] text-xs">Admin Workspace</p>
+              <h1 className="text-[#1d2a22] font-semibold text-[22px] leading-tight">Mansa</h1>
+              <p className="text-[#738275] text-xs">Travel Design Admin</p>
             </div>
           </Link>
           <button
@@ -114,9 +93,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         <div className="px-4 pt-4 pb-2">
           <div className="flex items-center gap-2 px-3 py-2.5 bg-[#eef2eb] rounded-xl border border-[#d9e0d6]">
             <Building2 className="w-4 h-4 text-[#5d785f]" />
-            <select className="bg-transparent text-[#2d3a31] text-sm flex-1 outline-none cursor-pointer">
-              <option value="twiga-residence">Twiga Residence</option>
-            </select>
+            <div className="bg-transparent text-[#2d3a31] text-sm flex-1">Mansa Tours & Travel</div>
           </div>
         </div>
 
@@ -171,7 +148,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             </div>
             <div className="flex-1 min-w-0">
               <p className="text-sm font-semibold text-[#1d2a22] truncate">{displayName}</p>
-              <p className="text-xs text-[#7e8f80] truncate">{user?.email || 'admin@twiga-agm.com'}</p>
+              <p className="text-xs text-[#7e8f80] truncate">{user?.email || 'admin@mansa.travel'}</p>
             </div>
             <button onClick={signOut} title="Sign out" className="text-[#7e8f80] hover:text-[#bf5342] transition">
               <LogOut className="w-4 h-4" />
@@ -188,7 +165,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           >
             <Menu className="w-6 h-6" />
           </button>
-          <h1 className="text-[#1d2a22] font-semibold">Twiga Admin</h1>
+          <h1 className="text-[#1d2a22] font-semibold">Mansa Admin</h1>
         </header>
 
         <main className="flex-1 p-4 lg:p-6 overflow-auto">{children}</main>

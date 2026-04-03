@@ -79,7 +79,7 @@ export async function getUserRole(service: ReturnType<typeof getServiceClient>, 
 export async function logAdminAction(
   service: ReturnType<typeof getServiceClient>,
   action: string,
-  entityType: 'booking' | 'payment' | 'room',
+  entityType: 'booking' | 'payment' | 'room' | 'itinerary',
   entityId: string,
   actor: ReturnType<typeof getActor>,
   metadata?: Record<string, unknown>

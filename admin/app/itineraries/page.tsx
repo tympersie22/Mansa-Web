@@ -1,0 +1,393 @@
+'use client';
+
+import { useEffect, useMemo, useState } from 'react';
+import Link from 'next/link';
+import Image from 'next/image';
+import { ExternalLink, Plus, Wand2 } from 'lucide-react';
+import { supabaseAdminApi } from '@/lib/supabase-admin-api';
+import {
+  cloneItinerary,
+  fetchPrimaryItinerary,
+  type ItineraryDay,
+  type ItineraryDocument,
+  sampleItinerary,
+} from '@/lib/itinerary-data';
+
+function updateDay(days: ItineraryDay[], dayId: string, patch: Partial<ItineraryDay>) {
+  return days.map((day) => (day.id === dayId ? { ...day, ...patch } : day));
+}
+
+export default function ItinerariesPage() {
+  const [itinerary, setItinerary] = useState<ItineraryDocument>(() => cloneItinerary(sampleItinerary));
+  const [activeDayId, setActiveDayId] = useState(sampleItinerary.days[0]?.id || '');
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
+  const [saveMessage, setSaveMessage] = useState('');
+
+  useEffect(() => {
+    let active = true;
+
+    fetchPrimaryItinerary()
+      .then((data) => {
+        if (!active || !data) return;
+        setItinerary(cloneItinerary(data));
+        setActiveDayId(data.days[0]?.id || '');
+      })
+      .finally(() => {
+        if (active) setLoading(false);
+      });
+
+    return () => {
+      active = false;
+    };
+  }, []);
+
+  const activeDay = useMemo(
+    () => itinerary.days.find((day) => day.id === activeDayId) || itinerary.days[0],
+    [activeDayId, itinerary.days]
+  );
+
+  const updateTripField = (field: keyof ItineraryDocument, value: string) => {
+    setItinerary((current) => ({ ...current, [field]: value }));
+  };
+
+  const updateActiveDay = (patch: Partial<ItineraryDay>) => {
+    if (!activeDay) return;
+    setItinerary((current) => ({ ...current, days: updateDay(current.days, activeDay.id, patch) }));
+  };
+
+  const addDay = () => {
+    const dayNumber = itinerary.days.length + 1;
+    const newDay: ItineraryDay = {
+      id: `day-${dayNumber}`,
+      dayNumber,
+      dateLabel: `Day ${dayNumber}`,
+      title: 'New Itinerary Day',
+      location: 'Zanzibar',
+      summary: 'Add the core story of this day here.',
+      heroImage: itinerary.heroImage,
+      activities: [
+        {
+          title: 'New Activity',
+          description: 'Describe the main experience, timing, or guest flow for this part of the day.',
+        },
+      ],
+    };
+
+    setItinerary((current) => ({ ...current, days: [...current.days, newDay] }));
+    setActiveDayId(newDay.id);
+  };
+
+  const handleSave = async () => {
+    setSaving(true);
+    setSaveMessage('');
+
+    const response = await supabaseAdminApi.saveItinerary(itinerary.slug, itinerary as unknown as Record<string, unknown>);
+    if (response?.ok) {
+      setSaveMessage(response.published ? 'Saved and available for the guest-facing itinerary page.' : 'Saved.');
+    } else {
+      setSaveMessage('Unable to save itinerary. Check Supabase service role configuration and admin auth.');
+    }
+
+    setSaving(false);
+  };
+
+  return (
+    <div className="mx-auto max-w-[1500px]">
+      <div className="mb-6 flex items-start justify-between gap-4">
+        <div>
+          <p className="text-[11px] uppercase tracking-[0.18em] text-[#7d907f]">Travel Design</p>
+          <h1 className="mt-2 text-[38px] font-semibold leading-none text-[#1f2d23]">Itinerary Builder</h1>
+          <p className="mt-3 max-w-3xl text-sm leading-7 text-[#708072]">
+            This builder is designed around the same premium structure as your Travefy PDF, but
+            with a cleaner digital editing flow and a stronger guest-facing presentation.
+          </p>
+          <p className="mt-3 text-xs uppercase tracking-[0.16em] text-[#8b9a8d]">
+            {loading ? 'Loading itinerary data...' : 'Loaded from Supabase when available, with local fallback.'}
+          </p>
+        </div>
+        <div className="flex items-center gap-3">
+          <button
+            type="button"
+            onClick={handleSave}
+            disabled={saving}
+            className="inline-flex items-center gap-2 rounded-xl bg-[#24352a] px-4 py-2.5 text-sm font-semibold text-white disabled:opacity-60"
+          >
+            {saving ? 'Saving...' : 'Save to Supabase'}
+          </button>
+          <button
+            type="button"
+            onClick={addDay}
+            className="inline-flex items-center gap-2 rounded-xl border border-[#d9e3d8] bg-white px-4 py-2.5 text-sm font-medium text-[#2f4232]"
+          >
+            <Plus className="h-4 w-4" />
+            Add Day
+          </button>
+          <Link
+            href={`http://localhost:3000/itineraries/${itinerary.slug}`}
+            target="_blank"
+            className="inline-flex items-center gap-2 rounded-xl bg-[#fbb040] px-4 py-2.5 text-sm font-semibold text-[#2b271f]"
+          >
+            View Guest Version
+            <ExternalLink className="h-4 w-4" />
+          </Link>
+        </div>
+      </div>
+      {saveMessage ? (
+        <div className="mb-4 rounded-2xl border border-[#dfe6dd] bg-[#f9fbf8] px-4 py-3 text-sm text-[#556559]">
+          {saveMessage}
+        </div>
+      ) : null}
+
+      <div className="grid gap-6 xl:grid-cols-[420px_minmax(0,1fr)]">
+        <section className="space-y-5">
+          <div className="rounded-[24px] border border-[#dfe6dd] bg-white p-5 shadow-[0_8px_22px_rgba(39,53,43,0.06)]">
+            <div className="mb-4 flex items-center gap-2 text-[#648067]">
+              <Wand2 className="h-4 w-4" />
+              <p className="text-xs uppercase tracking-[0.18em]">Trip Setup</p>
+            </div>
+            <div className="grid gap-4">
+              <label className="grid gap-2 text-sm text-[#5a6b5d]">
+                Trip Title
+                <input
+                  className="rounded-xl border border-[#d6e0d5] bg-[#fafcf9] px-4 py-3 outline-none"
+                  value={itinerary.title}
+                  onChange={(event) => updateTripField('title', event.target.value)}
+                />
+              </label>
+              <label className="grid gap-2 text-sm text-[#5a6b5d]">
+                Travel Dates
+                <input
+                  className="rounded-xl border border-[#d6e0d5] bg-[#fafcf9] px-4 py-3 outline-none"
+                  value={itinerary.travelDates}
+                  onChange={(event) => updateTripField('travelDates', event.target.value)}
+                />
+              </label>
+              <label className="grid gap-2 text-sm text-[#5a6b5d]">
+                Duration Label
+                <input
+                  className="rounded-xl border border-[#d6e0d5] bg-[#fafcf9] px-4 py-3 outline-none"
+                  value={itinerary.durationLabel}
+                  onChange={(event) => updateTripField('durationLabel', event.target.value)}
+                />
+              </label>
+              <label className="grid gap-2 text-sm text-[#5a6b5d]">
+                Group Label
+                <input
+                  className="rounded-xl border border-[#d6e0d5] bg-[#fafcf9] px-4 py-3 outline-none"
+                  value={itinerary.groupLabel}
+                  onChange={(event) => updateTripField('groupLabel', event.target.value)}
+                />
+              </label>
+              <label className="grid gap-2 text-sm text-[#5a6b5d]">
+                Overview
+                <textarea
+                  className="min-h-[140px] rounded-xl border border-[#d6e0d5] bg-[#fafcf9] px-4 py-3 outline-none"
+                  value={itinerary.overview}
+                  onChange={(event) => updateTripField('overview', event.target.value)}
+                />
+              </label>
+            </div>
+          </div>
+
+          <div className="rounded-[24px] border border-[#dfe6dd] bg-white p-5 shadow-[0_8px_22px_rgba(39,53,43,0.06)]">
+            <p className="mb-4 text-xs uppercase tracking-[0.18em] text-[#7d907f]">Day Structure</p>
+            <div className="space-y-2">
+              {itinerary.days.map((day) => (
+                <button
+                  key={day.id}
+                  type="button"
+                  onClick={() => setActiveDayId(day.id)}
+                  className={`w-full rounded-2xl border px-4 py-4 text-left transition ${
+                    day.id === activeDay?.id
+                      ? 'border-[#f1c167] bg-[#fff8e8]'
+                      : 'border-[#dfe6dd] bg-[#fafcf9]'
+                  }`}
+                >
+                  <p className="text-[11px] uppercase tracking-[0.18em] text-[#8d7a43]">Day {day.dayNumber}</p>
+                  <h2 className="mt-2 text-lg font-semibold text-[#243226]">{day.title}</h2>
+                  <p className="mt-1 text-sm text-[#66776a]">{day.dateLabel} • {day.location}</p>
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {activeDay ? (
+            <div className="rounded-[24px] border border-[#dfe6dd] bg-white p-5 shadow-[0_8px_22px_rgba(39,53,43,0.06)]">
+              <p className="mb-4 text-xs uppercase tracking-[0.18em] text-[#7d907f]">Active Day Editor</p>
+              <div className="grid gap-4">
+                <label className="grid gap-2 text-sm text-[#5a6b5d]">
+                  Day Title
+                  <input
+                    className="rounded-xl border border-[#d6e0d5] bg-[#fafcf9] px-4 py-3 outline-none"
+                    value={activeDay.title}
+                    onChange={(event) => updateActiveDay({ title: event.target.value })}
+                  />
+                </label>
+                <div className="grid gap-4 md:grid-cols-2">
+                  <label className="grid gap-2 text-sm text-[#5a6b5d]">
+                    Date Label
+                    <input
+                      className="rounded-xl border border-[#d6e0d5] bg-[#fafcf9] px-4 py-3 outline-none"
+                      value={activeDay.dateLabel}
+                      onChange={(event) => updateActiveDay({ dateLabel: event.target.value })}
+                    />
+                  </label>
+                  <label className="grid gap-2 text-sm text-[#5a6b5d]">
+                    Location
+                    <input
+                      className="rounded-xl border border-[#d6e0d5] bg-[#fafcf9] px-4 py-3 outline-none"
+                      value={activeDay.location}
+                      onChange={(event) => updateActiveDay({ location: event.target.value })}
+                    />
+                  </label>
+                </div>
+                <label className="grid gap-2 text-sm text-[#5a6b5d]">
+                  Day Summary
+                  <textarea
+                    className="min-h-[140px] rounded-xl border border-[#d6e0d5] bg-[#fafcf9] px-4 py-3 outline-none"
+                    value={activeDay.summary}
+                    onChange={(event) => updateActiveDay({ summary: event.target.value })}
+                  />
+                </label>
+              </div>
+            </div>
+          ) : null}
+        </section>
+
+        <section className="rounded-[32px] border border-[#dfe6dd] bg-white p-5 shadow-[0_10px_28px_rgba(39,53,43,0.08)] md:p-8">
+          <div className="overflow-hidden rounded-[28px] border border-[#e3e8df] bg-[#fcfcfa]">
+            <div className="grid gap-6 p-6 md:p-8">
+              <div className="flex items-start justify-between gap-6 text-[#34484b]">
+                <div className="flex items-start gap-4">
+                  <div className="flex h-12 w-12 items-center justify-center rounded-xl border border-[#dfe4df] bg-white text-sm font-semibold">
+                    MANSA
+                  </div>
+                  <div className="space-y-1 text-sm leading-6">
+                    {itinerary.contact.address.map((line) => (
+                      <p key={line}>{line}</p>
+                    ))}
+                  </div>
+                </div>
+                <div className="text-right text-sm leading-6">
+                  <p>{itinerary.contact.phone}</p>
+                  <p>{itinerary.contact.email}</p>
+                  <p>{itinerary.contact.website}</p>
+                </div>
+              </div>
+
+              <div className="relative overflow-hidden rounded-[24px]">
+                <Image
+                  src={itinerary.heroImage}
+                  alt={itinerary.title}
+                  width={1600}
+                  height={900}
+                  className="h-[340px] w-full object-cover"
+                />
+              </div>
+
+              <div className="text-center text-[#26404a]">
+                <h2 className="font-heading text-5xl">{itinerary.title}</h2>
+                <p className="mt-3 text-2xl font-semibold">{itinerary.travelDates}</p>
+                <p className="mt-2 text-sm uppercase tracking-[0.22em] text-[#84764d]">
+                  {itinerary.durationLabel} • {itinerary.groupLabel}
+                </p>
+              </div>
+
+              <div className="grid gap-6 xl:grid-cols-[1.1fr_0.9fr]">
+                <div className="rounded-[24px] bg-[#f6f4ee] p-6">
+                  <p className="text-[11px] uppercase tracking-[0.18em] text-[#8d7a43]">Overview</p>
+                  <p className="mt-4 text-sm leading-7 text-[#4f5c54]">{itinerary.overview}</p>
+                </div>
+                <div className="rounded-[24px] bg-[#f8faf7] p-6">
+                  <p className="text-[11px] uppercase tracking-[0.18em] text-[#7d907f]">Journey Highlights</p>
+                  <ul className="mt-4 space-y-3">
+                    {itinerary.travelersSummary.map((item) => (
+                      <li key={item} className="flex items-start gap-3 text-sm leading-7 text-[#4f5c54]">
+                        <span className="mt-3 h-1.5 w-1.5 rounded-full bg-[#fbb040]" />
+                        <span>{item}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+
+              <div className="space-y-5">
+                {itinerary.days.map((day) => (
+                  <article key={day.id} className="grid gap-6 rounded-[28px] border border-[#e3e8df] p-5 lg:grid-cols-[260px_minmax(0,1fr)] lg:p-6">
+                    <div className="relative overflow-hidden rounded-[20px]">
+                      <Image
+                        src={day.heroImage}
+                        alt={day.title}
+                        width={900}
+                        height={1100}
+                        className="h-full min-h-[220px] w-full object-cover"
+                      />
+                    </div>
+                    <div className="space-y-5">
+                      <div>
+                        <p className="text-[11px] uppercase tracking-[0.18em] text-[#8d7a43]">
+                          Day {day.dayNumber} • {day.dateLabel}
+                        </p>
+                        <h3 className="mt-2 text-3xl font-semibold text-[#223329]">{day.title}</h3>
+                        <p className="mt-2 text-sm uppercase tracking-[0.16em] text-[#6d7d71]">{day.location}</p>
+                        <p className="mt-4 text-sm leading-7 text-[#526157]">{day.summary}</p>
+                      </div>
+
+                      <div className="grid gap-4 xl:grid-cols-[1.2fr_0.8fr]">
+                        <div className="rounded-[22px] bg-[#f8faf7] p-5">
+                          <p className="text-[11px] uppercase tracking-[0.18em] text-[#7d907f]">Day Plan</p>
+                          <div className="mt-4 space-y-4">
+                            {day.activities.map((activity) => (
+                              <div key={`${activity.timeLabel}-${activity.title}`} className="grid gap-2 md:grid-cols-[120px_minmax(0,1fr)]">
+                                <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[#8d7a43]">
+                                  {activity.timeLabel || 'Planned'}
+                                </p>
+                                <div>
+                                  <p className="text-base font-semibold text-[#25362a]">{activity.title}</p>
+                                  <p className="mt-1 text-sm leading-7 text-[#526157]">{activity.description}</p>
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+
+                        <div className="space-y-4">
+                          {day.stays?.length ? (
+                            <div className="rounded-[22px] bg-[#f6f4ee] p-5">
+                              <p className="text-[11px] uppercase tracking-[0.18em] text-[#8d7a43]">Stay</p>
+                              <div className="mt-3 space-y-3">
+                                {day.stays.map((stay) => (
+                                  <div key={`${stay.name}-${stay.location}`} className="text-sm leading-7 text-[#4f5c54]">
+                                    <p className="font-semibold text-[#25362a]">{stay.name}</p>
+                                    <p>{stay.location}</p>
+                                    <p>{stay.nights} night{stay.nights > 1 ? 's' : ''}{stay.roomType ? ` • ${stay.roomType}` : ''}</p>
+                                  </div>
+                                ))}
+                              </div>
+                            </div>
+                          ) : null}
+
+                          {day.transfers?.length ? (
+                            <div className="rounded-[22px] bg-[#f8faf7] p-5">
+                              <p className="text-[11px] uppercase tracking-[0.18em] text-[#7d907f]">Transfers</p>
+                              <ul className="mt-3 space-y-2 text-sm leading-7 text-[#4f5c54]">
+                                {day.transfers.map((transfer) => (
+                                  <li key={transfer}>{transfer}</li>
+                                ))}
+                              </ul>
+                            </div>
+                          ) : null}
+                        </div>
+                      </div>
+                    </div>
+                  </article>
+                ))}
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+    </div>
+  );
+}

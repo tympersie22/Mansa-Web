@@ -3,15 +3,19 @@
 Run these files in order inside Supabase:
 
 1. `supabase/migrations/20260403_create_mansa_backend.sql`
-2. `supabase/seed.sql`
+2. `supabase/migrations/20260403_create_mansa_itineraries.sql`
+3. `supabase/seed.sql`
+4. `supabase/itinerary-seed.sql`
 
 What they do:
 
 - create the MANSA experience CMS tables
 - create journey and planning inquiry tables
+- create itinerary builder tables for admin and guest-facing itineraries
 - enable RLS policies for public website access
 - seed the six experience categories
 - seed core sample experiences including Mnemba Island Marine Experience
+- seed the sample MIS Group Trip itinerary used by the new builder
 
 Frontend notes:
 
