@@ -8,7 +8,6 @@ import { ArrowRight } from 'lucide-react';
 import Reveal from '@/components/mansa/Reveal';
 import {
   experiences,
-  heroPoster,
   heroVideo,
   introImage,
   testimonials,
@@ -37,7 +36,6 @@ export default function HomePageContent() {
             loop
             playsInline
             preload="auto"
-            poster={heroPoster}
             src={heroVideo}
           >
           </video>
