@@ -20,10 +20,32 @@ type ZoneGroup = {
   key: string;
   title: string;
   href: string;
+  summary: string;
   items: {
     label: string;
-    tooltip: string;
+    description: string;
   }[];
+};
+
+type MapInfo = {
+  eyebrow: string;
+  title: string;
+  intro: string;
+};
+
+const mapInfoByMode: Record<MapMode, MapInfo> = {
+  zanzibar: {
+    eyebrow: 'Zanzibar Map',
+    title: 'Zanzibar regions, read by pace and coastline',
+    intro:
+      'Zanzibar works best when you understand how each coast feels. North Coast is one region made up of Nungwi, Kendwa, and Kidoti, while the rest of the island shifts between cultural depth, marine access, village rhythm, and quieter privacy.',
+  },
+  mainland: {
+    eyebrow: 'Mainland Tanzania Map',
+    title: 'Mainland Tanzania, fully laid out by journey type',
+    intro:
+      'The mainland map should help guests understand the logic of Tanzania at a glance: classic safari in the north, wilder safari in the south, climb-led travel around Kilimanjaro, remote expedition travel in Mahale, and marine time around Mafia Island.',
+  },
 };
 
 function groupZones(mode: MapMode, zones: MapZone[]): ZoneGroup[] {
@@ -41,13 +63,19 @@ function groupZones(mode: MapMode, zones: MapZone[]): ZoneGroup[] {
         key,
         title,
         href: getDestinationHref(destination),
+        summary: destination.shortDescription,
         items: [],
       });
     }
 
+    const itemDescription =
+      mode === 'zanzibar' && destination.slug === 'north-coast'
+        ? destination.areaCards?.find((area) => area.title === zone.label)?.description || zone.tooltip
+        : zone.tooltip;
+
     grouped.get(key)!.items.push({
       label: zone.label,
-      tooltip: zone.tooltip,
+      description: itemDescription,
     });
   }
 
@@ -280,25 +308,77 @@ export default function DestinationsPage() {
               <Reveal key={group.key} delay={0.12 + index * 0.04}>
                 <Link
                   href={group.href}
-                  className="rounded-[1.5rem] border border-surface-border bg-white/80 p-5 shadow-[0_12px_28px_rgba(56,56,54,0.05)] transition hover:-translate-y-0.5 hover:border-accent/50"
+                  className="rounded-[1.5rem] border border-surface-border bg-white/80 p-6 shadow-[0_12px_28px_rgba(56,56,54,0.05)] transition hover:-translate-y-0.5 hover:border-accent/50"
                 >
                   <p className="text-[11px] uppercase tracking-[0.18em] text-accent">
                     {activeMap === 'zanzibar' && group.title === 'North Coast' ? 'Region' : 'Destination'}
                   </p>
                   <h3 className="mt-3 font-heading text-2xl text-text-primary">{group.title}</h3>
+                  <p className="mt-3 text-sm leading-7 text-text-secondary">{group.summary}</p>
                   <div className="mt-4 space-y-3">
                     {group.items.map((item) => (
                       <div key={`${group.key}-${item.label}`} className="rounded-[1rem] bg-surface-lighter px-4 py-3">
                         <p className="text-sm font-semibold uppercase tracking-[0.08em] text-text-primary">
                           {item.label}
                         </p>
-                        <p className="mt-1 text-sm leading-6 text-text-secondary">{item.tooltip}</p>
+                        <p className="mt-1 text-sm leading-6 text-text-secondary">{item.description}</p>
                       </div>
                     ))}
                   </div>
                 </Link>
               </Reveal>
             ))}
+          </div>
+
+          <div className="mt-8 rounded-[2rem] border border-surface-border bg-white/85 p-6 shadow-[0_12px_28px_rgba(56,56,54,0.05)] md:p-8">
+            <Reveal delay={0.16}>
+              <div className="max-w-3xl">
+                <p className="section-kicker mb-4">{mapInfoByMode[activeMap].eyebrow}</p>
+                <h3 className="font-heading text-3xl text-text-primary md:text-4xl">
+                  {mapInfoByMode[activeMap].title}
+                </h3>
+                <p className="mt-5 text-base leading-8 text-text-secondary md:text-lg">
+                  {mapInfoByMode[activeMap].intro}
+                </p>
+              </div>
+            </Reveal>
+
+            <div className="mt-8 grid gap-4 lg:grid-cols-2">
+              {activeZoneGroups.map((group, index) => (
+                <Reveal key={`${group.key}-detail`} delay={0.2 + index * 0.04}>
+                  <div className="rounded-[1.5rem] border border-surface-border bg-surface-lighter p-5">
+                    <div className="flex items-start justify-between gap-4">
+                      <div>
+                        <p className="text-[11px] uppercase tracking-[0.18em] text-accent">
+                          {activeMap === 'zanzibar' && group.title === 'North Coast' ? 'Region' : 'Destination'}
+                        </p>
+                        <h4 className="mt-2 font-heading text-2xl text-text-primary">{group.title}</h4>
+                      </div>
+                      <Link
+                        href={group.href}
+                        className="rounded-full border border-accent/40 px-4 py-2 text-[11px] font-bold uppercase tracking-[0.16em] text-text-primary transition hover:border-accent hover:bg-accent/10"
+                      >
+                        View Page
+                      </Link>
+                    </div>
+                    <p className="mt-4 text-sm leading-7 text-text-secondary">{group.summary}</p>
+                    <div className="mt-5 space-y-3">
+                      {group.items.map((item) => (
+                        <div
+                          key={`${group.key}-${item.label}-detail`}
+                          className="rounded-[1rem] bg-white px-4 py-4"
+                        >
+                          <p className="text-sm font-semibold uppercase tracking-[0.08em] text-text-primary">
+                            {item.label}
+                          </p>
+                          <p className="mt-2 text-sm leading-6 text-text-secondary">{item.description}</p>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </Reveal>
+              ))}
+            </div>
           </div>
         </div>
       </section>
