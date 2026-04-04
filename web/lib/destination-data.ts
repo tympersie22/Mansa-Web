@@ -296,11 +296,11 @@ export const zanzibarMapZones: MapZone[] = [
 ];
 
 export const mainlandMapZones: MapZone[] = [
-  { slug: 'northern-circuit', label: 'Northern Circuit', tooltip: 'Northern Circuit — Serengeti, Ngorongoro, and Tanzania’s classic safari flow', x: 228, y: 184, w: 150, h: 74 },
-  { slug: 'kilimanjaro', label: 'Kilimanjaro', tooltip: 'Kilimanjaro — Africa’s highest peak and a climb-led Tanzania chapter', x: 401, y: 140, w: 106, h: 52 },
-  { slug: 'southern-circuit', label: 'Southern Circuit', tooltip: 'Southern Circuit — larger wilderness, fewer crowds, and a rawer safari feel', x: 279, y: 536, w: 152, h: 88 },
-  { slug: 'mahale-mountains', label: 'Mahale Mountains', tooltip: 'Mahale Mountains — chimpanzee tracking where forest meets Lake Tanganyika', x: 30, y: 428, w: 132, h: 84 },
-  { slug: 'mafia-island', label: 'Mafia Island', tooltip: 'Mafia Island — quiet marine travel with diving and snorkeling focus', x: 447, y: 654, w: 88, h: 74 },
+  { slug: 'northern-circuit', label: 'Northern Circuit', tooltip: 'Northern Circuit — Serengeti, Ngorongoro, and Tanzania’s classic safari flow', x: 299, y: 194, w: 120, h: 0 },
+  { slug: 'kilimanjaro', label: 'Kilimanjaro', tooltip: 'Kilimanjaro — Africa’s highest peak and a climb-led Tanzania chapter', x: 441, y: 255, w: 98, h: 0 },
+  { slug: 'southern-circuit', label: 'Southern Circuit', tooltip: 'Southern Circuit — larger wilderness, fewer crowds, and a rawer safari feel', x: 356, y: 612, w: 124, h: 0 },
+  { slug: 'mahale-mountains', label: 'Mahale Mountains', tooltip: 'Mahale Mountains — chimpanzee tracking where forest meets Lake Tanganyika', x: 92, y: 468, w: 116, h: 0 },
+  { slug: 'mafia-island', label: 'Mafia Island', tooltip: 'Mafia Island — quiet marine travel with diving and snorkeling focus', x: 503, y: 587, w: 88, h: 0 },
 ];
 
 export function getDestinationBySlug(slug: string) {

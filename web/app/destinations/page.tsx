@@ -71,15 +71,14 @@ function DestinationMap({
                 key={`${mode}-${zone.label}`}
                 href={getDestinationHref(destination)}
                 title={zone.tooltip}
-                className="absolute flex items-center justify-center rounded-[1rem] border border-[#fbb040] bg-[rgba(251,176,64,0.18)] text-center text-[10px] font-bold uppercase tracking-[0.12em] text-[#383836] transition duration-200 hover:bg-[rgba(251,176,64,0.32)]"
+                className="absolute -translate-x-1/2 -translate-y-1/2 rounded-full border border-[#fbb040] bg-[rgba(47,48,45,0.78)] px-3 py-2 text-center text-[10px] font-bold uppercase tracking-[0.12em] text-[#f7efe1] shadow-[0_10px_24px_rgba(18,18,17,0.22)] transition duration-200 hover:bg-[rgba(62,63,58,0.92)]"
                 style={{
                   left: `${(zone.x / 544) * 100}%`,
                   top: `${(zone.y / 937) * 100}%`,
-                  width: `${(zone.w / 544) * 100}%`,
-                  height: `${(zone.h / 937) * 100}%`,
+                  minWidth: `${zone.w}px`,
                 }}
               >
-                <span className="px-1">{zone.label}</span>
+                <span className="block whitespace-nowrap">{zone.label}</span>
               </Link>
             );
           })}
