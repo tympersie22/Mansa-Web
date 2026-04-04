@@ -62,7 +62,7 @@ export default function JourneyDetailPage({ params }: { params: { slug: string }
             {journey.flow.map((day, index) => (
               <Reveal key={day.dayLabel} delay={index * 0.05}>
                 <div className="grid gap-6 overflow-hidden rounded-[1.9rem] bg-surface-lighter md:grid-cols-2">
-                  <div className={`${index % 2 === 1 ? 'md:order-2' : ''} relative min-h-[320px]`}>
+                  <div className={`${index % 2 === 0 ? 'md:order-2' : ''} relative min-h-[320px]`}>
                     <Image
                       src={day.image}
                       alt={`${journey.title} ${day.title}`}
@@ -71,7 +71,7 @@ export default function JourneyDetailPage({ params }: { params: { slug: string }
                       className="object-cover"
                     />
                   </div>
-                  <div className={`${index % 2 === 1 ? 'md:order-1' : ''} flex items-center p-8 md:p-10`}>
+                  <div className={`${index % 2 === 0 ? 'md:order-1' : ''} flex items-center p-8 md:p-10`}>
                     <div>
                       <p className="text-[11px] uppercase tracking-[0.18em] text-accent">
                         {day.dayLabel} • {day.location}
