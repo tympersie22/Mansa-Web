@@ -288,9 +288,7 @@ export const mainlandDestinations: Destination[] = [
 export const allDestinations = [...zanzibarDestinations, ...mainlandDestinations];
 
 export const zanzibarMapZones: MapZone[] = [
-  { slug: 'north-coast', label: 'Nungwi', group: 'North Coast', tooltip: 'North Coast — Nungwi: swimmable beaches and lively atmosphere', x: 106, y: 18, w: 70, h: 28 },
-  { slug: 'north-coast', label: 'Kendwa', group: 'North Coast', tooltip: 'North Coast — Kendwa: sunset coastline and easy beach time', x: 22, y: 30, w: 64, h: 26 },
-  { slug: 'north-coast', label: 'Kidoti', group: 'North Coast', tooltip: 'North Coast — Kidoti: quieter northern inlets and softer pace', x: 48, y: 64, w: 64, h: 26 },
+  { slug: 'north-coast', label: 'North Coast', tooltip: 'North Coast — Nungwi, Kendwa, and Kidoti with swimmable beaches and sunset coastline', x: 20, y: 14, w: 160, h: 86 },
   { slug: 'northeast-coast', label: 'Northeast Coast', tooltip: 'Northeast Coast — clear water, marine access, and premium stays', x: 132, y: 92, w: 104, h: 62 },
   { slug: 'stone-town', label: 'Stone Town', tooltip: 'Stone Town — cultural depth, architecture, and island context', x: 24, y: 170, w: 92, h: 36 },
   { slug: 'southeast-coast', label: 'Southeast Coast', tooltip: 'Southeast Coast — laid-back villages and ocean rhythm', x: 108, y: 230, w: 128, h: 64 },
