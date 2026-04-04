@@ -16,42 +16,6 @@ import { contactHref } from '@/lib/site-config';
 
 type MapMode = 'zanzibar' | 'mainland';
 
-type ZoneGroup = {
-  key: string;
-  title: string;
-  href: string;
-  items: {
-    label: string;
-  }[];
-};
-
-function groupZones(mode: MapMode, zones: MapZone[]): ZoneGroup[] {
-  const destinationList = mode === 'zanzibar' ? zanzibarDestinations : mainlandDestinations;
-  const grouped = new Map<string, ZoneGroup>();
-
-  for (const zone of zones) {
-    const key = zone.group || zone.slug;
-    const title = zone.group || zone.label;
-    const destination = destinationList.find((item) => item.slug === zone.slug);
-    if (!destination) continue;
-
-    if (!grouped.has(key)) {
-      grouped.set(key, {
-        key,
-        title,
-        href: getDestinationHref(destination),
-        items: [],
-      });
-    }
-
-    grouped.get(key)!.items.push({
-      label: zone.label,
-    });
-  }
-
-  return Array.from(grouped.values());
-}
-
 function DestinationMap({
   mode,
   zones,
@@ -154,7 +118,6 @@ export default function DestinationsPage() {
     () => (activeMap === 'zanzibar' ? zanzibarMapZones : mainlandMapZones),
     [activeMap]
   );
-  const activeZoneGroups = useMemo(() => groupZones(activeMap, activeZones), [activeMap, activeZones]);
 
   return (
     <div className="bg-surface">
@@ -271,31 +234,6 @@ export default function DestinationsPage() {
             <Reveal delay={0.08}>
               <DestinationMap mode={activeMap} zones={activeZones} />
             </Reveal>
-          </div>
-
-          <div className="mt-8 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-            {activeZoneGroups.map((group, index) => (
-              <Reveal key={group.key} delay={0.12 + index * 0.04}>
-                <Link
-                  href={group.href}
-                  className="rounded-[1.5rem] border border-surface-border bg-white/80 p-5 shadow-[0_12px_28px_rgba(56,56,54,0.05)] transition hover:-translate-y-0.5 hover:border-accent/50"
-                >
-                  <p className="text-[11px] uppercase tracking-[0.18em] text-accent">
-                    {activeMap === 'zanzibar' && group.title === 'North Coast' ? 'Region' : 'Destination'}
-                  </p>
-                  <h3 className="mt-3 font-heading text-2xl text-text-primary">{group.title}</h3>
-                  <div className="mt-4 space-y-3">
-                    {group.items.map((item) => (
-                      <div key={`${group.key}-${item.label}`} className="rounded-[1rem] bg-surface-lighter px-4 py-3">
-                        <p className="text-sm font-semibold uppercase tracking-[0.08em] text-text-primary">
-                          {item.label}
-                        </p>
-                      </div>
-                    ))}
-                  </div>
-                </Link>
-              </Reveal>
-            ))}
           </div>
         </div>
       </section>
