@@ -18,6 +18,7 @@ export default function JourneyFab() {
   const shouldShow =
     pathname.startsWith('/experiences') ||
     pathname.startsWith('/journeys') ||
+    pathname.startsWith('/destinations') ||
     pathname === '/your-journey' ||
     pathname === '/plan-your-trip';
 
