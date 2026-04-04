@@ -13,6 +13,8 @@ import {
   sampleItinerary,
 } from '@/lib/itinerary-data';
 
+const guestSiteUrl = (process.env.NEXT_PUBLIC_WEBSITE_URL || 'http://localhost:3000').replace(/\/$/, '');
+
 function updateDay(days: ItineraryDay[], dayId: string, patch: Partial<ItineraryDay>) {
   return days.map((day) => (day.id === dayId ? { ...day, ...patch } : day));
 }
@@ -124,7 +126,7 @@ export default function ItinerariesPage() {
             Add Day
           </button>
           <Link
-            href={`http://localhost:3000/itineraries/${itinerary.slug}`}
+            href={`${guestSiteUrl}/itineraries/${itinerary.slug}`}
             target="_blank"
             className="inline-flex items-center gap-2 rounded-xl bg-[#fbb040] px-4 py-2.5 text-sm font-semibold text-[#2b271f]"
           >

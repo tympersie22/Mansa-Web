@@ -68,10 +68,14 @@ export async function getActorWithProfile(
   };
 }
 
-export async function getUserRole(service: ReturnType<typeof getServiceClient>, userId: string): Promise<AdminRole> {
-  if (!service) return 'manager';
+export async function getUserRole(
+  service: ReturnType<typeof getServiceClient>,
+  userId: string,
+): Promise<AdminRole | null> {
+  if (!service) return null;
   const { data } = await service.from('admin_profiles').select('role').eq('user_id', userId).maybeSingle();
   const role = data?.role;
+  if (!role) return null;
   if (role === 'admin' || role === 'super_admin') return role;
   return 'manager';
 }
