@@ -16,7 +16,10 @@ export default function JourneyFab() {
   }, []);
 
   const shouldShow =
-    pathname.startsWith('/experiences') || pathname === '/your-journey' || pathname === '/plan-your-trip';
+    pathname.startsWith('/experiences') ||
+    pathname.startsWith('/journeys') ||
+    pathname === '/your-journey' ||
+    pathname === '/plan-your-trip';
 
   if (!shouldShow) return null;
 
