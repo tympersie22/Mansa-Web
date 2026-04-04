@@ -54,57 +54,35 @@ function DestinationMap({
           ))}
         </div>
       ) : (
-        <div className="relative mx-auto aspect-[1.08] w-full max-w-[720px] rounded-[1.7rem] bg-[#efe7d7]">
-          <svg viewBox="0 0 360 360" className="h-full w-full">
-            <g>
-              <path
-                d="M114 16C173 8 232 28 267 68C298 103 307 151 293 201C280 248 249 289 198 322C154 350 101 354 63 324C26 295 13 243 19 193C25 149 37 108 61 74C77 51 91 27 114 16Z"
-                fill="#d8cdb7"
-                stroke="#8e836d"
-                strokeWidth="3"
-              />
-              <path
-                d="M310 256C325 255 337 262 344 276C350 289 349 305 341 317C333 328 320 333 306 330C292 327 282 318 278 305C274 291 278 277 289 267C295 261 302 257 310 256Z"
-                fill="#d8cdb7"
-                stroke="#8e836d"
-                strokeWidth="3"
-              />
-            </g>
+        <div className="relative mx-auto aspect-[544/937] w-full max-w-[544px] overflow-hidden rounded-[1.7rem] bg-[#2f302d]">
+          <Image
+            src="/maps/mainland-tanzania-map-reference.png"
+            alt="Mansa branded Mainland Tanzania destination map"
+            fill
+            sizes="(max-width: 768px) 100vw, 544px"
+            className="object-contain"
+          />
+          {zones.map((zone) => {
+            const destination = destinationList.find((item) => item.slug === zone.slug);
+            if (!destination) return null;
 
-            {zones.map((zone) => {
-              const destination = destinationList.find((item) => item.slug === zone.slug);
-              if (!destination) return null;
-
-              return (
-              <Link key={`${mode}-${zone.label}`} href={getDestinationHref(destination)}>
-                <g className="cursor-pointer">
-                  <rect
-                    x={zone.x}
-                    y={zone.y}
-                    width={zone.w}
-                    height={zone.h}
-                    rx="14"
-                    fill="rgba(251,176,64,0.18)"
-                    stroke="#fbb040"
-                    strokeWidth="2"
-                    className="transition duration-200 hover:fill-[rgba(251,176,64,0.32)]"
-                  />
-                  <text
-                    x={zone.x + zone.w / 2}
-                    y={zone.y + zone.h / 2 + 2}
-                    textAnchor="middle"
-                    fontSize="11"
-                    fill="#383836"
-                    style={{ fontFamily: 'var(--font-body)', fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase' }}
-                  >
-                    {zone.label}
-                  </text>
-                  <title>{zone.tooltip}</title>
-                </g>
+            return (
+              <Link
+                key={`${mode}-${zone.label}`}
+                href={getDestinationHref(destination)}
+                title={zone.tooltip}
+                className="absolute flex items-center justify-center rounded-[1rem] border border-[#fbb040] bg-[rgba(251,176,64,0.18)] text-center text-[10px] font-bold uppercase tracking-[0.12em] text-[#383836] transition duration-200 hover:bg-[rgba(251,176,64,0.32)]"
+                style={{
+                  left: `${(zone.x / 544) * 100}%`,
+                  top: `${(zone.y / 937) * 100}%`,
+                  width: `${(zone.w / 544) * 100}%`,
+                  height: `${(zone.h / 937) * 100}%`,
+                }}
+              >
+                <span className="px-1">{zone.label}</span>
               </Link>
             );
-            })}
-          </svg>
+          })}
         </div>
       )}
     </div>
