@@ -49,19 +49,6 @@ async function requestWithMethod<T>(url: string, method: 'PATCH' | 'PUT', body: 
 }
 
 export const supabaseAdminApi = {
-  updateRoomBasePrice(roomId: string, basePrice: number) {
-    return request<{ ok: boolean }>(`/api/admin/rooms/${roomId}/price`, 'PATCH', { basePrice });
-  },
-  updateBookingStatus(bookingId: string, status: string, reason?: string) {
-    return request<{ ok: boolean }>(`/api/admin/bookings/${bookingId}/status`, 'PATCH', { status, reason });
-  },
-  updatePaymentStatus(paymentId: string, bookingId: string, status: string, reason?: string) {
-    return request<{ ok: boolean; bookingStatus?: string }>(`/api/admin/payments/${paymentId}/status`, 'PATCH', {
-      bookingId,
-      status,
-      reason,
-    });
-  },
   saveItinerary(slug: string, payload: Record<string, unknown>) {
     return requestWithMethod<{ ok: boolean; slug: string; published: boolean }>(
       `/api/admin/itineraries/${slug}`,

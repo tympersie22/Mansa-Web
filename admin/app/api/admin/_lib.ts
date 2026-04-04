@@ -6,8 +6,8 @@ const SUPABASE_ANON_KEY =
   process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY;
 const SUPABASE_SERVICE_ROLE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
-export const COMPANY_ID = 'twiga-agm';
-export const PROPERTY_ID = 'twiga-residence';
+export const COMPANY_ID = 'mansa';
+export const PROPERTY_ID = 'mansa-itineraries';
 export type AdminRole = 'admin' | 'manager' | 'super_admin';
 
 export function getServiceClient() {
@@ -79,7 +79,7 @@ export async function getUserRole(service: ReturnType<typeof getServiceClient>, 
 export async function logAdminAction(
   service: ReturnType<typeof getServiceClient>,
   action: string,
-  entityType: 'booking' | 'payment' | 'room' | 'itinerary',
+  entityType: 'itinerary',
   entityId: string,
   actor: ReturnType<typeof getActor>,
   metadata?: Record<string, unknown>

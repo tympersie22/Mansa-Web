@@ -63,7 +63,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         await supabase.from('admin_profiles').upsert(
           {
             user_id: sessionUser.id,
-            company_id: 'twiga-agm',
+            company_id: 'mansa',
             email: sessionUser.email || null,
             full_name: resolvedName,
             role: 'manager',

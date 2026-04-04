@@ -35,6 +35,7 @@ export type MapZone = {
   slug: string;
   label: string;
   tooltip: string;
+  group?: string;
   x: number;
   y: number;
   w: number;
@@ -287,21 +288,21 @@ export const mainlandDestinations: Destination[] = [
 export const allDestinations = [...zanzibarDestinations, ...mainlandDestinations];
 
 export const zanzibarMapZones: MapZone[] = [
-  { slug: 'north-coast', label: 'Nungwi', tooltip: 'Nungwi — Swimmable beaches & lively atmosphere', x: 106, y: 18, w: 70, h: 28 },
-  { slug: 'north-coast', label: 'Kendwa', tooltip: 'Kendwa — Sunset coastline & easy beach time', x: 22, y: 30, w: 64, h: 26 },
-  { slug: 'north-coast', label: 'Kidoti', tooltip: 'Kidoti — Quieter northern inlets and softer pace', x: 48, y: 64, w: 64, h: 26 },
-  { slug: 'northeast-coast', label: 'Northeast Coast', tooltip: 'Northeast Coast — Clear water & premium stays', x: 132, y: 92, w: 104, h: 62 },
-  { slug: 'stone-town', label: 'Stone Town', tooltip: 'Stone Town — Cultural depth & architectural character', x: 24, y: 170, w: 92, h: 36 },
-  { slug: 'southeast-coast', label: 'Southeast Coast', tooltip: 'Southeast Coast — Laid-back villages & ocean rhythm', x: 108, y: 230, w: 128, h: 64 },
-  { slug: 'south-coast', label: 'South Coast', tooltip: 'South Coast — Remote privacy & quieter coastline', x: 74, y: 316, w: 108, h: 44 },
+  { slug: 'north-coast', label: 'Nungwi', group: 'North Coast', tooltip: 'North Coast — Nungwi: swimmable beaches and lively atmosphere', x: 106, y: 18, w: 70, h: 28 },
+  { slug: 'north-coast', label: 'Kendwa', group: 'North Coast', tooltip: 'North Coast — Kendwa: sunset coastline and easy beach time', x: 22, y: 30, w: 64, h: 26 },
+  { slug: 'north-coast', label: 'Kidoti', group: 'North Coast', tooltip: 'North Coast — Kidoti: quieter northern inlets and softer pace', x: 48, y: 64, w: 64, h: 26 },
+  { slug: 'northeast-coast', label: 'Northeast Coast', tooltip: 'Northeast Coast — clear water, marine access, and premium stays', x: 132, y: 92, w: 104, h: 62 },
+  { slug: 'stone-town', label: 'Stone Town', tooltip: 'Stone Town — cultural depth, architecture, and island context', x: 24, y: 170, w: 92, h: 36 },
+  { slug: 'southeast-coast', label: 'Southeast Coast', tooltip: 'Southeast Coast — laid-back villages and ocean rhythm', x: 108, y: 230, w: 128, h: 64 },
+  { slug: 'south-coast', label: 'South Coast', tooltip: 'South Coast — remote privacy and quieter coastline', x: 74, y: 316, w: 108, h: 44 },
 ];
 
 export const mainlandMapZones: MapZone[] = [
-  { slug: 'northern-circuit', label: 'Northern Circuit', tooltip: 'Northern Circuit — Iconic parks and classic safari flow', x: 70, y: 30, w: 126, h: 62 },
-  { slug: 'kilimanjaro', label: 'Kilimanjaro', tooltip: 'Kilimanjaro — High-altitude climb and mountain-led travel', x: 210, y: 18, w: 84, h: 42 },
-  { slug: 'southern-circuit', label: 'Southern Circuit', tooltip: 'Southern Circuit — Wilder, larger, less crowded safari', x: 96, y: 150, w: 150, h: 84 },
-  { slug: 'mahale-mountains', label: 'Mahale Mountains', tooltip: 'Mahale Mountains — Chimpanzees, forest, and Lake Tanganyika', x: 8, y: 170, w: 78, h: 88 },
-  { slug: 'mafia-island', label: 'Mafia Island', tooltip: 'Mafia Island — Marine life, diving, and quiet island time', x: 266, y: 246, w: 82, h: 46 },
+  { slug: 'northern-circuit', label: 'Northern Circuit', tooltip: 'Northern Circuit — Serengeti, Ngorongoro, and Tanzania’s classic safari flow', x: 70, y: 30, w: 126, h: 62 },
+  { slug: 'kilimanjaro', label: 'Kilimanjaro', tooltip: 'Kilimanjaro — Africa’s highest peak and a climb-led Tanzania chapter', x: 210, y: 18, w: 84, h: 42 },
+  { slug: 'southern-circuit', label: 'Southern Circuit', tooltip: 'Southern Circuit — larger wilderness, fewer crowds, and a rawer safari feel', x: 96, y: 150, w: 150, h: 84 },
+  { slug: 'mahale-mountains', label: 'Mahale Mountains', tooltip: 'Mahale Mountains — chimpanzee tracking where forest meets Lake Tanganyika', x: 8, y: 170, w: 78, h: 88 },
+  { slug: 'mafia-island', label: 'Mafia Island', tooltip: 'Mafia Island — quiet marine travel with diving and snorkeling focus', x: 266, y: 246, w: 82, h: 46 },
 ];
 
 export function getDestinationBySlug(slug: string) {

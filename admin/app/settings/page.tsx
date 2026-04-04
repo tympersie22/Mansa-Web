@@ -5,7 +5,7 @@ import { Loader2, Save, User } from 'lucide-react';
 import { useAuth } from '@/lib/AuthContext';
 import { supabase } from '@/lib/supabase';
 
-const COMPANY_ID = 'twiga-agm';
+const COMPANY_ID = 'mansa';
 
 export default function SettingsPage() {
   const { user } = useAuth();

@@ -1,157 +1,72 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
-import { Clock3, Filter, Search } from 'lucide-react';
-import { fetchAdminLogs, subscribeAdminLogs } from '@/lib/data';
-import type { AdminLogEntry } from '@/lib/data';
-
-const formatAction = (action: string) =>
-  action
-    .split('.')
-    .map((part) => part[0]?.toUpperCase() + part.slice(1))
-    .join(' ');
-
-const formatDateTime = (value: number) =>
-  new Date(value).toLocaleString(undefined, {
-    year: 'numeric',
-    month: 'short',
-    day: '2-digit',
-    hour: '2-digit',
-    minute: '2-digit',
-  });
+import Link from 'next/link';
+import { Activity, ArrowRight, FileText, ShieldCheck } from 'lucide-react';
 
 export default function LogsPage() {
-  const [logs, setLogs] = useState<AdminLogEntry[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [query, setQuery] = useState('');
-  const [entityFilter, setEntityFilter] = useState('all');
-
-  useEffect(() => {
-    const bootstrap = async () => {
-      const data = await fetchAdminLogs();
-      setLogs(data);
-    };
-
-    void bootstrap();
-
-    const unsub = subscribeAdminLogs((data) => {
-      setLogs(data);
-      setLoading(false);
-    });
-
-    return () => unsub();
-  }, []);
-
-  const filtered = useMemo(() => {
-    const needle = query.toLowerCase();
-    return logs.filter((log) => {
-      const matchesEntity = entityFilter === 'all' || log.entityType === entityFilter;
-      const blob = [
-        log.action,
-        log.entityType,
-        log.entityId,
-        log.actor?.displayName,
-        log.actor?.email,
-        JSON.stringify(log.metadata || {}),
-      ]
-        .filter(Boolean)
-        .join(' ')
-        .toLowerCase();
-      return matchesEntity && blob.includes(needle);
-    });
-  }, [logs, query, entityFilter]);
-
   return (
-    <div className="max-w-[1400px] mx-auto space-y-5">
-      <section className="bg-[#f8faf7] border border-[#dfe6dd] rounded-[24px] p-5 md:p-6">
-        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-          <div>
-            <h1 className="text-[34px] leading-none font-semibold text-[#1f2d23]">Activity Logs</h1>
-            <p className="text-sm text-[#849684] mt-1">Realtime audit trail for admin actions</p>
-          </div>
+    <div className="mx-auto max-w-5xl space-y-6">
+      <section className="rounded-[24px] border border-[#dfe6dd] bg-[#f8faf7] p-6 md:p-8">
+        <p className="text-[11px] uppercase tracking-[0.18em] text-[#7d907f]">Workspace</p>
+        <h1 className="mt-2 text-[34px] font-semibold leading-none text-[#1f2d23]">Activity Logs</h1>
+        <p className="mt-3 max-w-2xl text-sm leading-7 text-[#708072]">
+          The admin has been reduced to the MANSA itinerary workspace only. Audit events are now focused on itinerary
+          edits, publishing state, and admin profile access rather than property, room, or payment operations.
+        </p>
+      </section>
 
-          <div className="flex flex-col sm:flex-row gap-2 w-full md:w-auto">
-            <div className="relative min-w-[260px]">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#91a192]" />
-              <input
-                type="text"
-                placeholder="Search action, actor, metadata..."
-                value={query}
-                onChange={(e) => setQuery(e.target.value)}
-                className="w-full h-10 rounded-xl bg-white border border-[#d8e1d7] pl-9 pr-3 text-sm text-[#2f4032] outline-none focus:border-[#b9cdb7]"
-              />
-            </div>
-
-            <div className="relative">
-              <Filter className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#91a192]" />
-              <select
-                value={entityFilter}
-                onChange={(e) => setEntityFilter(e.target.value)}
-                className="h-10 min-w-[180px] rounded-xl bg-white border border-[#d8e1d7] pl-9 pr-8 text-sm text-[#2f4032] outline-none focus:border-[#b9cdb7] appearance-none"
-              >
-                <option value="all">All Entities</option>
-                <option value="booking">Bookings</option>
-                <option value="payment">Payments</option>
-                <option value="room">Rooms</option>
-              </select>
-            </div>
+      <section className="grid gap-4 md:grid-cols-3">
+        <div className="rounded-2xl border border-[#dce5db] bg-white p-5">
+          <div className="mb-3 inline-flex rounded-xl bg-[#eef3eb] p-2 text-[#567158]">
+            <Activity className="h-5 w-5" />
           </div>
+          <h2 className="text-lg font-semibold text-[#243226]">Itinerary-first actions</h2>
+          <p className="mt-2 text-sm leading-6 text-[#66776a]">
+            Save and publish events are recorded against itinerary records only, keeping the workspace focused on
+            journey design.
+          </p>
+        </div>
+        <div className="rounded-2xl border border-[#dce5db] bg-white p-5">
+          <div className="mb-3 inline-flex rounded-xl bg-[#fff4da] p-2 text-[#9d6a00]">
+            <ShieldCheck className="h-5 w-5" />
+          </div>
+          <h2 className="text-lg font-semibold text-[#243226]">Supabase-backed admin</h2>
+          <p className="mt-2 text-sm leading-6 text-[#66776a]">
+            The save flow depends on authenticated Supabase access plus the server-side
+            <code className="mx-1 rounded bg-[#f3f6f1] px-1.5 py-0.5 text-xs">SUPABASE_SERVICE_ROLE_KEY</code>
+            environment variable.
+          </p>
+        </div>
+        <div className="rounded-2xl border border-[#dce5db] bg-white p-5">
+          <div className="mb-3 inline-flex rounded-xl bg-[#eef1f8] p-2 text-[#556f9f]">
+            <FileText className="h-5 w-5" />
+          </div>
+          <h2 className="text-lg font-semibold text-[#243226]">Clean workspace</h2>
+          <p className="mt-2 text-sm leading-6 text-[#66776a]">
+            Legacy Twiga booking, payment, and room management screens have been removed so this admin is now scoped
+            to MANSA only.
+          </p>
         </div>
       </section>
 
-      <section className="bg-white border border-[#dce5db] rounded-2xl overflow-hidden">
-        {loading ? (
-          <div className="p-6 space-y-3">
-            {[...Array(6)].map((_, idx) => (
-              <div key={idx} className="h-12 rounded-lg bg-[#f1f5ef] animate-pulse" />
-            ))}
-          </div>
-        ) : filtered.length === 0 ? (
-          <div className="p-10 text-center text-[#6c7f6d]">No audit entries found.</div>
-        ) : (
-          <div className="overflow-x-auto">
-            <table className="w-full text-sm">
-              <thead className="bg-[#f5f8f4] border-b border-[#e3ebe2]">
-                <tr>
-                  <th className="text-left py-3 px-4 font-semibold text-[#899a8a]">Action</th>
-                  <th className="text-left py-3 px-4 font-semibold text-[#899a8a]">Entity</th>
-                  <th className="text-left py-3 px-4 font-semibold text-[#899a8a]">Actor</th>
-                  <th className="text-left py-3 px-4 font-semibold text-[#899a8a]">Metadata</th>
-                  <th className="text-left py-3 px-4 font-semibold text-[#899a8a]">Time</th>
-                </tr>
-              </thead>
-              <tbody>
-                {filtered.map((log) => (
-                  <tr key={log.id} className="border-b border-[#edf2ec] hover:bg-[#f8fbf7] align-top">
-                    <td className="py-3 px-4">
-                      <p className="font-semibold text-[#2f4032]">{formatAction(log.action)}</p>
-                      <p className="text-xs text-[#8da08e]">{log.action}</p>
-                    </td>
-                    <td className="py-3 px-4">
-                      <p className="text-[#2f4032] capitalize">{log.entityType}</p>
-                      <p className="text-xs text-[#8da08e]">{log.entityId}</p>
-                    </td>
-                    <td className="py-3 px-4">
-                      <p className="text-[#2f4032]">{log.actor?.displayName || 'System'}</p>
-                      <p className="text-xs text-[#8da08e]">{log.actor?.email || log.actor?.uid || 'N/A'}</p>
-                    </td>
-                    <td className="py-3 px-4 max-w-[420px]">
-                      <pre className="text-xs text-[#5f715f] whitespace-pre-wrap break-words">
-                        {JSON.stringify(log.metadata || {}, null, 2)}
-                      </pre>
-                    </td>
-                    <td className="py-3 px-4 text-[#617262] whitespace-nowrap">
-                      <span className="inline-flex items-center gap-1.5">
-                        <Clock3 className="w-3.5 h-3.5" />
-                        {formatDateTime(log.createdAt)}
-                      </span>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        )}
+      <section className="rounded-[24px] border border-[#dce5db] bg-white p-6 md:p-8">
+        <h2 className="text-xl font-semibold text-[#243226]">Next checks</h2>
+        <div className="mt-4 grid gap-3">
+          <Link
+            href="/itineraries"
+            className="flex items-center justify-between rounded-2xl border border-[#e3e9e1] bg-[#fafcf9] px-4 py-4 text-sm text-[#2f4032] transition hover:border-[#d3ddd2] hover:bg-[#f5f8f4]"
+          >
+            Open itinerary builder
+            <ArrowRight className="h-4 w-4 text-[#718373]" />
+          </Link>
+          <Link
+            href="/settings"
+            className="flex items-center justify-between rounded-2xl border border-[#e3e9e1] bg-[#fafcf9] px-4 py-4 text-sm text-[#2f4032] transition hover:border-[#d3ddd2] hover:bg-[#f5f8f4]"
+          >
+            Verify admin profile and Supabase auth
+            <ArrowRight className="h-4 w-4 text-[#718373]" />
+          </Link>
+        </div>
       </section>
     </div>
   );
