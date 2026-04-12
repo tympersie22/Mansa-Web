@@ -101,9 +101,9 @@ export const destinations = [
 
 export const faqs = [
   {
-    question: 'Do you offer fixed packages?',
+    question: 'How does the planning process work?',
     answer:
-      'No. We start with your timing, pace, interests, and priorities, then shape the journey around them.',
+      'We begin with your travel dates, preferences, and overall direction, then build a structured proposal that brings everything together — from accommodation to experiences and logistics.',
   },
   {
     question: 'Can you combine Zanzibar with safari?',
@@ -119,5 +119,60 @@ export const faqs = [
     question: 'When should we begin planning?',
     answer:
       'Earlier is better for seasonal availability, but we can also support shorter lead times where logistics allow.',
+  },
+  {
+    question: 'How involved do I need to be in the planning process?',
+    answer:
+      'As much or as little as you prefer. Some guests come with a clear idea, while others rely on us to guide the structure.',
+  },
+  {
+    question: 'Can you work with a rough idea rather than a fixed plan?',
+    answer:
+      'Yes. Most journeys start that way. We use your initial direction to build a structured proposal.',
+  },
+  {
+    question: 'Will someone be available during our trip?',
+    answer:
+      'Yes. You’ll be able to reach us directly, and we remain available throughout your stay.',
+  },
+  {
+    question: 'How do you handle last-minute changes or requests?',
+    answer:
+      'Where possible, we remain flexible and accommodate changes on the ground, while ensuring the overall structure of the journey stays intact.',
+  },
+  {
+    question: 'How do you ensure everything runs smoothly during the trip?',
+    answer:
+      'Through detailed planning, clear coordination with our partners, and ongoing oversight while you are on the island.',
+  },
+  {
+    question: 'Are your experiences private or shared?',
+    answer:
+      'Most can be arranged privately. Shared options are available if preferred.',
+  },
+  {
+    question: 'Can we choose which experiences to include?',
+    answer:
+      'Yes. Everything is flexible and built around your interests.',
+  },
+  {
+    question: 'Can we choose our own hotels?',
+    answer:
+      'Yes. We can work with your preferred properties or recommend options based on your travel style.',
+  },
+  {
+    question: 'Do you handle corporate groups or large bookings?',
+    answer:
+      'Yes. We manage group travel, including corporate retreats, incentive trips, and conferences.',
+  },
+  {
+    question: 'How do you approach structuring a trip across different locations?',
+    answer:
+      'We focus on flow — how each location connects, how time is spent in each place, and how the overall journey feels from start to finish.',
+  },
+  {
+    question: 'What type of traveller do you work best with?',
+    answer:
+      'We work best with guests who value a well-structured, seamless experience and are open to guidance in shaping their journey.',
   },
 ];
