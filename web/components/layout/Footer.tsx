@@ -1,7 +1,15 @@
 import Link from 'next/link';
-import { Mail, Phone, MapPin, Instagram, Facebook, Globe } from 'lucide-react';
+import { Mail, Phone, MapPin, Instagram, Linkedin, Globe } from 'lucide-react';
 import { destinations } from '@/lib/mansa-content';
 import { contactHref, siteConfig } from '@/lib/site-config';
+
+function TikTokIcon(props: React.SVGProps<SVGSVGElement>) {
+  return (
+    <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" {...props}>
+      <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.44h-3.2v12.39a2.89 2.89 0 1 1-2-2.75V8.63a6.08 6.08 0 1 0 5.2 6v-6.3a8 8 0 0 0 4.77 1.57V6.69z" />
+    </svg>
+  );
+}
 
 const footerLinks = {
   destinations: destinations.map((destination) => ({
@@ -43,7 +51,8 @@ export default function Footer() {
             <div className="flex gap-4">
               {[
                 { href: siteConfig.links.instagram, icon: Instagram, label: 'Instagram' },
-                { href: siteConfig.links.facebook, icon: Facebook, label: 'Facebook' },
+                { href: siteConfig.links.tiktok, icon: TikTokIcon, label: 'TikTok' },
+                { href: siteConfig.links.linkedin, icon: Linkedin, label: 'LinkedIn' },
                 { href: siteConfig.links.website, icon: Globe, label: 'Website' },
               ].map((item) => (
                 <a
