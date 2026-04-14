@@ -10,8 +10,6 @@ import {
   ChevronRight,
   Building2,
   Loader2,
-  Bell,
-  HelpCircle,
   Settings,
   FileText,
   Map,
@@ -128,17 +126,6 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           ))}
         </nav>
 
-        <div className="px-4 pt-1 pb-2 space-y-1">
-          <button className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-[#556559] hover:bg-[#f1f5ef] transition-colors">
-            <Bell className="w-4 h-4" />
-            <span className="text-sm font-medium">Notifications</span>
-          </button>
-          <button className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-[#556559] hover:bg-[#f1f5ef] transition-colors">
-            <HelpCircle className="w-4 h-4" />
-            <span className="text-sm font-medium">Support</span>
-          </button>
-        </div>
-
         <div className="p-4 border-t border-[#e5ebe3]">
           <div className="flex items-center gap-3 px-2 py-2">
             <div className="w-9 h-9 bg-[#d9e5d7] rounded-full flex items-center justify-center">
@@ -165,7 +152,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           >
             <Menu className="w-6 h-6" />
           </button>
-          <h1 className="text-[#1d2a22] font-semibold">Mansa Admin</h1>
+          <h1 className="text-[#1d2a22] font-semibold">Mansa Travel Design Admin</h1>
         </header>
 
         <main className="flex-1 p-4 lg:p-6 overflow-auto">{children}</main>

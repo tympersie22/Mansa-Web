@@ -548,7 +548,7 @@ export const experiences: ExperienceEntry[] = [
     bestTime: 'Season-dependent',
     idealFor: 'Travelers wanting a stronger safari chapter',
     image:
-      'https://images.unsplash.com/photo-1549366021-9f761d040a94?auto=format&fit=crop&w=1400&q=80',
+      'https://images.unsplash.com/photo-1516426122078-c23e76319801?auto=format&fit=crop&w=1400&q=80',
     cardLine: 'A shorter Serengeti chapter built to integrate with Zanzibar cleanly.',
     intro: [
       'For travelers who want a more recognisable safari chapter, the Serengeti can be added in a way that still respects the wider flow of the journey.',
