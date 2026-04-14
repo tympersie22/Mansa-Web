@@ -129,6 +129,10 @@ export default function ItinerariesPage() {
     () => itinerary.days.find((day) => day.id === activeDayId) || itinerary.days[0],
     [activeDayId, itinerary.days]
   );
+  const sortedDays = useMemo(
+    () => itinerary.days.slice().sort((a, b) => a.dayNumber - b.dayNumber),
+    [itinerary.days]
+  );
 
   const updateTripField = (field: keyof ItineraryDocument, value: string | boolean) => {
     setItinerary((current) => ({ ...current, [field]: value }));
@@ -681,7 +685,7 @@ export default function ItinerariesPage() {
               </div>
 
               <div className="space-y-5">
-                {itinerary.days.map((day) => (
+                {sortedDays.map((day) => (
                   <article
                     key={day.id}
                     className="grid gap-6 rounded-[28px] border border-[#e3e8df] p-5 lg:grid-cols-[260px_minmax(0,1fr)] lg:p-6"
@@ -698,25 +702,27 @@ export default function ItinerariesPage() {
                     <div className="space-y-5">
                       <div>
                         <p className="text-[11px] uppercase tracking-[0.18em] text-[#8d7a43]">
-                          Day {day.dayNumber} • {day.dateLabel}
+                          Day {day.dayNumber}
                         </p>
                         <h3 className="mt-2 text-3xl font-semibold text-[#223329]">{day.title}</h3>
-                        <p className="mt-2 text-sm uppercase tracking-[0.16em] text-[#6d7d71]">
-                          {day.location}
-                        </p>
+                        <div className="mt-3 flex flex-wrap gap-3 text-xs uppercase tracking-[0.16em] text-[#6d7d71]">
+                          <span className="rounded-full bg-[#f6f4ee] px-3 py-1">{day.dateLabel}</span>
+                          <span className="rounded-full bg-[#f8faf7] px-3 py-1">{day.location}</span>
+                        </div>
                         <p className="mt-4 text-sm leading-7 text-[#526157]">{day.summary}</p>
                       </div>
 
-                      <div className="grid gap-4 xl:grid-cols-[1.2fr_0.8fr]">
-                        <div className="rounded-[22px] bg-[#f8faf7] p-5">
+                      <div className="grid gap-4 xl:grid-cols-[1.15fr_0.85fr]">
+                        <div className="space-y-4">
+                          <div className="rounded-[22px] bg-[#f8faf7] p-5">
                           <p className="text-[11px] uppercase tracking-[0.18em] text-[#7d907f]">
-                            Day Plan
+                            Experience Flow
                           </p>
                           <div className="mt-4 space-y-4">
                             {day.activities.map((activity) => (
                               <div
                                 key={`${activity.timeLabel}-${activity.title}`}
-                                className="grid gap-2 md:grid-cols-[120px_minmax(0,1fr)]"
+                                className="grid gap-2 rounded-[18px] border border-[#dfe6dd] bg-white/70 p-4 md:grid-cols-[120px_minmax(0,1fr)]"
                               >
                                 <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[#8d7a43]">
                                   {activity.timeLabel || 'Planned'}
@@ -732,6 +738,23 @@ export default function ItinerariesPage() {
                               </div>
                             ))}
                           </div>
+                          </div>
+
+                          {day.notes?.length ? (
+                            <div className="rounded-[22px] bg-[#f6f4ee] p-5">
+                              <p className="text-[11px] uppercase tracking-[0.18em] text-[#8d7a43]">
+                                Notes
+                              </p>
+                              <ul className="mt-3 space-y-2 text-sm leading-7 text-[#4f5c54]">
+                                {day.notes.map((note) => (
+                                  <li key={note} className="flex items-start gap-3">
+                                    <span className="mt-3 h-1.5 w-1.5 rounded-full bg-[#8d7a43]" />
+                                    <span>{note}</span>
+                                  </li>
+                                ))}
+                              </ul>
+                            </div>
+                          ) : null}
                         </div>
 
                         <div className="space-y-4">

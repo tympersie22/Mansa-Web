@@ -6,6 +6,7 @@ import { fetchPublishedItineraryBySlug } from '@/lib/itinerary-data';
 export default async function ItineraryPage({ params }: { params: { slug: string } }) {
   const itinerary = await fetchPublishedItineraryBySlug(params.slug);
   if (!itinerary) notFound();
+  const sortedDays = itinerary.days.slice().sort((a, b) => a.dayNumber - b.dayNumber);
 
   return (
     <div className="bg-[#f3f1ea]">
@@ -68,7 +69,7 @@ export default async function ItineraryPage({ params }: { params: { slug: string
             </div>
 
             <div className="space-y-6">
-              {itinerary.days.map((day) => (
+              {sortedDays.map((day) => (
                 <article key={day.id} className="grid gap-6 rounded-[30px] border border-[#e3e8df] p-5 md:p-6 lg:grid-cols-[280px_minmax(0,1fr)]">
                   <div className="relative overflow-hidden rounded-[22px]">
                     <Image
@@ -82,19 +83,23 @@ export default async function ItineraryPage({ params }: { params: { slug: string
                   <div className="space-y-5">
                     <div>
                       <p className="text-[11px] uppercase tracking-[0.18em] text-[#8d7a43]">
-                        Day {day.dayNumber} • {day.dateLabel}
+                        Day {day.dayNumber}
                       </p>
                       <h2 className="mt-2 text-3xl font-semibold text-[#223329] md:text-4xl">{day.title}</h2>
-                      <p className="mt-2 text-xs uppercase tracking-[0.16em] text-[#728375]">{day.location}</p>
+                      <div className="mt-3 flex flex-wrap gap-3 text-xs uppercase tracking-[0.16em] text-[#728375]">
+                        <span className="rounded-full bg-[#f6f4ee] px-3 py-1">{day.dateLabel}</span>
+                        <span className="rounded-full bg-[#f8faf7] px-3 py-1">{day.location}</span>
+                      </div>
                       <p className="mt-4 text-sm leading-8 text-[#526157] md:text-base">{day.summary}</p>
                     </div>
 
-                    <div className="grid gap-4 xl:grid-cols-[1.2fr_0.8fr]">
-                      <div className="rounded-[24px] bg-[#f8faf7] p-5 md:p-6">
-                        <p className="text-[11px] uppercase tracking-[0.18em] text-[#7d907f]">Daily Flow</p>
-                        <div className="mt-5 space-y-5">
+                    <div className="grid gap-4 xl:grid-cols-[1.15fr_0.85fr]">
+                      <div className="space-y-4">
+                        <div className="rounded-[24px] bg-[#f8faf7] p-5 md:p-6">
+                          <p className="text-[11px] uppercase tracking-[0.18em] text-[#7d907f]">Experience Flow</p>
+                          <div className="mt-5 space-y-4">
                           {day.activities.map((activity) => (
-                            <div key={`${activity.timeLabel}-${activity.title}`} className="grid gap-2 md:grid-cols-[130px_minmax(0,1fr)]">
+                            <div key={`${activity.timeLabel}-${activity.title}`} className="grid gap-2 rounded-[18px] border border-[#dfe6dd] bg-white/70 p-4 md:grid-cols-[130px_minmax(0,1fr)]">
                               <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[#8d7a43]">
                                 {activity.timeLabel || 'Planned'}
                               </p>
@@ -104,7 +109,22 @@ export default async function ItineraryPage({ params }: { params: { slug: string
                               </div>
                             </div>
                           ))}
+                          </div>
                         </div>
+
+                        {day.notes?.length ? (
+                          <div className="rounded-[24px] bg-[#f6f4ee] p-5 md:p-6">
+                            <p className="text-[11px] uppercase tracking-[0.18em] text-[#8d7a43]">Notes</p>
+                            <ul className="mt-4 space-y-3">
+                              {day.notes.map((note) => (
+                                <li key={note} className="flex items-start gap-3 text-sm leading-7 text-[#4f5c54]">
+                                  <span className="mt-3 h-1.5 w-1.5 rounded-full bg-[#8d7a43]" />
+                                  <span>{note}</span>
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+                        ) : null}
                       </div>
 
                       <div className="space-y-4">

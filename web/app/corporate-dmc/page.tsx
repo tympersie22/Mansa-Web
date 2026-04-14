@@ -67,7 +67,6 @@ const networkLogos = [
 
 export default function CorporateDmcPage() {
   const repeatedLogos = [...networkLogos, ...networkLogos];
-
   return (
     <div className="bg-surface">
       <section className="relative flex min-h-[68vh] items-end overflow-hidden">
