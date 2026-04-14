@@ -23,6 +23,11 @@ export const metadata: Metadata = {
     'Private experiences, curated journeys, and seamless travel across Zanzibar and mainland Tanzania.',
   keywords:
     'MANSA Tours and Travel, Zanzibar travel, curated journeys, Tanzania travel, private experiences, safari extension',
+  icons: {
+    icon: '/icon',
+    shortcut: '/icon',
+    apple: '/icon',
+  },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

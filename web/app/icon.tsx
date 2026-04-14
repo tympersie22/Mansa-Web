@@ -1,8 +1,8 @@
 import { ImageResponse } from 'next/og';
 
 export const size = {
-  width: 64,
-  height: 64,
+  width: 32,
+  height: 32,
 };
 
 export const contentType = 'image/png';
@@ -17,16 +17,16 @@ export default function Icon() {
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          borderRadius: 14,
           background: '#383836',
           color: '#FBB040',
-          fontSize: 34,
+          fontSize: 20,
           fontWeight: 700,
+          borderRadius: 8,
         }}
       >
         M
       </div>
     ),
-    size
+    size,
   );
 }

@@ -239,7 +239,7 @@ export default function CorporateDmcPage() {
               </p>
             </div>
           </Reveal>
-          <div className="mt-10 overflow-hidden rounded-[1.8rem] border border-surface-border bg-white/72 py-6">
+          <div className="mt-10 overflow-x-auto rounded-[1.8rem] border border-surface-border bg-white/72 py-6">
             <div className="marquee-track flex min-w-max items-center gap-4 px-4">
               {repeatedLogos.map((item, index) => (
                 <div
