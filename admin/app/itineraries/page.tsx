@@ -688,15 +688,15 @@ export default function ItinerariesPage() {
                 {sortedDays.map((day) => (
                   <article
                     key={day.id}
-                    className="grid gap-6 rounded-[28px] border border-[#e3e8df] p-5 lg:grid-cols-[260px_minmax(0,1fr)] lg:p-6"
+                    className="grid gap-5 rounded-[28px] border border-[#e3e8df] p-5 lg:grid-cols-[200px_minmax(0,1fr)] lg:p-6"
                   >
-                    <div className="relative overflow-hidden rounded-[20px]">
+                    <div className="relative overflow-hidden rounded-[20px] self-start">
                       <Image
                         src={day.heroImage}
                         alt={day.title}
                         width={900}
                         height={1100}
-                        className="h-full min-h-[220px] w-full object-cover"
+                        className="h-[170px] w-full object-cover lg:h-[200px]"
                       />
                     </div>
                     <div className="space-y-5">
@@ -704,7 +704,9 @@ export default function ItinerariesPage() {
                         <p className="text-[11px] uppercase tracking-[0.18em] text-[#8d7a43]">
                           Day {day.dayNumber}
                         </p>
-                        <h3 className="mt-2 text-3xl font-semibold text-[#223329]">{day.title}</h3>
+                        <h3 className="mt-2 text-2xl font-semibold text-[#223329] lg:text-[2rem]">
+                          {day.title}
+                        </h3>
                         <div className="mt-3 flex flex-wrap gap-3 text-xs uppercase tracking-[0.16em] text-[#6d7d71]">
                           <span className="rounded-full bg-[#f6f4ee] px-3 py-1">{day.dateLabel}</span>
                           <span className="rounded-full bg-[#f8faf7] px-3 py-1">{day.location}</span>
