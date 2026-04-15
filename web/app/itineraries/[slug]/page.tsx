@@ -71,14 +71,67 @@ export default async function ItineraryPage({ params }: { params: { slug: string
             <div className="space-y-6">
               {sortedDays.map((day) => (
                 <article key={day.id} className="grid gap-6 rounded-[30px] border border-[#e3e8df] p-5 md:p-6 lg:grid-cols-[280px_minmax(0,1fr)]">
-                  <div className="relative overflow-hidden rounded-[22px]">
-                    <Image
-                      src={day.heroImage}
-                      alt={day.title}
-                      width={1000}
-                      height={1200}
-                      className="h-full min-h-[240px] w-full object-cover"
-                    />
+                  <div className="space-y-4">
+                    <div className="relative overflow-hidden rounded-[22px]">
+                      <Image
+                        src={day.heroImage}
+                        alt={day.title}
+                        width={1000}
+                        height={1200}
+                        className="h-[220px] w-full object-cover"
+                      />
+                    </div>
+
+                    {day.stays?.length ? (
+                      <div className="rounded-[24px] bg-[#f6f4ee] p-5 md:p-6">
+                        <p className="text-[11px] uppercase tracking-[0.18em] text-[#8d7a43]">Stay</p>
+                        <div className="mt-4 space-y-3">
+                          {day.stays.map((stay) => (
+                            <div key={`${stay.name}-${stay.location}`} className="text-sm leading-7 text-[#4f5c54]">
+                              <p className="font-semibold text-[#25362a]">{stay.name}</p>
+                              <p>{stay.location}</p>
+                              <p>{stay.nights} night{stay.nights > 1 ? 's' : ''}{stay.roomType ? ` • ${stay.roomType}` : ''}</p>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    ) : null}
+
+                    {day.transfers?.length ? (
+                      <div className="rounded-[24px] bg-[#f8faf7] p-5 md:p-6">
+                        <p className="text-[11px] uppercase tracking-[0.18em] text-[#7d907f]">Transfers</p>
+                        <ul className="mt-4 space-y-2 text-sm leading-7 text-[#4f5c54]">
+                          {day.transfers.map((transfer) => (
+                            <li key={transfer}>{transfer}</li>
+                          ))}
+                        </ul>
+                      </div>
+                    ) : null}
+
+                    {day.meals?.length ? (
+                      <div className="rounded-[24px] bg-[#f8faf7] p-5 md:p-6">
+                        <p className="text-[11px] uppercase tracking-[0.18em] text-[#7d907f]">Meals</p>
+                        <ul className="mt-4 space-y-2 text-sm leading-7 text-[#4f5c54]">
+                          {day.meals.map((meal) => (
+                            <li key={meal}>{meal}</li>
+                          ))}
+                        </ul>
+                      </div>
+                    ) : null}
+
+                    {day.notes?.length ? (
+                      <div className="rounded-[24px] bg-[#f6f4ee] p-5 md:p-6">
+                        <p className="text-[11px] uppercase tracking-[0.18em] text-[#8d7a43]">Notes</p>
+                        <ul className="mt-4 space-y-3">
+                          {day.notes.map((note) => (
+                            <li key={note} className="flex items-start gap-3 text-sm leading-7 text-[#4f5c54]">
+                              <span className="mt-3 h-1.5 w-1.5 rounded-full bg-[#8d7a43]" />
+                              <span>{note}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    ) : null}
                   </div>
                   <div className="space-y-5">
                     <div>
@@ -93,77 +146,20 @@ export default async function ItineraryPage({ params }: { params: { slug: string
                       <p className="mt-4 text-sm leading-8 text-[#526157] md:text-base">{day.summary}</p>
                     </div>
 
-                    <div className="grid gap-4 xl:grid-cols-[1.15fr_0.85fr]">
-                      <div className="space-y-4">
-                        <div className="rounded-[24px] bg-[#f8faf7] p-5 md:p-6">
-                          <p className="text-[11px] uppercase tracking-[0.18em] text-[#7d907f]">Experience Flow</p>
-                          <div className="mt-5 space-y-4">
-                          {day.activities.map((activity) => (
-                            <div key={`${activity.timeLabel}-${activity.title}`} className="grid gap-2 rounded-[18px] border border-[#dfe6dd] bg-white/70 p-4 md:grid-cols-[130px_minmax(0,1fr)]">
-                              <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[#8d7a43]">
-                                {activity.timeLabel || 'Planned'}
-                              </p>
-                              <div>
-                                <p className="text-base font-semibold text-[#25362a]">{activity.title}</p>
-                                <p className="mt-1 text-sm leading-7 text-[#526157]">{activity.description}</p>
-                              </div>
-                            </div>
-                          ))}
-                          </div>
-                        </div>
-
-                        {day.notes?.length ? (
-                          <div className="rounded-[24px] bg-[#f6f4ee] p-5 md:p-6">
-                            <p className="text-[11px] uppercase tracking-[0.18em] text-[#8d7a43]">Notes</p>
-                            <ul className="mt-4 space-y-3">
-                              {day.notes.map((note) => (
-                                <li key={note} className="flex items-start gap-3 text-sm leading-7 text-[#4f5c54]">
-                                  <span className="mt-3 h-1.5 w-1.5 rounded-full bg-[#8d7a43]" />
-                                  <span>{note}</span>
-                                </li>
-                              ))}
-                            </ul>
-                          </div>
-                        ) : null}
-                      </div>
-
-                      <div className="space-y-4">
-                        {day.stays?.length ? (
-                          <div className="rounded-[24px] bg-[#f6f4ee] p-5 md:p-6">
-                            <p className="text-[11px] uppercase tracking-[0.18em] text-[#8d7a43]">Stay</p>
-                            <div className="mt-4 space-y-3">
-                              {day.stays.map((stay) => (
-                                <div key={`${stay.name}-${stay.location}`} className="text-sm leading-7 text-[#4f5c54]">
-                                  <p className="font-semibold text-[#25362a]">{stay.name}</p>
-                                  <p>{stay.location}</p>
-                                  <p>{stay.nights} night{stay.nights > 1 ? 's' : ''}{stay.roomType ? ` • ${stay.roomType}` : ''}</p>
-                                </div>
-                              ))}
+                    <div className="rounded-[24px] bg-[#f8faf7] p-5 md:p-6">
+                      <p className="text-[11px] uppercase tracking-[0.18em] text-[#7d907f]">Experience Flow</p>
+                      <div className="mt-5 space-y-4">
+                        {day.activities.map((activity) => (
+                          <div key={`${activity.timeLabel}-${activity.title}`} className="grid gap-2 rounded-[18px] border border-[#dfe6dd] bg-white/70 p-4 md:grid-cols-[130px_minmax(0,1fr)]">
+                            <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[#8d7a43]">
+                              {activity.timeLabel || 'Planned'}
+                            </p>
+                            <div>
+                              <p className="text-base font-semibold text-[#25362a]">{activity.title}</p>
+                              <p className="mt-1 text-sm leading-7 text-[#526157]">{activity.description}</p>
                             </div>
                           </div>
-                        ) : null}
-
-                        {day.meals?.length ? (
-                          <div className="rounded-[24px] bg-[#f8faf7] p-5 md:p-6">
-                            <p className="text-[11px] uppercase tracking-[0.18em] text-[#7d907f]">Meals</p>
-                            <ul className="mt-4 space-y-2 text-sm leading-7 text-[#4f5c54]">
-                              {day.meals.map((meal) => (
-                                <li key={meal}>{meal}</li>
-                              ))}
-                            </ul>
-                          </div>
-                        ) : null}
-
-                        {day.transfers?.length ? (
-                          <div className="rounded-[24px] bg-[#f8faf7] p-5 md:p-6">
-                            <p className="text-[11px] uppercase tracking-[0.18em] text-[#7d907f]">Transfers</p>
-                            <ul className="mt-4 space-y-2 text-sm leading-7 text-[#4f5c54]">
-                              {day.transfers.map((transfer) => (
-                                <li key={transfer}>{transfer}</li>
-                              ))}
-                            </ul>
-                          </div>
-                        ) : null}
+                        ))}
                       </div>
                     </div>
                   </div>

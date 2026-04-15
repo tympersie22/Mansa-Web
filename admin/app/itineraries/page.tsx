@@ -688,16 +688,83 @@ export default function ItinerariesPage() {
                 {sortedDays.map((day) => (
                   <article
                     key={day.id}
-                    className="grid gap-5 rounded-[28px] border border-[#e3e8df] p-5 lg:grid-cols-[200px_minmax(0,1fr)] lg:p-6"
+                    className="grid gap-5 rounded-[28px] border border-[#e3e8df] p-5 lg:grid-cols-[240px_minmax(0,1fr)] lg:p-6"
                   >
-                    <div className="relative overflow-hidden rounded-[20px] self-start">
-                      <Image
-                        src={day.heroImage}
-                        alt={day.title}
-                        width={900}
-                        height={1100}
-                        className="h-[170px] w-full object-cover lg:h-[200px]"
-                      />
+                    <div className="space-y-4 self-start">
+                      <div className="relative overflow-hidden rounded-[20px]">
+                        <Image
+                          src={day.heroImage}
+                          alt={day.title}
+                          width={900}
+                          height={1100}
+                          className="h-[170px] w-full object-cover lg:h-[200px]"
+                        />
+                      </div>
+
+                      {day.stays?.length ? (
+                        <div className="rounded-[22px] bg-[#f6f4ee] p-5">
+                          <p className="text-[11px] uppercase tracking-[0.18em] text-[#8d7a43]">
+                            Stay
+                          </p>
+                          <div className="mt-3 space-y-3">
+                            {day.stays.map((stay) => (
+                              <div
+                                key={`${stay.name}-${stay.location}`}
+                                className="text-sm leading-7 text-[#4f5c54]"
+                              >
+                                <p className="font-semibold text-[#25362a]">{stay.name}</p>
+                                <p>{stay.location}</p>
+                                <p>
+                                  {stay.nights} night{stay.nights > 1 ? 's' : ''}
+                                  {stay.roomType ? ` • ${stay.roomType}` : ''}
+                                </p>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      ) : null}
+
+                      {day.transfers?.length ? (
+                        <div className="rounded-[22px] bg-[#f8faf7] p-5">
+                          <p className="text-[11px] uppercase tracking-[0.18em] text-[#7d907f]">
+                            Transfers
+                          </p>
+                          <ul className="mt-3 space-y-2 text-sm leading-7 text-[#4f5c54]">
+                            {day.transfers.map((transfer) => (
+                              <li key={transfer}>{transfer}</li>
+                            ))}
+                          </ul>
+                        </div>
+                      ) : null}
+
+                      {day.meals?.length ? (
+                        <div className="rounded-[22px] bg-[#f8faf7] p-5">
+                          <p className="text-[11px] uppercase tracking-[0.18em] text-[#7d907f]">
+                            Meals
+                          </p>
+                          <ul className="mt-3 space-y-2 text-sm leading-7 text-[#4f5c54]">
+                            {day.meals.map((item) => (
+                              <li key={item}>{item}</li>
+                            ))}
+                          </ul>
+                        </div>
+                      ) : null}
+
+                      {day.notes?.length ? (
+                        <div className="rounded-[22px] bg-[#f6f4ee] p-5">
+                          <p className="text-[11px] uppercase tracking-[0.18em] text-[#8d7a43]">
+                            Notes
+                          </p>
+                          <ul className="mt-3 space-y-2 text-sm leading-7 text-[#4f5c54]">
+                            {day.notes.map((note) => (
+                              <li key={note} className="flex items-start gap-3">
+                                <span className="mt-3 h-1.5 w-1.5 rounded-full bg-[#8d7a43]" />
+                                <span>{note}</span>
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      ) : null}
                     </div>
                     <div className="space-y-5">
                       <div>
@@ -714,13 +781,11 @@ export default function ItinerariesPage() {
                         <p className="mt-4 text-sm leading-7 text-[#526157]">{day.summary}</p>
                       </div>
 
-                      <div className="grid gap-4 xl:grid-cols-[1.15fr_0.85fr]">
-                        <div className="space-y-4">
-                          <div className="rounded-[22px] bg-[#f8faf7] p-5">
-                          <p className="text-[11px] uppercase tracking-[0.18em] text-[#7d907f]">
-                            Experience Flow
-                          </p>
-                          <div className="mt-4 space-y-4">
+                      <div className="rounded-[22px] bg-[#f8faf7] p-5">
+                        <p className="text-[11px] uppercase tracking-[0.18em] text-[#7d907f]">
+                          Experience Flow
+                        </p>
+                        <div className="mt-4 space-y-4">
                             {day.activities.map((activity) => (
                               <div
                                 key={`${activity.timeLabel}-${activity.title}`}
@@ -739,75 +804,6 @@ export default function ItinerariesPage() {
                                 </div>
                               </div>
                             ))}
-                          </div>
-                          </div>
-
-                          {day.notes?.length ? (
-                            <div className="rounded-[22px] bg-[#f6f4ee] p-5">
-                              <p className="text-[11px] uppercase tracking-[0.18em] text-[#8d7a43]">
-                                Notes
-                              </p>
-                              <ul className="mt-3 space-y-2 text-sm leading-7 text-[#4f5c54]">
-                                {day.notes.map((note) => (
-                                  <li key={note} className="flex items-start gap-3">
-                                    <span className="mt-3 h-1.5 w-1.5 rounded-full bg-[#8d7a43]" />
-                                    <span>{note}</span>
-                                  </li>
-                                ))}
-                              </ul>
-                            </div>
-                          ) : null}
-                        </div>
-
-                        <div className="space-y-4">
-                          {day.stays?.length ? (
-                            <div className="rounded-[22px] bg-[#f6f4ee] p-5">
-                              <p className="text-[11px] uppercase tracking-[0.18em] text-[#8d7a43]">
-                                Stay
-                              </p>
-                              <div className="mt-3 space-y-3">
-                                {day.stays.map((stay) => (
-                                  <div
-                                    key={`${stay.name}-${stay.location}`}
-                                    className="text-sm leading-7 text-[#4f5c54]"
-                                  >
-                                    <p className="font-semibold text-[#25362a]">{stay.name}</p>
-                                    <p>{stay.location}</p>
-                                    <p>
-                                      {stay.nights} night{stay.nights > 1 ? 's' : ''}
-                                      {stay.roomType ? ` • ${stay.roomType}` : ''}
-                                    </p>
-                                  </div>
-                                ))}
-                              </div>
-                            </div>
-                          ) : null}
-
-                          {day.transfers?.length ? (
-                            <div className="rounded-[22px] bg-[#f8faf7] p-5">
-                              <p className="text-[11px] uppercase tracking-[0.18em] text-[#7d907f]">
-                                Transfers
-                              </p>
-                              <ul className="mt-3 space-y-2 text-sm leading-7 text-[#4f5c54]">
-                                {day.transfers.map((transfer) => (
-                                  <li key={transfer}>{transfer}</li>
-                                ))}
-                              </ul>
-                            </div>
-                          ) : null}
-
-                          {day.meals?.length ? (
-                            <div className="rounded-[22px] bg-[#f8faf7] p-5">
-                              <p className="text-[11px] uppercase tracking-[0.18em] text-[#7d907f]">
-                                Meals
-                              </p>
-                              <ul className="mt-3 space-y-2 text-sm leading-7 text-[#4f5c54]">
-                                {day.meals.map((item) => (
-                                  <li key={item}>{item}</li>
-                                ))}
-                              </ul>
-                            </div>
-                          ) : null}
                         </div>
                       </div>
                     </div>
