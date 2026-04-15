@@ -786,24 +786,26 @@ export default function ItinerariesPage() {
                           Experience Flow
                         </p>
                         <div className="mt-4 space-y-4">
-                            {day.activities.map((activity) => (
-                              <div
-                                key={`${activity.timeLabel}-${activity.title}`}
-                                className="grid gap-2 rounded-[18px] border border-[#dfe6dd] bg-white/70 p-4 lg:grid-cols-[120px_minmax(0,1fr)]"
-                              >
+                          {day.activities.map((activity) => (
+                            <div
+                              key={`${activity.timeLabel}-${activity.title}`}
+                              className="grid gap-4 rounded-[18px] border border-[#dfe6dd] bg-white/70 p-4 lg:grid-cols-[104px_minmax(0,1fr)] lg:items-start"
+                            >
+                              <div className="rounded-2xl bg-[#f6f4ee] px-3 py-2 text-center lg:text-left">
                                 <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[#8d7a43]">
                                   {activity.timeLabel || 'Planned'}
                                 </p>
-                                <div>
-                                  <p className="text-base font-semibold text-[#25362a]">
-                                    {activity.title}
-                                  </p>
-                                  <p className="mt-1 text-sm leading-7 text-[#526157]">
-                                    {activity.description}
-                                  </p>
-                                </div>
                               </div>
-                            ))}
+                              <div className="min-w-0">
+                                <p className="break-words text-base font-semibold leading-6 text-[#25362a]">
+                                  {activity.title}
+                                </p>
+                                <p className="mt-2 break-words text-sm leading-7 text-[#526157]">
+                                  {activity.description}
+                                </p>
+                              </div>
+                            </div>
+                          ))}
                         </div>
                       </div>
                     </div>
