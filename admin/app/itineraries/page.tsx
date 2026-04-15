@@ -688,7 +688,7 @@ export default function ItinerariesPage() {
                 {sortedDays.map((day) => (
                   <article
                     key={day.id}
-                    className="grid gap-5 rounded-[28px] border border-[#e3e8df] p-5 lg:grid-cols-[240px_minmax(0,1fr)] lg:p-6"
+                    className="grid gap-5 rounded-[28px] border border-[#e3e8df] p-5 xl:grid-cols-[220px_minmax(0,1fr)] xl:p-6"
                   >
                     <div className="space-y-4 self-start">
                       <div className="relative overflow-hidden rounded-[20px]">
@@ -789,7 +789,7 @@ export default function ItinerariesPage() {
                             {day.activities.map((activity) => (
                               <div
                                 key={`${activity.timeLabel}-${activity.title}`}
-                                className="grid gap-2 rounded-[18px] border border-[#dfe6dd] bg-white/70 p-4 md:grid-cols-[120px_minmax(0,1fr)]"
+                                className="grid gap-2 rounded-[18px] border border-[#dfe6dd] bg-white/70 p-4 lg:grid-cols-[120px_minmax(0,1fr)]"
                               >
                                 <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[#8d7a43]">
                                   {activity.timeLabel || 'Planned'}
