@@ -133,7 +133,7 @@ export default function ItinerariesPage() {
   );
   const guestSiteUrl = useMemo(
     () =>
-      (itinerary.contact.website || process.env.NEXT_PUBLIC_WEBSITE_URL || 'https://mansa.travel').replace(
+      (process.env.NEXT_PUBLIC_WEBSITE_URL || itinerary.contact.website || 'http://localhost:3000').replace(
         /\/$/,
         ''
       ),
