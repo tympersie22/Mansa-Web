@@ -789,15 +789,15 @@ export default function ItinerariesPage() {
                           {day.activities.map((activity) => (
                             <div
                               key={`${activity.timeLabel}-${activity.title}`}
-                              className="grid gap-4 rounded-[18px] border border-[#dfe6dd] bg-white/70 p-4 lg:grid-cols-[104px_minmax(0,1fr)] lg:items-start"
+                              className="rounded-[18px] border border-[#dfe6dd] bg-white/70 p-4"
                             >
-                              <div className="rounded-2xl bg-[#f6f4ee] px-3 py-2 text-center lg:text-left">
+                              <div className="inline-flex rounded-full bg-[#f6f4ee] px-3 py-1.5">
                                 <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[#8d7a43]">
                                   {activity.timeLabel || 'Planned'}
                                 </p>
                               </div>
                               <div className="min-w-0">
-                                <p className="break-words text-base font-semibold leading-6 text-[#25362a]">
+                                <p className="mt-3 break-words text-base font-semibold leading-6 text-[#25362a]">
                                   {activity.title}
                                 </p>
                                 <p className="mt-2 break-words text-sm leading-7 text-[#526157]">
