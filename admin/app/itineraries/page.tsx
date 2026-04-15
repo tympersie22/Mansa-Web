@@ -13,8 +13,6 @@ import {
   sampleItinerary,
 } from '@/lib/itinerary-data';
 
-const guestSiteUrl = (process.env.NEXT_PUBLIC_WEBSITE_URL || 'http://localhost:3000').replace(/\/$/, '');
-
 function updateDay(days: ItineraryDay[], dayId: string, patch: Partial<ItineraryDay>) {
   return days.map((day) => (day.id === dayId ? { ...day, ...patch } : day));
 }
@@ -132,6 +130,14 @@ export default function ItinerariesPage() {
   const sortedDays = useMemo(
     () => itinerary.days.slice().sort((a, b) => a.dayNumber - b.dayNumber),
     [itinerary.days]
+  );
+  const guestSiteUrl = useMemo(
+    () =>
+      (itinerary.contact.website || process.env.NEXT_PUBLIC_WEBSITE_URL || 'https://mansa.travel').replace(
+        /\/$/,
+        ''
+      ),
+    [itinerary.contact.website]
   );
 
   const updateTripField = (field: keyof ItineraryDocument, value: string | boolean) => {
