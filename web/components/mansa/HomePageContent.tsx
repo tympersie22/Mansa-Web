@@ -130,14 +130,15 @@ export default function HomePageContent() {
           <div className="mt-12 grid gap-6 md:grid-cols-2 xl:grid-cols-3">
             {experiences.map((experience, index) => (
               <Reveal key={experience.title} delay={index * 0.06}>
-                <Link href="/experiences" className="group experience-card">
-                  <div className="relative h-[340px] overflow-hidden rounded-[1.75rem]">
+                <Link href={experience.href} className="group experience-card">
+                  <div className={`relative h-[340px] overflow-hidden rounded-[1.75rem] ${experience.imageFit === 'contain' ? 'bg-[#f2e6d4]' : ''}`}>
                     <Image
                       src={experience.image}
                       alt={experience.title}
                       width={900}
                       height={1100}
-                      className="h-full w-full object-cover transition duration-700 group-hover:scale-105"
+                      className={`h-full w-full ${experience.imageFit === 'contain' ? 'object-contain p-4' : 'object-cover'} transition duration-700 group-hover:scale-105`}
+                      style={experience.imagePosition ? { objectPosition: experience.imagePosition } : undefined}
                     />
                     <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(18,18,17,0.04),rgba(18,18,17,0.78))]" />
                     <div className="absolute inset-x-0 bottom-0 p-7 text-text-inverse">

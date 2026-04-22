@@ -10,38 +10,45 @@ export const experiences = [
   {
     title: 'Ocean & Island',
     description: 'Private dhow charters, reef escapes, sandbanks, and tide-shaped days on the water.',
-    image:
-      'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1200&q=80',
+    href: '/experiences/ocean-and-islands',
+    image: '/images/experiences/pexels-dajana-reci-289671698-30125141.jpg',
+    imagePosition: 'center 42%',
   },
   {
     title: 'Culture & Heritage',
     description: 'Stone Town stories, historic routes, architecture, and local perspectives that add depth.',
-    image:
-      'https://images.unsplash.com/photo-1468413253725-0d5181091126?auto=format&fit=crop&w=1200&q=80',
+    href: '/experiences/culture-and-place',
+    image: '/images/experiences/stone-town/pexels-george-john-35128998-7101641.jpg',
+    imagePosition: 'center 45%',
   },
   {
     title: 'Beach & Slow Living',
     description: 'Time shaped by light, tide, and pace, with stays and moments designed to breathe.',
-    image:
-      'https://images.unsplash.com/photo-1500375592092-40eb2168fd21?auto=format&fit=crop&w=1200&q=80',
+    href: '/experiences/slow-zanzibar',
+    image: '/images/experiences/sunset-cruise/pexels-mashauri-lumbas-2147951045-34678339.jpg',
+    imagePosition: 'center 48%',
   },
   {
     title: 'Adventure & Exploration',
     description: 'Active days that move between coastline, inland nature, and unexpected terrain.',
-    image:
-      'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1200&q=80',
+    href: '/experiences/adventure-and-exploration',
+    image: '/images/experiences/adventure/pexels-marri-shyam-366418-32457066.jpg',
+    imagePosition: 'center 45%',
   },
   {
     title: 'Safari Extensions',
     description: 'Mainland Tanzania add-ons that connect island rhythm with iconic wildlife experiences.',
-    image:
-      'https://images.unsplash.com/photo-1516426122078-c23e76319801?auto=format&fit=crop&w=1200&q=80',
+    href: '/experiences/safari-and-beyond',
+    image: '/images/experiences/safari/pexels-adrien-olichon-1257089-36702544.jpg',
+    imagePosition: 'center 50%',
   },
   {
     title: 'Private & Exclusive',
     description: 'Discreet, high-touch planning for couples, families, groups, and special occasions.',
-    image:
-      'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1200&q=80',
+    href: '/experiences/private-experiences',
+    image: '/images/experiences/stone-town/pexels-roman-odintsov-11025240.jpg',
+    imageFit: 'contain',
+    imagePosition: 'center 56%',
   },
 ];
 

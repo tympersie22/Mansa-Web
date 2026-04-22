@@ -18,12 +18,13 @@ export default function ExperiencesPage() {
     <div className="bg-surface">
       <section className="relative flex min-h-[70vh] items-end overflow-hidden">
         <Image
-          src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1600&q=80"
-          alt="Zanzibar ocean experience"
+          src="/images/experiences/stone-town/pexels-george-john-35128998-7101641.jpg"
+          alt="Aerial view of Stone Town and the Zanzibar coastline"
           fill
           sizes="100vw"
           priority
           className="object-cover"
+          style={{ objectPosition: 'center 45%' }}
         />
         <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(18,18,17,0.24),rgba(18,18,17,0.78))]" />
         <div className="relative mx-auto w-full max-w-6xl px-6 pb-14 pt-36 text-white lg:px-8 lg:pb-20">

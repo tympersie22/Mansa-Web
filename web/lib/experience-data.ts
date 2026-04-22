@@ -6,6 +6,8 @@ export interface ExperienceCategory {
   intro: string;
   curationLine: string;
   image: string;
+  imageFit?: 'cover' | 'contain';
+  imagePosition?: string;
 }
 
 export interface ExperienceEntry {
@@ -13,6 +15,7 @@ export interface ExperienceEntry {
   title: string;
   subtitle: string;
   categorySlug: string;
+  summary: string;
   duration: string;
   experienceType: string;
   departure: string;
@@ -20,15 +23,36 @@ export interface ExperienceEntry {
   bestTime: string;
   idealFor: string;
   image: string;
+  imageFit?: 'cover' | 'contain';
+  imagePosition?: string;
   cardLine: string;
   intro: string[];
   highlights: string[];
   narrative: string[];
+  itinerary: ExperienceTimelineItem[];
   options: Array<{ title: string; description: string }>;
   included: string[];
   bring: string[];
   notes: string[];
+  brochure: ExperienceBrochure;
 }
+
+export interface ExperienceTimelineItem {
+  label: string;
+  title: string;
+  description: string;
+}
+
+export interface ExperienceBrochure {
+  overview: string;
+  highlights: string[];
+  fullItinerary: ExperienceTimelineItem[];
+  includes: string[];
+  excludes: string[];
+  notes: string;
+}
+
+type ExperienceSeedEntry = Omit<ExperienceEntry, 'summary' | 'itinerary' | 'brochure'>;
 
 export interface JourneyItem {
   slug: string;
@@ -47,8 +71,8 @@ export const experienceCategories: ExperienceCategory[] = [
       'Ocean experiences reveal Zanzibar in motion: shifting light, clear water, and the quieter rhythm that comes from time spent offshore.',
     curationLine:
       'Ocean experiences can be adapted in timing, privacy, and pace depending on how you want the day to feel.',
-    image:
-      'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1400&q=80',
+    image: '/images/experiences/pexels-dajana-reci-289671698-30125141.jpg',
+    imagePosition: 'center 42%',
   },
   {
     slug: 'culture-and-place',
@@ -59,8 +83,9 @@ export const experienceCategories: ExperienceCategory[] = [
       'These experiences are shaped around Stone Town, heritage, food, and the lived texture of the island beyond its coastline.',
     curationLine:
       'Cultural experiences can remain light-touch or become more layered, depending on how deeply you want to engage.',
-    image:
-      'https://images.unsplash.com/photo-1468413253725-0d5181091126?auto=format&fit=crop&w=1400&q=80',
+    image: '/images/experiences/stone-town/pexels-roman-odintsov-11025240.jpg',
+    imageFit: 'contain',
+    imagePosition: 'center 56%',
   },
   {
     slug: 'slow-zanzibar',
@@ -83,8 +108,8 @@ export const experienceCategories: ExperienceCategory[] = [
       'For travelers who want energy and variation, these experiences bring together landscapes, activity, and a stronger sense of discovery.',
     curationLine:
       'Adventure experiences can be softened or intensified depending on your comfort level and preferred pace.',
-    image:
-      'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1400&q=80',
+    image: '/images/experiences/adventure/pexels-marri-shyam-366418-32457066.jpg',
+    imagePosition: 'center 45%',
   },
   {
     slug: 'safari-and-beyond',
@@ -95,8 +120,7 @@ export const experienceCategories: ExperienceCategory[] = [
       'These experiences extend the journey beyond Zanzibar, linking coast and bush in a way that feels intentional rather than overpacked.',
     curationLine:
       'Safari extensions work best when they are integrated early, so the island and mainland feel like one journey.',
-    image:
-      'https://images.unsplash.com/photo-1516426122078-c23e76319801?auto=format&fit=crop&w=1400&q=80',
+    image: '/images/experiences/safari/pexels-adrien-olichon-1257089-36702544.jpg',
   },
   {
     slug: 'private-experiences',
@@ -112,7 +136,7 @@ export const experienceCategories: ExperienceCategory[] = [
   },
 ];
 
-export const experiences: ExperienceEntry[] = [
+const experienceSeed: ExperienceSeedEntry[] = [
   {
     slug: 'mnemba-island-marine-experience',
     title: 'Mnemba Island Marine Experience',
@@ -125,8 +149,8 @@ export const experiences: ExperienceEntry[] = [
     startTime: 'Morning (around 08:00 AM)',
     bestTime: 'Morning hours for calm seas and clear visibility',
     idealFor: 'Couples, families, and ocean lovers',
-    image:
-      'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1400&q=80',
+    image: '/images/experiences/Mnemba.jpg',
+    imagePosition: 'center 48%',
     cardLine: 'Snorkeling, open water, and reef time around Mnemba.',
     intro: [
       'Set out along Zanzibar’s northeast coast for a morning shaped by the rhythm of the ocean. The waters surrounding Mnemba Island are known for their clarity, vibrant coral reefs, and diverse marine life.',
@@ -206,8 +230,7 @@ export const experiences: ExperienceEntry[] = [
     startTime: 'Late afternoon',
     bestTime: 'Golden hour into sunset',
     idealFor: 'Couples and first-time visitors',
-    image:
-      'https://images.unsplash.com/photo-1500375592092-40eb2168fd21?auto=format&fit=crop&w=1400&q=80',
+    image: '/images/experiences/sunset-cruise/pexels-goodcitizen-3361818.jpg',
     cardLine: 'An atmospheric evening cruise with a classic dhow setting.',
     intro: [
       'The dhow cruise is one of Zanzibar’s most familiar experiences, but the tone can vary dramatically depending on how it is arranged.',
@@ -237,8 +260,9 @@ export const experiences: ExperienceEntry[] = [
     startTime: 'Morning or late afternoon',
     bestTime: 'Cooler hours',
     idealFor: 'First-time visitors and culture-led travelers',
-    image:
-      'https://images.unsplash.com/photo-1468413253725-0d5181091126?auto=format&fit=crop&w=1400&q=80',
+    image: '/images/experiences/stone-town/pexels-roman-odintsov-11025240.jpg',
+    imageFit: 'contain',
+    imagePosition: 'center 56%',
     cardLine: 'Architecture, stories, and local context in the heart of Stone Town.',
     intro: [
       'Stone Town is best approached with context. Its streets, buildings, and public spaces reveal more when they are connected through story rather than simply viewed as landmarks.',
@@ -268,8 +292,8 @@ export const experiences: ExperienceEntry[] = [
     startTime: 'Morning',
     bestTime: 'Morning hours',
     idealFor: 'Food lovers and cultural travelers',
-    image:
-      'https://images.unsplash.com/photo-1472396961693-142e6e269027?auto=format&fit=crop&w=1400&q=80',
+    image: '/images/experiences/spice/pexels-julia-volk-5769698.jpg',
+    imagePosition: 'center 50%',
     cardLine: 'A more grounded way to connect with Zanzibar through food and landscape.',
     intro: [
       'Spice tours are common, but the experience becomes stronger when it moves beyond demonstration and feels more connected to everyday food culture.',
@@ -299,8 +323,9 @@ export const experiences: ExperienceEntry[] = [
     startTime: 'Around sunset',
     bestTime: 'Dry evenings',
     idealFor: 'Curious eaters and city walkers',
-    image:
-      'https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=1400&q=80',
+    image: '/images/experiences/spice/pexels-theonlyabdulla-34561170.jpg',
+    imageFit: 'contain',
+    imagePosition: 'center 54%',
     cardLine: 'A city-led food experience with atmosphere and local context.',
     intro: [
       'The evening food market atmosphere in Stone Town is one of the city’s most recognisable scenes, but it is best enjoyed with a bit of structure and local interpretation.',
@@ -392,8 +417,8 @@ export const experiences: ExperienceEntry[] = [
     startTime: 'Late afternoon',
     bestTime: 'Sunset',
     idealFor: 'Couples and special occasions',
-    image:
-      'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1400&q=80',
+    image: '/images/experiences/sunset-cruise/pexels-mashauri-lumbas-2147951045-34678339.jpg',
+    imagePosition: 'center 48%',
     cardLine: 'A composed evening with light sailing and a dinner follow-through.',
     intro: [
       'This experience is designed around how an evening should unfold rather than around a single activity. The goal is a graceful shift from water to table, without friction in between.',
@@ -454,8 +479,8 @@ export const experiences: ExperienceEntry[] = [
     startTime: 'Morning',
     bestTime: 'Cooler hours',
     idealFor: 'Active travelers',
-    image:
-      'https://images.unsplash.com/photo-1517832606299-7ae9b720a186?auto=format&fit=crop&w=1400&q=80',
+    image: '/images/experiences/adventure/pexels-deffo-manizo-64452317-20897828.jpg',
+    imagePosition: 'center 48%',
     cardLine: 'A more active coastal route for travelers who want movement built in.',
     intro: [
       'Cycling reveals parts of Zanzibar at a very different pace from driving. It gives a stronger sense of texture, transition, and the distance between village, greenery, and coastline.',
@@ -516,8 +541,7 @@ export const experiences: ExperienceEntry[] = [
     startTime: 'Early morning',
     bestTime: 'Dry season windows',
     idealFor: 'Travelers adding safari to an island stay',
-    image:
-      'https://images.unsplash.com/photo-1516426122078-c23e76319801?auto=format&fit=crop&w=1400&q=80',
+    image: '/images/experiences/safari/pexels-wussol-2147803031-30894532.jpg',
     cardLine: 'A strong mainland extension for travelers pairing coast with safari.',
     intro: [
       'A fly-in safari changes the scale of the journey quickly and decisively. It is one of the most effective ways to pair Zanzibar with the mainland without losing momentum.',
@@ -547,8 +571,7 @@ export const experiences: ExperienceEntry[] = [
     startTime: 'Morning departure',
     bestTime: 'Season-dependent',
     idealFor: 'Travelers wanting a stronger safari chapter',
-    image:
-      'https://images.unsplash.com/photo-1516426122078-c23e76319801?auto=format&fit=crop&w=1400&q=80',
+    image: '/images/experiences/safari/pexels-hugosykes-30705849.jpg',
     cardLine: 'A shorter Serengeti chapter built to integrate with Zanzibar cleanly.',
     intro: [
       'For travelers who want a more recognisable safari chapter, the Serengeti can be added in a way that still respects the wider flow of the journey.',
@@ -578,8 +601,7 @@ export const experiences: ExperienceEntry[] = [
     startTime: 'Custom',
     bestTime: 'Season-dependent',
     idealFor: 'Couples and milestone trips',
-    image:
-      'https://images.unsplash.com/photo-1516026672322-bc52d61a55d5?auto=format&fit=crop&w=1400&q=80',
+    image: '/images/experiences/safari/pexels-marri-shyam-366418-32457066.jpg',
     cardLine: 'A longer-flow safari and coast route designed as one journey.',
     intro: [
       'Some trips benefit from being designed as a full sequence rather than island-first and safari-second. This route is for travelers who want the whole itinerary composed as one narrative.',
@@ -692,6 +714,303 @@ export const experiences: ExperienceEntry[] = [
     notes: ['Advance notice is strongly recommended.', 'Final setup depends on privacy level and location.'],
   },
 ];
+
+type ExperienceBrochureOverride = Partial<ExperienceBrochure>;
+
+const brochureOverrides: Partial<Record<string, ExperienceBrochureOverride>> = {
+  'mnemba-island-marine-experience': {
+    overview:
+      'Increase your chances of spotting some of Tanzania’s rarest marine life on a guided snorkeling tour around Mnemba Island, one of Zanzibar’s most famous marine conservation areas. This morning experience blends dolphin encounters, clear reef water, and a lighter on-board rhythm that keeps the trip scenic rather than rushed.',
+    highlights: [
+      'Cruise from Muyuni toward Mnemba waters for a chance to spot spinner dolphins',
+      'Snorkeling in one of Zanzibar’s best-known conservation areas',
+      'Seasonal fruit and refreshments served on board',
+      'A clean morning flow that works well within a wider itinerary',
+    ],
+    fullItinerary: [
+      {
+        label: '08:00',
+        title: 'Departure from Muyuni',
+        description: 'Board the boat on Zanzibar’s northeast coast and set out toward Mnemba Island.',
+      },
+      {
+        label: '08:30',
+        title: 'Dolphin search en route',
+        description: 'Cruise through Mnemba waters with the chance to encounter spinner dolphins along the way.',
+      },
+      {
+        label: '09:30',
+        title: 'Snorkeling at the reef',
+        description: 'Enter the marine conservation area for a guided snorkeling session above coral and tropical fish.',
+      },
+      {
+        label: '10:30',
+        title: 'Fruit and recovery time on board',
+        description: 'Relax between stops with fresh fruit, bottled water, and open-water views.',
+      },
+      {
+        label: '11:30',
+        title: 'Return to Muyuni',
+        description: 'Head back to shore before midday so the experience remains light and well-paced.',
+      },
+    ],
+    includes: [
+      'Boat transfer',
+      'Snorkeling equipment',
+      'Seasonal fruit platter',
+      'Refreshments',
+      'Entry fees to Mnemba Marine Conservation',
+    ],
+    excludes: ['Personal expenses', 'Tips and gratuities', 'Additional meals'],
+    notes:
+      'Marine sightings are never guaranteed, and this experience may operate on a shared basis unless arranged privately in advance.',
+  },
+  'stone-town-cultural-walk': {
+    overview:
+      'Step into the heart of Zanzibar with a guided Stone Town walk shaped around architecture, history, and daily life. Rather than pushing volume, the route focuses on cultural layering, context, and the atmosphere that gives the old town its lasting character.',
+    highlights: [
+      'Visit major cultural and historic landmarks across the old town',
+      'Understand Zanzibar through architecture, trade history, and local context',
+      'Move at a measured pace with time for markets and street atmosphere',
+      'Customizable route depending on interests and energy level',
+    ],
+    fullItinerary: [
+      {
+        label: 'Flexible Start',
+        title: 'Meet your guide',
+        description: 'Begin at a selected point in Stone Town between the morning and late afternoon windows.',
+      },
+      {
+        label: 'Historic Core',
+        title: 'Landmarks and city narrative',
+        description: 'Walk through key historical areas and connect the architecture to Zanzibar’s Swahili, Arab, and Indian influences.',
+      },
+      {
+        label: 'Markets',
+        title: 'Souks and local movement',
+        description: 'Move through local markets and public spaces to experience the city as it is lived, not just observed.',
+      },
+      {
+        label: 'Optional Continuation',
+        title: 'Lunch, shopping, or cultural extension',
+        description: 'Continue into a local lunch stop or a lighter shopping and exploration chapter if desired.',
+      },
+    ],
+    includes: ['Expert guide', 'Entry fees to main attractions where applicable'],
+    excludes: ['Personal expenses', 'Tips and gratuities', 'Meals unless added on'],
+    notes:
+      'This walk is fully customizable and works best when adapted to your interests, pace, and the wider rhythm of your stay.',
+  },
+  'spice-farm-and-local-table': {
+    overview:
+      'Uncover Zanzibar’s “Spice Island” heritage with a guided visit shaped around cinnamon, cloves, nutmeg, vanilla, and tropical fruits. The experience is strongest when it connects the farm setting to food culture and the table, rather than treating the farm as a novelty stop.',
+    highlights: [
+      'Guided walk through a working spice property',
+      'Smell, taste, and handle fresh produce and spices',
+      'Learn culinary, cosmetic, and medicinal uses of Zanzibar’s spices',
+      'Finish with tastings that connect the landscape to everyday food culture',
+    ],
+    fullItinerary: [
+      {
+        label: 'Arrival',
+        title: 'Welcome briefing at the farm',
+        description: 'Begin with an introduction to the property, seasonal produce, and the rhythm of the visit.',
+      },
+      {
+        label: 'Farm Walk',
+        title: 'Spices, fruits, and plants',
+        description: 'Walk through the farm with a local guide and learn how ingredients are grown and understood locally.',
+      },
+      {
+        label: 'Tasting',
+        title: 'Fresh fruit, spice, and tea tasting',
+        description: 'Pause for a tasting session that makes the connection between landscape, produce, and the table more tangible.',
+      },
+      {
+        label: 'Close',
+        title: 'Shopping or return transfer',
+        description: 'Finish with optional browsing at the spice shop before returning onward.',
+      },
+    ],
+    includes: ['Guided spice farm tour', 'Fruit and spice tasting', 'Local guide', 'Entrance fees'],
+    excludes: ['Personal expenses', 'Tips and gratuities', 'Additional meals'],
+    notes:
+      'Tour start time is flexible daily, and produce visibility varies slightly by season and harvest conditions.',
+  },
+  'dhow-sunset-cruise': {
+    overview:
+      'Sail into the softer end of the day on a traditional dhow with a stronger emphasis on atmosphere than entertainment. This is one of Zanzibar’s classic experiences, but it works best when the pacing stays calm and the setting is allowed to carry the evening.',
+    highlights: [
+      'Traditional dhow sailing along Zanzibar’s coast',
+      'Golden-hour light and open-water sunset views',
+      'Refreshments served on board',
+      'Strong fit for couples, families, or smaller private groups',
+    ],
+    fullItinerary: [
+      {
+        label: 'Boarding',
+        title: 'Set sail from the coast',
+        description: 'Board your dhow in Stone Town or Kendwa and settle into a slower rhythm on the water.',
+      },
+      {
+        label: 'Cruise',
+        title: 'Leisurely sailing',
+        description: 'Follow the coastline with sea breeze, refreshments, and optional live music depending on arrangement.',
+      },
+      {
+        label: 'Sunset',
+        title: 'Golden-hour viewing',
+        description: 'Pause into the best light of the day for photographs, conversation, and a more atmospheric close to the afternoon.',
+      },
+      {
+        label: 'Return',
+        title: 'Back to shore',
+        description: 'Come back in time for dinner or a continuation into the rest of your evening.',
+      },
+    ],
+    includes: ['Private dhow cruise', 'Refreshments on board', 'Professional crew'],
+    excludes: ['Personal expenses', 'Tips and gratuities', 'Meals'],
+    notes:
+      'Live band entertainment is available on request, and a shared basis can also be arranged if preferred.',
+  },
+  'jozani-forest-exploration': {
+    overview:
+      'Step into Zanzibar’s best-known protected forest for a nature-led inland contrast to the coast. Jozani combines woodland, mangroves, and the chance to encounter the rare Red Colobus monkey in a way that adds ecological depth to an island itinerary.',
+    highlights: [
+      'Guided forest walk through protected woodland trails',
+      'Chance to spot Red Colobus monkeys and smaller wildlife',
+      'Mangrove boardwalk and ecosystem interpretation',
+      'A family-friendly inland contrast to beach-based days',
+    ],
+    fullItinerary: [
+      {
+        label: 'Arrival',
+        title: 'Forest entrance and briefing',
+        description: 'Meet your guide at Jozani and begin with a short introduction to the reserve and route.',
+      },
+      {
+        label: 'Woodland Route',
+        title: 'Forest trails and wildlife spotting',
+        description: 'Walk through the reserve with a focus on Zanzibar’s endemic Red Colobus monkeys and other wildlife.',
+      },
+      {
+        label: 'Mangroves',
+        title: 'Boardwalk and ecosystem context',
+        description: 'Continue into the mangrove environment to understand how Zanzibar’s inland ecology connects to the coast.',
+      },
+      {
+        label: 'Close',
+        title: 'Photos and return',
+        description: 'Wrap with lighter photo time and return onward once the forest chapter is complete.',
+      },
+    ],
+    includes: ['Entrance fees', 'Guided forest walk', 'Mangrove boardwalk visit', 'Professional local guide'],
+    excludes: ['Personal expenses', 'Tips and gratuities', 'Meals'],
+    notes:
+      'Wildlife visibility varies by day, and the ground can be damp depending on recent weather conditions.',
+  },
+  'selous-fly-in-safari': {
+    overview:
+      'Experience mainland wilderness as a clean extension from Zanzibar with a same-day fly-in safari to Nyerere National Park. The shift from island tempo to safari terrain is dramatic, and when the day is well-sequenced it feels like a true second chapter rather than a logistical interruption.',
+    highlights: [
+      'Return flights from Zanzibar to the mainland',
+      'Full-day game drive in Nyerere National Park',
+      'Bush picnic lunch surrounded by wildlife landscapes',
+      'Strong safari contrast without committing to a longer mainland stay',
+    ],
+    fullItinerary: [
+      {
+        label: '08:00',
+        title: 'Flight from Zanzibar',
+        description: 'Depart Zanzibar in the morning for the short flight to the Selous/Nyerere side of the mainland.',
+      },
+      {
+        label: 'Arrival',
+        title: 'Meet safari guide',
+        description: 'Land at the airstrip, transfer into the park environment, and begin the safari chapter directly.',
+      },
+      {
+        label: 'Morning Drive',
+        title: 'Wildlife viewing',
+        description: 'Explore the park by 4x4 with the chance to encounter elephants, lions, giraffes, zebras, hippos, and more.',
+      },
+      {
+        label: 'Midday',
+        title: 'Bush picnic lunch',
+        description: 'Pause for lunch inside the safari environment before continuing deeper into the afternoon drive.',
+      },
+      {
+        label: 'Afternoon',
+        title: 'Second game drive',
+        description: 'Continue exploring the reserve before transferring back toward the airstrip.',
+      },
+      {
+        label: 'Return',
+        title: 'Flight back to Zanzibar',
+        description: 'Fly back to the island in the evening to close the safari extension cleanly.',
+      },
+    ],
+    includes: [
+      'Return flights Zanzibar to Selous',
+      'Park entrance fees',
+      'Full-day game drive in 4x4 vehicle',
+      'Picnic lunch and bottled water',
+      'English-speaking driver guide',
+    ],
+    excludes: ['Personal expenses', 'Tips and gratuities', 'Additional beverages beyond standard inclusions'],
+    notes:
+      'This safari often operates on a shared basis unless a private arrangement is requested in advance, and wildlife sightings can never be guaranteed.',
+  },
+};
+
+function buildDefaultItinerary(experience: ExperienceSeedEntry): ExperienceTimelineItem[] {
+  return [
+    {
+      label: experience.startTime || 'Start',
+      title: `Departure from ${experience.departure}`,
+      description:
+        experience.intro[0] ||
+        `Begin from ${experience.departure} with a clear introduction to the experience and its pace.`,
+    },
+    {
+      label: 'Main Experience',
+      title: experience.title,
+      description:
+        experience.narrative[0] ||
+        experience.intro[1] ||
+        experience.subtitle,
+    },
+    {
+      label: 'Close',
+      title: 'Wrap-up and continuation',
+      description:
+        experience.narrative[1] ||
+        experience.notes[0] ||
+        'The experience closes with a smooth return or continuation into the rest of your journey.',
+    },
+  ];
+}
+
+function enrichExperience(experience: ExperienceSeedEntry): ExperienceEntry {
+  const override = brochureOverrides[experience.slug];
+  const brochure: ExperienceBrochure = {
+    overview: override?.overview || experience.intro.join(' '),
+    highlights: override?.highlights || experience.highlights,
+    fullItinerary: override?.fullItinerary || buildDefaultItinerary(experience),
+    includes: override?.includes || experience.included,
+    excludes: override?.excludes || [],
+    notes: override?.notes || experience.notes.join(' '),
+  };
+
+  return {
+    ...experience,
+    summary: experience.cardLine,
+    itinerary: brochure.fullItinerary,
+    brochure,
+  };
+}
+
+export const experiences: ExperienceEntry[] = experienceSeed.map(enrichExperience);
 
 export const featuredExperienceSlugs = [
   'mnemba-island-marine-experience',

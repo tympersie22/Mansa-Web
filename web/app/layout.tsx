@@ -24,9 +24,9 @@ export const metadata: Metadata = {
   keywords:
     'MANSA Tours and Travel, Zanzibar travel, curated journeys, Tanzania travel, private experiences, safari extension',
   icons: {
-    icon: '/icon',
-    shortcut: '/icon',
-    apple: '/icon',
+    icon: '/favicon.svg',
+    shortcut: '/favicon.svg',
+    apple: '/favicon.svg',
   },
 };
 
