@@ -104,7 +104,12 @@ export default function ExperienceBrochureDrawer({
             onClick={onClose}
           />
 
-          <div className="absolute inset-0 flex items-end justify-center">
+          <div
+            className="absolute inset-0 flex items-end justify-center"
+            onMouseDown={(event) => {
+              if (event.target === event.currentTarget) onClose();
+            }}
+          >
             <motion.div
               ref={panelRef}
               role="dialog"

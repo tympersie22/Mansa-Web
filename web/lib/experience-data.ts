@@ -131,8 +131,8 @@ export const experienceCategories: ExperienceCategory[] = [
       'Private experiences offer more control over timing, privacy, atmosphere, and how the day unfolds from beginning to end.',
     curationLine:
       'Privacy is not a style on its own. It is a way of shaping the experience more closely around you.',
-    image:
-      'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1400&q=80',
+    image: '/images/experiences/private/pexels-keeganjchecks-10294337.jpg',
+    imagePosition: 'center 48%',
   },
 ];
 
@@ -323,9 +323,7 @@ const experienceSeed: ExperienceSeedEntry[] = [
     startTime: 'Around sunset',
     bestTime: 'Dry evenings',
     idealFor: 'Curious eaters and city walkers',
-    image: '/images/experiences/spice/pexels-theonlyabdulla-34561170.jpg',
-    imageFit: 'contain',
-    imagePosition: 'center 54%',
+    image: 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=1400&q=80',
     cardLine: 'A city-led food experience with atmosphere and local context.',
     intro: [
       'The evening food market atmosphere in Stone Town is one of the city’s most recognisable scenes, but it is best enjoyed with a bit of structure and local interpretation.',

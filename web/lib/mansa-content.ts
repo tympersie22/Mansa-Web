@@ -4,9 +4,18 @@ export const heroVideo =
   '/videos/web-mansa.m4v?v=3';
 
 export const introImage =
-  'https://images.unsplash.com/photo-1528127269322-539801943592?auto=format&fit=crop&w=1200&q=80';
+  '/images/home/pexels-taryn-elliott-5859213.jpg';
 
-export const experiences = [
+interface HomepageExperience {
+  title: string;
+  description: string;
+  href: string;
+  image: string;
+  imagePosition?: string;
+  imageFit?: 'cover' | 'contain';
+}
+
+export const experiences: HomepageExperience[] = [
   {
     title: 'Ocean & Island',
     description: 'Private dhow charters, reef escapes, sandbanks, and tide-shaped days on the water.',
@@ -46,9 +55,8 @@ export const experiences = [
     title: 'Private & Exclusive',
     description: 'Discreet, high-touch planning for couples, families, groups, and special occasions.',
     href: '/experiences/private-experiences',
-    image: '/images/experiences/stone-town/pexels-roman-odintsov-11025240.jpg',
-    imageFit: 'contain',
-    imagePosition: 'center 56%',
+    image: '/images/experiences/private/pexels-keeganjchecks-10294337.jpg',
+    imagePosition: 'center 48%',
   },
 ];
 
