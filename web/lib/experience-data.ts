@@ -35,6 +35,7 @@ export interface ExperienceEntry {
   bring: string[];
   notes: string[];
   brochure: ExperienceBrochure;
+  cta: ExperienceCallToAction;
 }
 
 export interface ExperienceTimelineItem {
@@ -52,7 +53,14 @@ export interface ExperienceBrochure {
   notes: string;
 }
 
-type ExperienceSeedEntry = Omit<ExperienceEntry, 'summary' | 'itinerary' | 'brochure'>;
+export interface ExperienceCallToAction {
+  title: string;
+  text: string;
+}
+
+type ExperienceSeedEntry = Omit<ExperienceEntry, 'summary' | 'itinerary' | 'brochure' | 'cta'> & {
+  cta?: ExperienceCallToAction;
+};
 
 export interface JourneyItem {
   slug: string;
@@ -112,6 +120,30 @@ export const experienceCategories: ExperienceCategory[] = [
     imagePosition: 'center 45%',
   },
   {
+    slug: 'nature-and-wildlife',
+    title: 'Nature & Wildlife',
+    shortTitle: 'Nature & Wildlife',
+    description: 'Forest habitats, conservation sites, and wildlife encounters rooted in care and context.',
+    intro:
+      'These experiences focus on Zanzibar’s ecological side: protected forest, sea life, rescued animals, and places where conservation and quieter observation matter more than spectacle.',
+    curationLine:
+      'Wildlife experiences work best when they are guided with respect, patience, and a clear understanding of the environments they depend on.',
+    image:
+      'https://images.unsplash.com/photo-1511497584788-876760111969?auto=format&fit=crop&w=1400&q=80',
+  },
+  {
+    slug: 'adventure-and-ocean',
+    title: 'Adventure & Ocean',
+    shortTitle: 'Adventure & Ocean',
+    description: 'Open-water pursuits shaped by adrenaline, movement, and the Indian Ocean.',
+    intro:
+      'These experiences lean into the ocean as a place of action: speed, depth, fishing, and a stronger sense of challenge beyond a simple beach day.',
+    curationLine:
+      'Ocean adventure depends on timing, weather, and the right crew. When handled well, it feels exhilarating without becoming chaotic.',
+    image: '/images/experiences/pexels-dajana-reci-289671698-30125141.jpg',
+    imagePosition: 'center 45%',
+  },
+  {
     slug: 'safari-and-beyond',
     title: 'Safari & Beyond',
     shortTitle: 'Safari & Beyond',
@@ -135,6 +167,12 @@ export const experienceCategories: ExperienceCategory[] = [
     imagePosition: 'center 48%',
   },
 ];
+
+const defaultExperienceCta: ExperienceCallToAction = {
+  title: 'Ready To Start Planning?',
+  text:
+    'When the experience direction feels right, we can help shape it into a well-paced plan around your timing, style, and wider journey.',
+};
 
 const experienceSeed: ExperienceSeedEntry[] = [
   {
@@ -189,6 +227,147 @@ const experienceSeed: ExperienceSeedEntry[] = [
     ],
   },
   {
+    slug: 'blue-safari',
+    title: 'Blue Safari',
+    subtitle:
+      'A full-day ocean experience sailing Zanzibar’s turquoise waters, sandbanks, reefs, and hidden lagoons.',
+    categorySlug: 'ocean-and-islands',
+    duration: 'Full Day',
+    experienceType: 'Shared / Private',
+    departure: 'Fumba',
+    startTime: 'Morning Departure (around 09:00 AM)',
+    bestTime: 'Daytime hours with favorable tide conditions',
+    idealFor: 'Couples, families, groups, and ocean lovers',
+    image: '/images/experiences/pexels-dajana-reci-289671698-30125141.jpg',
+    imagePosition: 'center 52%',
+    cardLine:
+      'A full-day dhow experience built around sandbanks, snorkeling, island lunch, and Zanzibar’s southwest coast.',
+    intro: [
+      'Set sail across the Indian Ocean on a traditional dhow for one of Zanzibar’s most iconic marine experiences. Blue Safari combines crystal-clear waters, white sandbanks, vibrant coral reefs, and freshly prepared seafood into a full day shaped by the rhythm of the ocean.',
+      'From snorkeling among tropical fish to relaxing on secluded sandbanks and exploring the natural beauty surrounding Kwale Island, the experience offers a perfect balance of adventure, relaxation, and authentic coastal atmosphere.',
+    ],
+    highlights: [
+      'Traditional dhow sailing experience across turquoise waters',
+      'Relaxing on a pristine sandbank surrounded by the ocean',
+      'Guided snorkeling among coral reefs and tropical fish',
+      'Seafood BBQ lunch served on Kwale Island',
+      'Swimming in the Blue Lagoon during high tide conditions',
+      'Fresh tropical fruits and refreshments throughout the day',
+    ],
+    narrative: [
+      'The experience begins in Fumba, where you’ll board a traditional wooden dhow and set sail across Zanzibar’s southwest coastline. As the boat moves through the calm turquoise waters, the journey offers sweeping ocean views and a chance to fully disconnect into the rhythm of island life.',
+      'The first stop is typically a pristine sandbank, where there is time to swim, relax, and enjoy the surrounding scenery before continuing towards the snorkeling areas. Guided snorkeling sessions allow you to explore coral reefs filled with colorful tropical fish and marine life in clear, shallow waters.',
+      'Later in the day, the journey continues to Kwale Island, where a freshly prepared seafood BBQ lunch is served beneath the shade of tropical trees. Depending on the tides and sea conditions, the experience may also include a stop at the Blue Lagoon before sailing back towards Fumba in the late afternoon.',
+    ],
+    options: [
+      {
+        title: 'Shared Experience',
+        description:
+          'A social and lively group experience aboard a traditional dhow, shared with other travelers exploring Zanzibar’s coastline.',
+      },
+      {
+        title: 'Private Experience',
+        description:
+          'A more exclusive option offering added privacy, flexibility, and a personalized pace throughout the day.',
+      },
+    ],
+    included: [
+      'Traditional dhow trip with crew',
+      'Snorkeling equipment',
+      'Seafood BBQ lunch',
+      'Tropical fruits',
+      'Bottled water and soft drinks',
+      'Marine conservation fees',
+      'Professional guide',
+    ],
+    bring: [
+      'Swimwear',
+      'Towel',
+      'Sunscreen',
+      'Hat and sunglasses',
+      'Waterproof phone pouch or dry bag',
+      'Camera',
+    ],
+    notes: [
+      'This experience is typically operated as a shared tour (approximately 10–14 guests per boat).',
+      'Private dhow arrangements are available upon request.',
+      'The itinerary and timings may vary depending on tide and sea conditions.',
+      'Access to the Blue Lagoon depends on water levels and weather conditions.',
+      'Marine wildlife sightings vary and cannot be guaranteed.',
+    ],
+    cta: {
+      title: 'Sail Zanzibar’s Turquoise Waters',
+      text:
+        'Experience a full day of sailing, snorkeling, island flavors, and coastal beauty aboard a traditional Zanzibar dhow.',
+    },
+  },
+  {
+    slug: 'nakupenda-sandbank-experience',
+    title: 'Nakupenda Sandbank Experience',
+    subtitle:
+      'A magical disappearing sandbank in the Indian Ocean where turquoise waters, white sand, and ocean views meet.',
+    categorySlug: 'ocean-and-islands',
+    duration: '4–5 Hours',
+    experienceType: 'Shared / Private',
+    departure: 'Stone Town',
+    startTime: 'Morning (around 09:00 AM – 10:00 AM)',
+    bestTime: 'Low tide for full sandbank exposure',
+    idealFor: 'Couples, families, groups, and ocean lovers',
+    image: '/images/experiences/pexels-dajana-reci-289671698-30125141.jpg',
+    imagePosition: 'center 50%',
+    cardLine:
+      'A tide-shaped sandbank escape from Stone Town with swimming, snorkeling, and open-ocean views.',
+    intro: [
+      'Escape to one of Zanzibar’s most iconic natural wonders — Nakupenda Sandbank. Located just off the coast of Stone Town, this pristine sandbank appears and disappears with the tides, offering a perfect setting for swimming, sunbathing, snorkeling, and relaxing in crystal-clear waters.',
+      'This experience combines ocean adventure with pure relaxation in one of the most beautiful marine environments in Zanzibar.',
+    ],
+    highlights: [
+      'Relax on a pristine white sandbank in the middle of the ocean',
+      'Swim in crystal-clear turquoise waters',
+      'Snorkel among tropical fish and coral reefs nearby',
+      'Fresh seafood BBQ served on the sandbank (optional depending on package)',
+      'Scenic boat ride from Stone Town',
+      'Perfect photography and sunset moments',
+    ],
+    narrative: [
+      'The experience begins with a boat departure from Stone Town, cruising across calm turquoise waters toward the Nakupenda Sandbank. Along the way, you’ll enjoy views of the historic coastline and the open Indian Ocean.',
+      'Upon arrival, you step onto soft white sand surrounded entirely by ocean. The sandbank offers time to swim, relax, and explore the shallow waters filled with marine life. Depending on conditions, snorkeling is available nearby coral areas where tropical fish are commonly seen.',
+      'A seafood BBQ lunch or fruit platter is typically served on the sandbank, allowing you to enjoy fresh island flavors in a truly unique ocean setting. After free time for swimming, photography, and relaxation, you will cruise back to Stone Town as the sandbank slowly disappears with the tide.',
+    ],
+    options: [
+      {
+        title: 'Shared Experience',
+        description:
+          'A relaxed group boat trip to Nakupenda Sandbank with shared dining and activities.',
+      },
+      {
+        title: 'Private Experience',
+        description:
+          'A more exclusive boat experience with flexible timing, privacy, and customized setup.',
+      },
+    ],
+    included: [
+      'Boat transfer from Stone Town',
+      'Visit to Nakupenda Sandbank',
+      'Swimming and relaxation time',
+      'Snorkeling equipment (if included in package)',
+      'Fruit platter or seafood BBQ (depending on package)',
+      'Professional boat crew',
+    ],
+    bring: ['Swimwear', 'Towel', 'Sunscreen', 'Sunglasses', 'Camera or phone', 'Waterproof bag'],
+    notes: [
+      'This experience is tide dependent and may vary in timing.',
+      'Sandbank size changes depending on ocean conditions.',
+      'Seafood BBQ may be shared or optional depending on package type.',
+      'Weather conditions may affect snorkeling visibility.',
+    ],
+    cta: {
+      title: 'Discover Zanzibar’s Floating Paradise',
+      text:
+        'Spend a day on a magical sandbank surrounded by the Indian Ocean — swim, relax, and enjoy one of Zanzibar’s most iconic experiences.',
+    },
+  },
+  {
     slug: 'private-sandbank-escape',
     title: 'Private Sandbank Escape',
     subtitle: 'A slower day offshore with time to swim, pause, and enjoy Zanzibar’s shifting coastline.',
@@ -222,95 +401,393 @@ const experienceSeed: ExperienceSeedEntry[] = [
   {
     slug: 'dhow-sunset-cruise',
     title: 'Dhow Sunset Cruise',
-    subtitle: 'A classic Zanzibar evening on the water, reworked with a calmer and more considered feel.',
+    subtitle:
+      'A magical evening sail across Zanzibar’s coastline as the sun sets over the Indian Ocean.',
     categorySlug: 'ocean-and-islands',
-    duration: '2 hours',
-    experienceType: 'Shared / Private',
-    departure: 'Stone Town or Nungwi',
-    startTime: 'Late afternoon',
-    bestTime: 'Golden hour into sunset',
-    idealFor: 'Couples and first-time visitors',
+    duration: '2 Hours',
+    experienceType: 'Private / Shared',
+    departure: 'Stone Town or Kendwa Beach',
+    startTime: '5:00 PM – 7:00 PM (daily)',
+    bestTime: 'Clear weather evenings for optimal sunset views',
+    idealFor: 'Couples, honeymooners, families, and sunset lovers',
     image: '/images/experiences/sunset-cruise/pexels-goodcitizen-3361818.jpg',
-    cardLine: 'An atmospheric evening cruise with a classic dhow setting.',
+    cardLine: 'A classic Zanzibar sunset cruise shaped by light, calm water, and uninterrupted ocean views.',
     intro: [
-      'The dhow cruise is one of Zanzibar’s most familiar experiences, but the tone can vary dramatically depending on how it is arranged.',
-      'This version focuses on atmosphere, light, and pacing rather than volume or crowd.',
+      'Sail into the golden Zanzibar sunset aboard a traditional wooden dhow. As the boat drifts across calm waters, the sky transforms into shades of gold, orange, and deep pink, creating one of the most unforgettable natural spectacles on the island.',
+      'This experience is designed for pure relaxation — soft ocean breezes, gentle waves, and uninterrupted views of the horizon as day turns into night over the Indian Ocean.',
     ],
-    highlights: ['Traditional dhow setting', 'Open-water sunset views', 'Relaxed pacing', 'Soft refreshments', 'Option for private use'],
+    highlights: [
+      'Private sailing experience on a traditional dhow',
+      'Stunning sunset views over the Indian Ocean',
+      'Relaxed coastal cruise along Zanzibar’s shoreline',
+      'Refreshing drinks served on board',
+      'Optional live music for a premium atmosphere',
+      'Ideal for couples, families, and small groups',
+    ],
     narrative: [
-      'You board in the late afternoon and head out as the light begins to soften. The experience is intentionally simple: coastline, breeze, open water, and time to settle into the evening.',
-      'As sunset approaches, the focus remains on the setting rather than entertainment-heavy additions, making it a strong option for couples or anyone who prefers a quieter atmosphere.',
+      'The experience begins in the late afternoon as you board your traditional dhow from either Stone Town or Kendwa Beach. As you set sail, the coastline slowly fades behind you and the open ocean becomes your backdrop for the evening.',
+      'The dhow glides along the water at a relaxed pace, offering uninterrupted views of the horizon as the sun begins its descent. Soft music, refreshments, and the sound of the waves create a calm and intimate atmosphere throughout the journey.',
+      'As sunset approaches, the sky transforms into vibrant colours, offering the perfect setting for photography and quiet moments on deck. After sunset, the dhow gently returns to shore, completing a peaceful end to the day.',
     ],
     options: [
-      { title: 'Shared Cruise', description: 'A lighter-touch option with a small group atmosphere.' },
-      { title: 'Private Dhow', description: 'More privacy and flexibility for the setting and pace.' },
+      {
+        title: 'Private Experience',
+        description:
+          'A fully private dhow cruise offering exclusivity, flexibility, and a personalized sunset experience.',
+      },
+      {
+        title: 'Shared Experience',
+        description:
+          'A relaxed group cruise sharing the beauty of Zanzibar’s sunset with other travelers.',
+      },
     ],
-    included: ['Boat arrangement', 'Refreshments', 'Crew support'],
-    bring: ['Light layer', 'Phone or camera', 'Sunglasses'],
-    notes: ['Departure point may vary by stay location.', 'Timing changes slightly with the season and sunset hour.'],
+    included: [
+      'Traditional dhow cruise',
+      'Professional crew',
+      'Refreshments on board',
+      'Sunset sailing experience',
+      'Optional live band (on request)',
+    ],
+    bring: ['Light jacket or cover-up', 'Camera or phone', 'Sunglasses', 'Relaxed evening wear', 'Smile and good energy'],
+    notes: [
+      'This experience is weather dependent and may be adjusted for safety.',
+      'Sunset visibility varies depending on seasonal conditions.',
+      'Private upgrades and live music are available upon request.',
+    ],
+    cta: {
+      title: 'End Your Day on the Water',
+      text:
+        'Experience Zanzibar’s most iconic sunset from a traditional dhow, surrounded by ocean, sky, and silence.',
+    },
   },
   {
     slug: 'stone-town-cultural-walk',
-    title: 'Stone Town Cultural Walk',
-    subtitle: 'A guided introduction to history, architecture, and the layered identity of Stone Town.',
+    title: 'Stone Town Tour – Zanzibar',
+    subtitle:
+      'Walk through history, culture, and flavors in the heart of Zanzibar.',
     categorySlug: 'culture-and-place',
-    duration: 'Half Day',
+    duration: '2–3 Hours',
     experienceType: 'Shared / Private',
-    departure: 'Stone Town',
-    startTime: 'Morning or late afternoon',
-    bestTime: 'Cooler hours',
-    idealFor: 'First-time visitors and culture-led travelers',
+    departure: 'Stone Town (Flexible Meeting Point)',
+    startTime: '8:00 AM – 4:00 PM (Flexible)',
+    bestTime: 'Morning or late afternoon for cooler temperatures',
+    idealFor: 'Culture lovers, history enthusiasts, and first-time visitors',
     image: '/images/experiences/stone-town/pexels-roman-odintsov-11025240.jpg',
     imageFit: 'contain',
     imagePosition: 'center 56%',
-    cardLine: 'Architecture, stories, and local context in the heart of Stone Town.',
+    cardLine: 'A guided Stone Town walk through landmarks, markets, carved doors, and Zanzibar’s layered past.',
     intro: [
-      'Stone Town is best approached with context. Its streets, buildings, and public spaces reveal more when they are connected through story rather than simply viewed as landmarks.',
-      'This walking experience introduces the town through architecture, trade history, and everyday cultural detail.',
+      'Step into the living heart of Zanzibar with a guided Stone Town tour. This UNESCO World Heritage Site is a maze of winding alleys, historic buildings, bustling markets, and rich cultural influences shaped by centuries of trade and tradition.',
+      'This experience offers a deep dive into the island’s history, architecture, and daily life, with the flexibility to tailor the journey based on your interests and pace.',
     ],
-    highlights: ['Historic streets and architecture', 'Swahili, Arab, and Indian influences', 'Flexible pace', 'Local guiding perspective'],
+    highlights: [
+      'Visit the Sultan’s Palace and Old Slave Market',
+      'Explore the House of Wonders and Old Fort',
+      'Wander through narrow historic streets and alleys',
+      'Experience the vibrant Forodhani Night Market',
+      'Discover Zanzibar’s cultural and trading history',
+      'Optional stops at cafes and rooftop viewpoints',
+    ],
     narrative: [
-      'The walk moves through Stone Town at a measured pace, allowing time to notice detail rather than rushing between stops. Depending on your interests, the focus can lean more historical, more architectural, or more contemporary.',
-      'What makes this experience valuable is not volume, but interpretation — the ability to understand what the place is, how it evolved, and how it is still lived today.',
+      'The experience begins with a flexible meet-up in Stone Town, where your guide introduces you to the city’s layered history and cultural significance. From there, you’ll walk through key landmarks, exploring architectural highlights and historic sites that tell the story of Zanzibar’s past.',
+      'As you move through the narrow streets, you’ll pass bustling markets, carved wooden doors, local shops, and hidden corners that reflect the city’s unique identity. Your guide will share stories of trade, culture, and the people who shaped Stone Town over centuries.',
+      'Depending on your pace and preferences, the tour can include time for shopping, photography, and optional stops at local cafés or rooftop restaurants overlooking the ocean.',
     ],
     options: [
-      { title: 'Classic Walk', description: 'A strong introduction for travelers new to Stone Town.' },
-      { title: 'Private Deep-Dive', description: 'Longer, more tailored pacing with additional thematic focus.' },
+      {
+        title: 'Shared Experience',
+        description:
+          'A guided group walking tour through Stone Town’s key cultural and historical sites.',
+      },
+      {
+        title: 'Private Experience',
+        description:
+          'A fully personalized walking experience tailored to your interests, pace, and preferred stops.',
+      },
     ],
-    included: ['Local guide', 'Flexible routing', 'Heritage context'],
-    bring: ['Comfortable footwear', 'Water', 'Sun protection'],
-    notes: ['Stone Town streets are best explored on foot.', 'The route may shift depending on crowd levels and interests.'],
+    included: [
+      'Professional local guide',
+      'Entry fees to main attractions',
+      'Guided walking tour of Stone Town',
+    ],
+    bring: ['Comfortable walking shoes', 'Light clothing', 'Hat and sunscreen', 'Camera', 'Water bottle'],
+    notes: [
+      'This is a flexible walking tour that can be customized.',
+      'Some attractions may have varying opening times.',
+      'Moderate walking is required throughout the experience.',
+    ],
+    cta: {
+      title: 'Discover the Soul of Zanzibar',
+      text:
+        'Walk through centuries of history, culture, and flavor in one of Africa’s most iconic coastal towns.',
+    },
+  },
+  {
+    slug: 'prison-island-tour',
+    title: 'Prison Island Tour',
+    subtitle:
+      'A short journey from Stone Town combining history, wildlife, and ocean views.',
+    categorySlug: 'culture-and-place',
+    duration: '3–4 Hours',
+    experienceType: 'Shared / Private',
+    departure: 'Stone Town',
+    startTime: 'Flexible Daily Departures (09:00 AM – 03:00 PM)',
+    bestTime: 'Daytime hours with calm sea conditions',
+    idealFor: 'Couples, families, history lovers, and first-time visitors to Zanzibar',
+    image: '/images/experiences/stone-town/pexels-george-john-35128998-7101641.jpg',
+    imagePosition: 'center 48%',
+    cardLine:
+      'A short island excursion pairing prison history, giant tortoises, and open-water views off Stone Town.',
+    intro: [
+      'Just off the coast of Stone Town, Prison Island — also known as Changuu Island — offers a unique blend of history, nature, and coastal scenery. Originally used as a detention island and later home to giant Aldabra tortoises, the island today is one of Zanzibar’s most popular short excursions.',
+      'The experience combines a scenic boat ride, a visit to the historic prison ruins, and time spent with the island’s famous tortoises, all surrounded by clear turquoise waters and relaxed island atmosphere.',
+    ],
+    highlights: [
+      'Meet the giant Aldabra tortoises',
+      'Explore the historic prison ruins',
+      'Scenic boat ride from Stone Town',
+      'Relax by the beach with ocean views',
+      'Excellent photography opportunities',
+      'Optional snorkeling and sandbank lunch add-ons',
+    ],
+    narrative: [
+      'The experience begins with a short boat ride departing from Stone Town, crossing the turquoise waters towards Prison Island. Along the way, there are views of Zanzibar’s coastline and the historic skyline of Stone Town fading into the distance.',
+      'Upon arrival, you’ll explore the island’s old prison ruins while learning about the island’s history and its changing role over time. The island is also home to giant Aldabra tortoises, some of which are over a century old, offering the opportunity to observe and photograph these remarkable animals up close.',
+      'After visiting the tortoise sanctuary and historical areas, there is time to relax along the shoreline, enjoy the ocean surroundings, and take photos before returning to Stone Town. Optional snorkeling or lunch experiences can also be arranged nearby for guests wanting to extend the excursion.',
+    ],
+    options: [
+      {
+        title: 'Shared Experience',
+        description:
+          'A relaxed shared island excursion with other travelers exploring Prison Island together.',
+      },
+      {
+        title: 'Private Experience',
+        description:
+          'A more flexible and personalized option allowing you to explore the island at your own pace.',
+      },
+    ],
+    included: [
+      'Boat transfer between Stone Town and Prison Island',
+      'Entrance fees',
+      'Guided tour of the prison ruins',
+      'Visit to the giant tortoise sanctuary',
+      'Professional local guide',
+    ],
+    bring: [
+      'Comfortable clothing',
+      'Hat and sunglasses',
+      'Sunscreen',
+      'Camera',
+      'Comfortable footwear',
+      'Swimwear and towel (if adding snorkeling)',
+    ],
+    notes: [
+      'This experience may be shared unless booked privately.',
+      'Boat crossings depend on sea and weather conditions.',
+      'Snorkeling and sandbank lunch experiences are optional add-ons.',
+      'Wildlife interactions should always be respectful and guided by local instructions.',
+    ],
+    cta: {
+      title: 'Discover Zanzibar’s Historic Island Escape',
+      text:
+        'Meet giant tortoises, explore island history, and enjoy the coastal beauty surrounding Prison Island.',
+    },
   },
   {
     slug: 'spice-farm-and-local-table',
-    title: 'Spice Farm and Local Table',
-    subtitle: 'A slower cultural experience shaped around Zanzibar’s agricultural heritage and food culture.',
+    title: 'Spice Tour',
+    subtitle:
+      'Smell, taste, and discover the essence of Zanzibar’s famous Spice Island heritage.',
     categorySlug: 'culture-and-place',
-    duration: 'Half Day',
-    experienceType: 'Private / Shared',
-    departure: 'Central Zanzibar',
-    startTime: 'Morning',
-    bestTime: 'Morning hours',
-    idealFor: 'Food lovers and cultural travelers',
+    duration: '2–3 Hours',
+    experienceType: 'Shared / Private',
+    departure: 'Spice Farm (Kijichi)',
+    startTime: '09:00 AM – 03:00 PM (Flexible Daily Departures)',
+    bestTime: 'Morning or early afternoon for cooler conditions',
+    idealFor: 'Culture lovers, families, food enthusiasts, and curious travelers',
     image: '/images/experiences/spice/pexels-julia-volk-5769698.jpg',
     imagePosition: 'center 50%',
-    cardLine: 'A more grounded way to connect with Zanzibar through food and landscape.',
+    cardLine:
+      'A sensory walk through Zanzibar’s spice heritage, from cloves and cinnamon to fruit, herbs, and tradition.',
     intro: [
-      'Spice tours are common, but the experience becomes stronger when it moves beyond demonstration and feels more connected to everyday food culture.',
-      'This version pairs the farm setting with a more considered local table experience.',
+      'Uncover Zanzibar’s world-famous Spice Island identity with a guided walk through a local spice farm. This experience takes you into the heart of traditional cultivation, where spices, herbs, and tropical fruits are grown, harvested, and used in everyday life.',
+      'From cloves and cinnamon to vanilla and nutmeg, this tour offers a sensory journey through Zanzibar’s agricultural heritage, combining education, tasting, and authentic local interaction.',
     ],
-    highlights: ['Spice and fruit introductions', 'Food culture context', 'Slower pacing', 'Local lunch element'],
+    highlights: [
+      'Guided farm walk with a local spice expert',
+      'Smell, touch, and taste fresh spices and tropical fruits',
+      'Learn traditional medicinal, culinary, and cosmetic uses',
+      'See plants like vanilla, cinnamon, cloves, and cardamom',
+      'Fresh fruit and spice tasting experience',
+      'Opportunity to purchase local spice products',
+    ],
     narrative: [
-      'The visit begins on a working spice property, where the focus is placed on how ingredients are grown, used, and understood locally rather than treated as novelty alone.',
-      'From there, the experience extends into a meal component that makes the connection between landscape and table feel more complete.',
+      'The experience begins with arrival at a local spice farm in Kijichi, where you are welcomed by a local guide who introduces the history and importance of spice cultivation in Zanzibar.',
+      'You will walk through lush plantations, learning how different spices grow and how they are used in daily Zanzibari life. Along the way, your guide will demonstrate harvesting techniques and explain the cultural and economic importance of each plant.',
+      'The tour continues with a sensory tasting session where you will sample fresh tropical fruits, spices, and herbal teas directly from the farm. After the guided walk, there is time to browse the spice shop and purchase locally produced items before the experience concludes.',
     ],
     options: [
-      { title: 'Farm Visit', description: 'A shorter version centered on the property and produce itself.' },
-      { title: 'Farm and Table', description: 'Includes a more complete meal and deeper culinary framing.' },
+      {
+        title: 'Shared Experience',
+        description:
+          'A guided group spice farm tour with other travelers exploring Zanzibar’s spice heritage.',
+      },
+      {
+        title: 'Private Experience',
+        description:
+          'A more personalized and flexible experience with dedicated attention from your guide.',
+      },
     ],
-    included: ['Guide', 'Farm access', 'Tastings', 'Meal component where applicable'],
-    bring: ['Light clothing', 'Water', 'Hat'],
-    notes: ['Farm conditions vary by season.', 'Food offerings depend on availability.'],
+    included: [
+      'Guided spice farm tour',
+      'Fresh fruit and spice tasting',
+      'Professional local guide',
+      'Entrance fees',
+    ],
+    bring: ['Comfortable walking shoes', 'Light clothing', 'Hat and sunscreen', 'Camera', 'Water bottle'],
+    notes: [
+      'This experience may be shared unless booked privately.',
+      'Spice availability varies depending on season.',
+      'Some plants may not be in harvest year-round.',
+      'Respect for farm instructions and natural environment is required.',
+    ],
+    cta: {
+      title: 'Discover Zanzibar’s Spice Island Roots',
+      text:
+        'Step into the world of spices, aromas, and tradition in one of Zanzibar’s most iconic cultural experiences.',
+    },
+  },
+  {
+    slug: 'swahili-culinary-experience',
+    title: 'Swahili Culinary Experience',
+    subtitle:
+      'Cook, taste, and celebrate the flavors of Zanzibar with local chefs.',
+    categorySlug: 'culture-and-place',
+    duration: '2.5–3.5 Hours',
+    experienceType: 'Shared / Private',
+    departure: 'Kijichi – Culinary Experience Venue',
+    startTime: '10:00 AM & 03:00 PM (Daily Sessions)',
+    bestTime: 'Mid-morning or late afternoon sessions',
+    idealFor: 'Food lovers, couples, families, and cultural explorers',
+    image: '/images/experiences/spice/pexels-julia-volk-5769698.jpg',
+    imagePosition: 'center 50%',
+    cardLine:
+      'A hands-on cooking session rooted in Swahili spices, techniques, and shared table culture.',
+    intro: [
+      'Step into the heart of Zanzibar’s food culture with a hands-on cooking experience guided by local chefs. This immersive class introduces you to traditional Swahili cuisine, blending African, Arab, and Indian influences through spices, techniques, and storytelling.',
+      'From preparation to tasting, this experience connects you directly with the island’s culinary heritage in a warm and interactive setting.',
+    ],
+    highlights: [
+      'Learn to cook signature Swahili dishes like pilau rice, coconut curry, and chapati',
+      'Discover Zanzibar’s famous spices and their everyday uses',
+      'Hands-on cooking experience with local chefs',
+      'Enjoy a shared meal of your prepared dishes',
+      'Take home authentic recipes',
+      'Cultural and interactive food experience',
+    ],
+    narrative: [
+      'The experience begins with arrival at a traditional cooking venue in Kijichi, where you are welcomed by your local chef and introduced to the ingredients and spices that define Swahili cuisine.',
+      'You will then take part in a guided cooking session, learning step by step how to prepare several traditional dishes. The chef will explain techniques, spice combinations, and cultural influences behind each recipe as you cook.',
+      'Once the cooking is complete, everyone gathers to enjoy a shared meal featuring the dishes you have prepared together. After dining, you will receive recipe guidance so you can recreate the experience at home.',
+    ],
+    options: [
+      {
+        title: 'Shared Experience',
+        description:
+          'A group cooking class where guests learn and cook together in a social, interactive environment.',
+      },
+      {
+        title: 'Private Experience',
+        description:
+          'A more personalized cooking session with dedicated chef guidance and flexible pacing.',
+      },
+    ],
+    included: [
+      'Guided cooking class with local chef',
+      'All ingredients provided',
+      'Meal (lunch or dinner depending on session)',
+      'Recipe booklet to take home',
+    ],
+    bring: ['Comfortable clothing', 'Camera or phone', 'Appetite', 'Handwashing essentials (optional)', 'Open mind for cooking and learning'],
+    notes: [
+      'This is a shared cooking experience unless booked privately.',
+      'Menu may vary depending on seasonal ingredients.',
+      'Guests are encouraged to participate actively in cooking.',
+      'Hygiene and food safety standards are followed throughout.',
+    ],
+    cta: {
+      title: 'Taste the Flavors of Zanzibar',
+      text:
+        'Learn, cook, and enjoy authentic Swahili dishes in a hands-on cultural cooking experience.',
+    },
+  },
+  {
+    slug: 'mamas-of-zanzibar-experience',
+    title: 'Mamas of Zanzibar Experience',
+    subtitle:
+      'Step into a real Zanzibari home and experience authentic Swahili culture, cooking, and connection through the women who preserve it.',
+    categorySlug: 'culture-and-place',
+    duration: '3–4 Hours',
+    experienceType: 'Shared / Private',
+    departure: 'Ngalawa Road / Bububu Area (Mamas of Zanzibar Home Base)',
+    startTime: '09:00 AM (advance booking required)',
+    bestTime: 'Morning sessions for active market and cooking experience',
+    idealFor: 'Culture seekers, food lovers, couples, and meaningful travel experiences',
+    image: '/images/experiences/spice/pexels-julia-volk-5769698.jpg',
+    imagePosition: 'center 52%',
+    cardLine:
+      'A home-based cultural exchange through cooking, storytelling, and shared time with local Zanzibari women.',
+    intro: [
+      'Experience Zanzibar through the eyes of its local women in one of the island’s most authentic cultural encounters. Hosted by the Mamas of Zanzibar, this experience takes place in a real local home where food, stories, and traditions are shared in a warm and welcoming environment.',
+      'This is not a staged tour — it is a genuine cultural exchange centered around Swahili cuisine, community, and everyday life.',
+    ],
+    highlights: [
+      'Cook traditional Swahili dishes with local Zanzibari women',
+      'Visit a real local home and community setting',
+      'Learn the stories and cultural traditions behind each dish',
+      'Enjoy a shared home-cooked meal with your hosts',
+      'Experience authentic, non-touristy Zanzibar culture',
+      'Support women-led community tourism initiatives',
+    ],
+    narrative: [
+      'The experience begins with a warm welcome into a local Zanzibari home where the Mamas introduce themselves and share the story behind their community-led initiative.',
+      'You will then head into a hands-on cooking session where you participate in preparing traditional Swahili dishes using fresh local ingredients and spices. The Mamas guide you step by step, sharing techniques, family recipes, and cultural meaning behind the food.',
+      'Once cooking is complete, everyone gathers to enjoy a shared meal together in a relaxed, family-style setting. This is where conversation flows naturally — stories are exchanged, laughter is shared, and guests gain a deeper understanding of daily life in Zanzibar.',
+      'The experience concludes with time to relax, take photos, and reflect before departure.',
+    ],
+    options: [
+      {
+        title: 'Shared Experience',
+        description:
+          'A social and interactive group setting where guests cook and dine together with the Mamas.',
+      },
+      {
+        title: 'Private Experience',
+        description:
+          'A more intimate version of the experience with personalized interaction and flexible pacing.',
+      },
+    ],
+    included: [
+      'Guided cultural cooking experience',
+      'All ingredients and cooking materials',
+      'Home-cooked Swahili meal',
+      'Local host (Mamas) experience',
+      'Cultural storytelling and interaction',
+    ],
+    bring: ['Comfortable clothing', 'Open mind and appetite', 'Camera or phone', 'Respectful attire (modest dress recommended)', 'Cash for optional donations or local products'],
+    notes: [
+      'This is a shared community-based experience.',
+      'Advance booking is required.',
+      'Modest dress is expected to respect local culture.',
+      'This experience directly supports local women and families.',
+      'Punctual arrival is important (starts at 09:00 AM).',
+    ],
+    cta: {
+      title: 'Experience the Real Zanzibar',
+      text:
+        'Step beyond tourism and into a real Zanzibari home — cook, connect, and share a meaningful cultural experience with local women.',
+    },
   },
   {
     slug: 'forodhani-evening-food-walk',
@@ -468,95 +945,594 @@ const experienceSeed: ExperienceSeedEntry[] = [
   },
   {
     slug: 'jungle-and-coast-bike-experience',
-    title: 'Jungle and Coast Bike Experience',
-    subtitle: 'A more kinetic way to experience Zanzibar’s changing landscapes.',
+    title: 'Quad Bike Adventure – Zanzibar',
+    subtitle:
+      'Ride through villages, farmlands, and coastal landscapes on an off-road Zanzibar experience.',
     categorySlug: 'adventure-and-exploration',
-    duration: 'Half Day',
-    experienceType: 'Private / Small Group',
-    departure: 'Varies by route',
-    startTime: 'Morning',
-    bestTime: 'Cooler hours',
-    idealFor: 'Active travelers',
+    duration: '3 Hours',
+    experienceType: 'Shared / Private',
+    departure: 'Kiwengwa / Jambiani',
+    startTime: '09:00 AM or 02:00 PM',
+    bestTime: 'Morning or late afternoon for cooler riding conditions',
+    idealFor: 'Adventure seekers, couples, groups, and cultural explorers',
     image: '/images/experiences/adventure/pexels-deffo-manizo-64452317-20897828.jpg',
     imagePosition: 'center 48%',
-    cardLine: 'A more active coastal route for travelers who want movement built in.',
+    cardLine:
+      'An off-road Zanzibar ride through villages, rice fields, fishing communities, and everyday island landscapes.',
     intro: [
-      'Cycling reveals parts of Zanzibar at a very different pace from driving. It gives a stronger sense of texture, transition, and the distance between village, greenery, and coastline.',
-      'This experience is designed for travelers who enjoy movement as part of discovery.',
+      'Get off the beaten path and experience Zanzibar from a completely different perspective. This quad bike adventure takes you through rural villages, rice fields, fishing communities, and scenic landscapes that reveal the island’s authentic local life beyond the beaches.',
+      'It’s a hands-on, immersive journey combining adventure, culture, and everyday island life — guided by locals who know the terrain and communities deeply.',
     ],
-    highlights: ['Guided bike route', 'Village and coastline contrast', 'Active pacing', 'Smaller-group feel'],
+    highlights: [
+      'Start your ride from Kiwengwa with safety briefing and quad introduction',
+      'Explore Pwani Mchangani community square and local life',
+      'Ride through Kinyasini village and scenic rice fields',
+      'Pass traditional mud houses and rural settlements',
+      'Visit fishing villages and local fish markets',
+      'Experience authentic Zanzibari countryside landscapes',
+    ],
     narrative: [
-      'The route is chosen according to comfort level and conditions, keeping the experience engaging without turning it into a performance challenge.',
-      'What makes it rewarding is the shift in perspective: you see the island as connected space rather than a series of stops.',
+      'The experience begins in Kiwengwa, where you’ll receive a full safety briefing and introduction to your quad bike before setting off into Zanzibar’s interior landscapes.',
+      'As you ride along guided trails, you’ll pass through small villages where daily life unfolds naturally — farmers working in fields, children playing, and local markets operating at a relaxed island pace. The journey continues through rice fields, sandy tracks, and coastal village routes that showcase Zanzibar’s rural charm.',
+      'Along the way, there are stops to explore community areas, interact respectfully with locals, and take photos of the diverse landscapes. The route also includes fishing villages where you can observe traditional coastal livelihoods before returning to the starting point after an adventurous ride through the island’s heartland.',
     ],
     options: [
-      { title: 'Leisure Route', description: 'Softer terrain and a more relaxed rhythm.' },
-      { title: 'Active Route', description: 'Longer distance and more energetic pacing.' },
+      {
+        title: 'Shared Experience',
+        description:
+          'A guided group quad bike adventure following a set route through Zanzibar’s villages and landscapes.',
+      },
+      {
+        title: 'Private Experience',
+        description:
+          'A more exclusive ride with greater flexibility, privacy, and personalized stops along the route.',
+      },
     ],
-    included: ['Bike setup', 'Guide', 'Water support'],
-    bring: ['Comfortable activewear', 'Closed shoes', 'Sun protection'],
-    notes: ['Routes depend on conditions and guest confidence.', 'Not recommended in heavy rain conditions.'],
+    included: [
+      'Quad bike rental',
+      'Professional local guide',
+      'Safety briefing and equipment',
+      'Refreshment stop during the ride',
+    ],
+    bring: [
+      'Valid driving license',
+      'Comfortable clothing suitable for outdoor riding',
+      'Sun protection (hat, sunscreen, sunglasses)',
+      'Camera or phone',
+      'Cash for optional local purchases',
+    ],
+    notes: [
+      'All riders must follow safety instructions provided by guides.',
+      'This experience operates on designated safe routes through villages and rural areas.',
+      'Weather conditions may affect ride timing or route selection.',
+      'Respect for local communities is essential throughout the experience.',
+    ],
+    cta: {
+      title: 'Explore Zanzibar Beyond the Roads',
+      text:
+        'Ride through villages, landscapes, and coastal communities on an unforgettable off-road adventure.',
+    },
   },
   {
     slug: 'jozani-forest-exploration',
-    title: 'Jozani Forest Exploration',
-    subtitle: 'A nature-led inland experience through one of Zanzibar’s best-known protected areas.',
-    categorySlug: 'adventure-and-exploration',
-    duration: 'Half Day',
+    title: 'Jozani Forest Tour',
+    subtitle:
+      'Wild, green, and home to Zanzibar’s rare Red Colobus monkeys.',
+    categorySlug: 'nature-and-wildlife',
+    duration: '2–3 Hours',
     experienceType: 'Shared / Private',
-    departure: 'Jozani Forest',
-    startTime: 'Morning',
-    bestTime: 'Morning',
-    idealFor: 'Nature lovers and families',
+    departure: 'Jozani Chwaka Bay National Park',
+    startTime: '09:00 AM – 02:00 PM (Flexible Daily Departures)',
+    bestTime: 'Morning hours for active wildlife viewing',
+    idealFor: 'Nature lovers, families, photographers, and wildlife enthusiasts',
     image:
       'https://images.unsplash.com/photo-1511497584788-876760111969?auto=format&fit=crop&w=1400&q=80',
-    cardLine: 'A nature-focused inland experience with forest and boardwalk settings.',
+    cardLine:
+      'A guided forest walk through Zanzibar’s only national park, centered on red colobus monkeys and mangrove habitat.',
     intro: [
-      'Jozani offers a different mood from the coast: shaded, quieter, and more ecological in focus.',
-      'This experience works particularly well as a half-day contrast within a broader island itinerary.',
+      'Step into Zanzibar’s only national park and a sanctuary of rich biodiversity. Jozani Forest is home to the rare Red Colobus monkey and offers a peaceful escape into dense greenery, mangrove ecosystems, and ancient coastal forest.',
+      'This experience combines wildlife encounters, guided nature walks, and educational insight into Zanzibar’s unique ecosystem.',
     ],
-    highlights: ['Protected forest environment', 'Wildlife focus', 'Boardwalk and woodland setting', 'Family-friendly'],
+    highlights: [
+      'See the endangered Red Colobus monkeys',
+      'Guided walk through lush forest trails',
+      'Discover mangrove ecosystems and medicinal plants',
+      'Spot butterflies, birds, and small wildlife',
+      'Explore Zanzibar’s protected natural environment',
+      'Ideal for nature photography and quiet exploration',
+    ],
     narrative: [
-      'The route moves through forest and mangrove environments, giving a stronger sense of Zanzibar’s inland ecology.',
-      'It is a straightforward but worthwhile experience when balanced with coast-based days, especially for travelers who want more variety.',
+      'The experience begins at the entrance of Jozani Chwaka Bay National Park, where you are welcomed by a professional local guide who introduces the forest and its ecological importance.',
+      'You will then walk through shaded forest trails where Red Colobus monkeys are often seen moving freely among the trees. Your guide will explain their behavior, conservation efforts, and the unique biodiversity of the forest.',
+      'The journey continues to the mangrove boardwalk, where you will learn about the coastal ecosystem and its role in protecting Zanzibar’s shoreline. After the guided exploration, there is time for photos and a relaxed return from the forest.',
     ],
     options: [
-      { title: 'Shared Visit', description: 'A lighter and practical way to access the reserve.' },
-      { title: 'Private Visit', description: 'More flexibility in pace and guiding attention.' },
+      {
+        title: 'Shared Experience',
+        description:
+          'A guided group forest walk exploring Jozani’s main highlights alongside other travelers.',
+      },
+      {
+        title: 'Private Experience',
+        description:
+          'A more personalized nature experience with a dedicated guide and flexible pacing.',
+      },
     ],
-    included: ['Entry fees', 'Guide support', 'Route coordination'],
-    bring: ['Comfortable shoes', 'Water', 'Light insect protection'],
-    notes: ['Wildlife visibility varies.', 'Ground may be damp depending on conditions.'],
+    included: ['Entrance fees to Jozani Forest', 'Guided forest walk', 'Mangrove boardwalk visit', 'Professional local guide'],
+    bring: ['Comfortable walking shoes', 'Light clothing suitable for forest conditions', 'Hat and sunscreen', 'Camera', 'Insect repellent', 'Water bottle'],
+    notes: [
+      'Wildlife sightings are natural and cannot be guaranteed.',
+      'Please follow all park rules and guide instructions.',
+      'Stay on designated trails for safety and conservation.',
+      'Weather conditions may affect visibility and walking conditions.',
+    ],
+    cta: {
+      title: 'Discover Zanzibar’s Wild Side',
+      text:
+        'Walk among ancient trees and meet the island’s rare red colobus monkeys in their natural habitat.',
+    },
+  },
+  {
+    slug: 'nungwi-aquarium',
+    title: 'Nungwi Aquarium',
+    subtitle:
+      'Swim, protect, and discover Zanzibar’s sea turtles in a natural tidal sanctuary.',
+    categorySlug: 'nature-and-wildlife',
+    duration: '1.5–2 Hours',
+    experienceType: 'Shared / Private',
+    departure: 'Nungwi Village – Aquarium',
+    startTime: '09:00 AM – 05:00 PM (Daily Slots)',
+    bestTime: 'Morning or late afternoon for calmer conditions and fewer crowds',
+    idealFor: 'Families, wildlife lovers, couples, and educational travelers',
+    image:
+      'https://images.unsplash.com/photo-1544551763-46a013bb70d5?auto=format&fit=crop&w=1400&q=80',
+    cardLine:
+      'A conservation-led sea turtle sanctuary visit with guided swimming, feeding, and marine education.',
+    intro: [
+      'Located at the northern tip of Zanzibar in Nungwi village, the Nungwi Aquarium is a conservation-based sanctuary where rescued sea turtles are cared for in a natural tidal pool. This experience offers visitors the chance to observe, learn about, and responsibly swim alongside these gentle marine creatures.',
+      'The visit combines conservation education with a meaningful wildlife encounter in a calm coastal setting.',
+    ],
+    highlights: [
+      'Swim with sea turtles in a natural tidal pool',
+      'Learn about turtle rescue and rehabilitation programs',
+      'Feed and observe turtles up close',
+      'Conservation-focused guided experience',
+      'Family-friendly wildlife activity',
+      'Located in the vibrant village of Nungwi',
+    ],
+    narrative: [
+      'The experience begins with arrival at the Nungwi Aquarium, where you will be welcomed and given an introduction to the sanctuary’s conservation work and purpose.',
+      'You will then enter the tidal pool area, where rescued sea turtles live in a protected natural environment connected to the ocean. Guests are guided through a safe and respectful interaction, including the opportunity to swim alongside and feed the turtles under supervision.',
+      'Throughout the visit, you will learn about turtle conservation efforts, rehabilitation processes, and the importance of protecting marine ecosystems. After your swim and learning session, there is time for photos and relaxation before concluding the experience.',
+    ],
+    options: [
+      {
+        title: 'Shared Experience',
+        description:
+          'A guided group visit shared with other guests at scheduled entry times.',
+      },
+      {
+        title: 'Private Experience',
+        description:
+          'A more exclusive and personalized visit with additional flexibility and dedicated guidance.',
+      },
+    ],
+    included: ['Entry to Nungwi Aquarium', 'Turtle swim and feeding experience', 'Basic guide and orientation', 'Conservation briefing'],
+    bring: ['Swimwear', 'Towel', 'Change of clothes', 'Waterproof bag', 'Sunscreen', 'Camera'],
+    notes: [
+      'This is a conservation-focused experience.',
+      'All interactions with turtles must follow guide instructions.',
+      'Wildlife behavior may vary depending on conditions.',
+      'Respect for animals and environment is strictly required.',
+    ],
+    cta: {
+      title: 'Support Turtle Conservation in Zanzibar',
+      text:
+        'Swim with rescued sea turtles and be part of a meaningful conservation experience in Nungwi.',
+    },
+  },
+  {
+    slug: 'sky-diving-zanzibar',
+    title: 'Sky Diving Zanzibar',
+    subtitle:
+      'Jump from 10,000 feet above turquoise waters and experience Zanzibar from the sky.',
+    categorySlug: 'adventure-and-exploration',
+    duration: '~2 Hours',
+    experienceType: 'Shared / Private',
+    departure: 'Kendwa / Nungwi Drop Zone',
+    startTime: 'Daily (weather dependent)',
+    bestTime: 'Clear weather mornings for optimal visibility',
+    idealFor: 'Adventure seekers and thrill lovers',
+    image:
+      'https://images.unsplash.com/photo-1527631746610-bca00a040d60?auto=format&fit=crop&w=1400&q=80',
+    cardLine:
+      'A tandem skydive above Zanzibar’s coastline with freefall, canopy glide, and beach landing at Kendwa.',
+    intro: [
+      'Experience the ultimate adrenaline rush with a tandem skydive over Zanzibar’s breathtaking coastline. From high above the Indian Ocean, you’ll freefall over turquoise waters and white sand beaches before gliding gently back down to a soft landing on Kendwa’s shoreline.',
+      'This is one of the most extreme and unforgettable ways to experience Zanzibar — a true once-in-a-lifetime perspective of paradise.',
+    ],
+    highlights: [
+      'Tandem skydive with a certified professional instructor',
+      'Jump from 10,000 feet above Zanzibar’s coastline',
+      '30–40 seconds of freefall over the Indian Ocean',
+      '5–10 minute parachute glide with panoramic views',
+      'Soft beach landing at Kendwa Rocks',
+      'Personalized certificate of your jump',
+    ],
+    narrative: [
+      'The experience begins with arrival at the designated drop zone near Kendwa, where you will complete registration and meet your certified instructor. A full safety briefing and gear fitting will follow, ensuring you are fully prepared for the jump.',
+      'Once ready, you will board the aircraft for a scenic climb to 10,000 feet. During the ascent, you’ll enjoy panoramic views of Zanzibar’s coastline, coral reefs, and surrounding islands.',
+      'At altitude, you will exit the aircraft in tandem with your instructor for an exhilarating freefall lasting approximately 30–40 seconds. After the parachute opens, you will transition into a calm glide lasting several minutes, floating above the ocean with uninterrupted views of the coastline.',
+      'The experience concludes with a smooth beach landing at Kendwa, followed by certificate presentation and optional media collection.',
+    ],
+    options: [
+      {
+        title: 'Standard Tandem Jump',
+        description:
+          'A fully guided skydive experience with a certified instructor and all safety equipment included.',
+      },
+      {
+        title: 'Premium Media Package Upgrade',
+        description:
+          'Includes professional photo and video capture of your entire jump experience.',
+      },
+    ],
+    included: [
+      'Certified tandem skydiving instructor',
+      'Full safety briefing and equipment',
+      'Scenic aircraft ascent',
+      'Tandem skydive experience',
+      'Personalized completion certificate',
+    ],
+    bring: ['Comfortable clothing', 'Secure closed shoes', 'Valid ID or passport', 'Hair tie (if needed)', 'Sense of adventure'],
+    notes: [
+      'Maximum weight limit: 105 kg per person.',
+      'Not suitable for pregnant guests or those with serious medical conditions.',
+      'This activity is weather dependent and may be rescheduled for safety reasons.',
+      'All safety instructions must be followed strictly at all times.',
+    ],
+    cta: {
+      title: 'Take the Leap of a Lifetime',
+      text:
+        'See Zanzibar from a perspective few ever experience — freefall above paradise and land on its golden shores.',
+    },
+  },
+  {
+    slug: 'beach-horse-riding',
+    title: 'Beach Horse Riding',
+    subtitle:
+      'Ride along Zanzibar’s coastline where ocean waves meet golden sands.',
+    categorySlug: 'adventure-and-exploration',
+    duration: '1–2 Hours',
+    experienceType: 'Shared / Private',
+    departure: 'East Coast (Michamvi Kae) / North Coast (Nungwi)',
+    startTime: 'Flexible Daily (Sunrise to Sunset)',
+    bestTime: 'Early morning or sunset for optimal conditions',
+    idealFor: 'Couples, families, beginners, and adventure seekers',
+    image:
+      'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1400&q=80',
+    cardLine:
+      'A guided horseback ride along Zanzibar’s shoreline with ocean-edge views and flexible timing from sunrise to sunset.',
+    intro: [
+      'Experience the freedom of horseback riding along Zanzibar’s stunning beaches. This guided coastal adventure takes you across soft white sands and shallow waters, offering breathtaking views of the Indian Ocean.',
+      'Whether you are a beginner or experienced rider, this experience blends relaxation, adventure, and unforgettable coastal scenery in one unique journey.',
+    ],
+    highlights: [
+      'Scenic horseback ride along Zanzibar’s beaches',
+      'Suitable for beginners and experienced riders',
+      'Ride along sunrise, daytime, or sunset settings',
+      'Guided experience with professional instructors',
+      'Opportunity for ocean-edge photography',
+      'Ideal for couples, families, and solo travelers',
+    ],
+    narrative: [
+      'The experience begins with a safety briefing from your professional instructor, where you will be introduced to your horse and provided with all necessary riding equipment.',
+      'Once ready, you will set off along the shoreline, riding across soft sand and shallow waters while enjoying uninterrupted views of the ocean. The pace is relaxed and guided, ensuring comfort and safety for all experience levels.',
+      'Along the route, there are stops for photography and moments to take in the scenery before gently returning to the stables. Depending on the selected time, sunrise and sunset rides offer especially dramatic lighting and atmosphere.',
+    ],
+    options: [
+      {
+        title: 'Shared Experience',
+        description:
+          'A guided group horseback ride along the beach with other participants.',
+      },
+      {
+        title: 'Private Experience',
+        description:
+          'A more exclusive riding experience with personalized pacing and route flexibility.',
+      },
+    ],
+    included: ['Horse rental and riding equipment (helmet, saddle, reins)', 'Professional riding instructor', 'Safety briefing and guidance'],
+    bring: ['Comfortable clothing suitable for riding', 'Closed or secure footwear', 'Sunscreen', 'Camera or phone', 'Hat (optional for waiting areas)'],
+    notes: [
+      'All rides are guided for safety and comfort.',
+      'Riders must follow instructor instructions at all times.',
+      'Weather and tide conditions may affect route selection.',
+      'Weight and age restrictions may apply depending on horse availability.',
+    ],
+    cta: {
+      title: 'Ride Along Zanzibar’s Shores',
+      text:
+        'Experience the magic of horseback riding where the ocean meets the sand in one of Zanzibar’s most scenic coastal adventures.',
+    },
+  },
+  {
+    slug: 'game-fishing-zanzibar',
+    title: 'Game Fishing Zanzibar',
+    subtitle:
+      'Head into the Indian Ocean for a deep-sea fishing adventure and the thrill of the big catch.',
+    categorySlug: 'adventure-and-ocean',
+    duration: '4–8 Hours',
+    experienceType: 'Shared / Private',
+    departure: 'Kendwa / Nungwi / Matemwe / Kiwengwa (sea dependent)',
+    startTime: '06:00 AM – 07:00 AM (recommended)',
+    bestTime: 'Early morning for optimal fishing conditions',
+    idealFor: 'Fishing enthusiasts, adventure seekers, and ocean lovers',
+    image:
+      'https://images.unsplash.com/photo-1574781330855-d0db8cc6a79c?auto=format&fit=crop&w=1400&q=80',
+    cardLine:
+      'A deep-sea charter into Zanzibar’s offshore fishing grounds with local crew support and open-ocean time.',
+    intro: [
+      'Head out into the Indian Ocean for an unforgettable deep-sea fishing experience. Zanzibar is known for its rich marine waters where anglers have the chance to target some of the most exciting game fish, including tuna, marlin, barracuda, dorado, and kingfish.',
+      'This experience combines sport, adventure, and ocean exploration with guidance from an experienced local crew aboard a fully equipped fishing boat.',
+    ],
+    highlights: [
+      'Deep-sea fishing with a professional local crew',
+      'Fully equipped boat with rods, bait, and fishing gear',
+      'Chance to catch tuna, marlin, barracuda, dorado, and kingfish',
+      'Scenic time on the open Indian Ocean',
+      'Refreshments served on board',
+      'Ideal for beginners and experienced anglers',
+    ],
+    narrative: [
+      'The experience begins early in the morning as you meet your crew at one of the designated departure points in Kendwa, Nungwi, Matemwe, or Kiwengwa, depending on sea and tide conditions. After a short briefing, you will board a fully equipped fishing vessel and head offshore into deeper waters.',
+      'Once at the fishing grounds, the crew will guide you through trolling and casting techniques depending on the conditions and target species. Throughout the session, you’ll have continuous support whether you are a beginner or experienced angler.',
+      'Between fishing sessions, you can relax on board, enjoy light refreshments, and take in the vast open ocean surroundings. In a full-day trip, additional time is spent fishing with a lunch break served on board before returning to shore with your catch.',
+    ],
+    options: [
+      {
+        title: 'Half-Day Fishing Charter',
+        description:
+          'A 4-hour guided fishing experience focusing on key offshore fishing grounds.',
+      },
+      {
+        title: 'Full-Day Fishing Charter',
+        description:
+          'An extended 8-hour experience with more fishing time and a full lunch served on board.',
+      },
+    ],
+    included: [
+      'Boat charter with professional fishing crew',
+      'Fishing rods, bait, and equipment',
+      'Soft drinks and snacks (half-day)',
+      'Lunch (full-day trips only)',
+    ],
+    bring: ['Comfortable clothing', 'Hat and sunglasses', 'Sunscreen', 'Camera', 'Motion sickness tablets (if needed)'],
+    notes: [
+      'Fishing locations depend on sea and weather conditions.',
+      'Catch success is not guaranteed as this is a natural activity.',
+      'This is a shared charter unless booked privately.',
+      'Safety instructions from crew must be followed at all times.',
+    ],
+    cta: {
+      title: 'The Ultimate Ocean Fishing Adventure',
+      text:
+        'Spend a day on the Indian Ocean chasing the thrill of the catch in one of Zanzibar’s most exciting marine experiences.',
+    },
+  },
+  {
+    slug: 'cheetahs-rock-zanzibar',
+    title: 'Cheetah’s Rock Zanzibar',
+    subtitle:
+      'A once-in-a-lifetime ethical wildlife encounter where rescued animals and conservation come together.',
+    categorySlug: 'nature-and-wildlife',
+    duration: '3–4 Hours',
+    experienceType: 'Shared Experience (Limited Capacity)',
+    departure: 'Cheetah’s Rock – West Coast Zanzibar (near Kama Village)',
+    startTime: 'Scheduled sessions (pre-booking required)',
+    bestTime: 'Midday to afternoon sessions',
+    idealFor: 'Animal lovers, educational travelers, families (15+ age restriction applies)',
+    image:
+      'https://images.unsplash.com/photo-1549366021-9f761d450615?auto=format&fit=crop&w=1400&q=80',
+    cardLine:
+      'A conservation-led rescue sanctuary visit focused on storytelling, animal welfare, and highly controlled encounters.',
+    intro: [
+      'Experience one of Zanzibar’s most unique wildlife encounters at Cheetah’s Rock, a conservation-focused rescue center where animals that cannot return to the wild are cared for and protected.',
+      'This is not a traditional zoo. It is an intimate guided experience where guests meet rescued wildlife up close, learn their stories, and support ongoing conservation efforts through responsible tourism.',
+    ],
+    highlights: [
+      'Meet rescued cheetahs, lions, zebras, lemurs, and more',
+      'Guided wildlife encounter with expert animal caretakers',
+      'Learn real rescue and conservation stories behind each animal',
+      'Close-up photo opportunities with select animals',
+      'Small-group, limited-capacity experience for animal welfare',
+      'Educational and conservation-focused tour',
+    ],
+    narrative: [
+      'The experience begins with arrival at Cheetah’s Rock, located on Zanzibar’s west coast near Kama Village. Guests are welcomed by the team and introduced to the sanctuary’s mission of rescue, rehabilitation, and education.',
+      'You will then join a guided wildlife tour where trained staff lead you through carefully managed animal encounters. Each animal has its own rescue story, and during the visit you will learn how they came to the sanctuary and how they are cared for today.',
+      'Depending on the tour flow, guests may encounter cheetahs, lions, zebras, lemurs, monkeys, hyenas, and other rescued species. All interactions are strictly supervised and designed around animal welfare and natural behavior, ensuring respectful and safe contact.',
+      'The experience is highly immersive, combining education, photography opportunities, and direct engagement with conservation work in action.',
+    ],
+    options: [
+      {
+        title: 'Wildlife Tour Experience',
+        description:
+          'The main guided tour featuring multiple rescued animals and storytelling-focused encounters.',
+      },
+      {
+        title: 'Combined Tour (Wildlife + Otters)',
+        description:
+          'A full-day experience combining the wildlife tour with a VIP otter encounter for a more extended visit.',
+      },
+      {
+        title: 'VIP Otter Experience',
+        description:
+          'A separate interactive experience focused on rescued otters in a controlled natural environment.',
+      },
+    ],
+    included: [
+      'Guided wildlife tour',
+      'Professional animal caretakers and guides',
+      'Educational conservation briefing',
+      'Supervised animal encounters',
+      'Access to rescued wildlife areas',
+    ],
+    bring: ['Comfortable closed clothing (no loose items or strong scents)', 'Closed shoes (required)', 'Camera (no flash in some areas)', 'Booking confirmation', 'Respectful attitude toward wildlife rules'],
+    notes: [
+      'Minimum age: 15 years and above.',
+      'Strict dress and scent guidelines apply for animal safety.',
+      'No perfumes, strong lotions, or insect repellents allowed.',
+      'Advance booking is required due to limited capacity.',
+      'All interactions are controlled for animal welfare and safety.',
+    ],
+    cta: {
+      title: 'A Rare Wildlife Encounter in Zanzibar',
+      text:
+        'Meet rescued animals face-to-face and discover the powerful conservation stories behind Zanzibar’s most unique wildlife sanctuary.',
+    },
   },
   {
     slug: 'selous-fly-in-safari',
-    title: 'Selous Fly-In Safari',
-    subtitle: 'A mainland extension that shifts the journey from ocean rhythm to larger wildlife landscapes.',
+    title: 'Selous Day Safari (Nyerere National Park)',
+    subtitle:
+      'A full-day fly-in safari from Zanzibar into one of Africa’s largest protected wilderness areas.',
     categorySlug: 'safari-and-beyond',
-    duration: 'Full Day or Overnight Extension',
-    experienceType: 'Private / Shared',
+    duration: 'Full Day',
+    experienceType: 'Shared Safari',
     departure: 'Zanzibar Airport',
-    startTime: 'Early morning',
-    bestTime: 'Dry season windows',
-    idealFor: 'Travelers adding safari to an island stay',
+    startTime: 'Early Morning Departure',
+    bestTime: 'Year-round',
+    idealFor: 'Couples, families, groups, photographers, and wildlife lovers',
     image: '/images/experiences/safari/pexels-wussol-2147803031-30894532.jpg',
-    cardLine: 'A strong mainland extension for travelers pairing coast with safari.',
+    imagePosition: 'center 46%',
+    cardLine:
+      'A same-day fly-in safari from Zanzibar into the scale and wildlife of Nyerere National Park.',
     intro: [
-      'A fly-in safari changes the scale of the journey quickly and decisively. It is one of the most effective ways to pair Zanzibar with the mainland without losing momentum.',
-      'This experience works best when planned as part of the wider itinerary from the outset.',
+      'Experience Africa’s wilderness in just one day with a fly-in safari to Selous, now part of Nyerere National Park. Known for its elephants, lions, hippos, crocodiles, and rich birdlife, this vast protected area offers an unforgettable safari experience only a short flight away from Zanzibar.',
+      'The journey combines scenic flights, guided game drives, and time immersed in Tanzania’s natural landscapes — making it the perfect safari addition to your Zanzibar holiday.',
     ],
-    highlights: ['Fly-in safari access', 'Mainland wildlife landscapes', 'High contrast to island stay', 'Single-journey feel when well planned'],
+    highlights: [
+      'Same-day return safari from Zanzibar',
+      'Scenic flight over Tanzania’s coastline and landscapes',
+      'Game drive through Nyerere National Park',
+      'Opportunity to encounter elephants, lions, giraffes, zebras, hippos, and crocodiles',
+      'Picnic lunch surrounded by nature',
+      'One of Africa’s largest protected wildlife areas',
+    ],
     narrative: [
-      'The day begins early with an airport transfer and short flight to the mainland. From there, the pace shifts into game drive territory, opening a very different visual and ecological register from Zanzibar.',
-      'Because the change is so dramatic, sequencing matters. When arranged properly, the contrast feels like a strength rather than a break in the trip.',
+      'The experience begins with an early morning departure from Zanzibar, flying across the Tanzanian coastline towards the vast wilderness of Nyerere National Park. Upon arrival at the Selous airstrip, you’ll meet your safari guide and begin a full-day game drive through diverse landscapes shaped by rivers, open plains, and dense bush.',
+      'Throughout the day, there are opportunities to encounter some of Africa’s most iconic wildlife, including elephants moving across the savannah, giraffes feeding among the trees, hippos resting near water sources, and, with luck, predators such as lions in their natural habitat. The park’s scale and remote atmosphere create a safari experience that feels both wild and authentic.',
+      'Midway through the experience, you’ll pause for a picnic lunch in the bush before continuing the afternoon game drive through different areas of the park. After a full day exploring the wilderness, the journey concludes with a return flight back to Zanzibar in the late afternoon.',
     ],
     options: [
-      { title: 'Day Safari', description: 'A shorter, efficient safari extension from Zanzibar.' },
-      { title: 'Overnight Extension', description: 'More time on the mainland and a slower safari rhythm.' },
+      {
+        title: 'Shared Safari Experience',
+        description:
+          'A professionally guided shared safari experience, offering a social and efficient way to explore Nyerere National Park in a single day.',
+      },
+      {
+        title: 'Private Safari Experience',
+        description:
+          'A more exclusive safari option with greater flexibility and a more personalized experience throughout the day.',
+      },
     ],
-    included: ['Flight logistics', 'Ground coordination', 'Safari guiding', 'Park handling'],
-    bring: ['Neutral clothing', 'Hat', 'Camera', 'Travel documents'],
-    notes: ['Flight timing may shift slightly.', 'Safari sightings vary and are never guaranteed.'],
+    included: [
+      'Return flights between Zanzibar and Selous',
+      'Park entrance fees',
+      'Full-day safari game drive',
+      'Picnic lunch',
+      'Bottled drinking water',
+      'English-speaking safari guide',
+      '4x4 safari vehicle',
+    ],
+    bring: [
+      'Comfortable lightweight clothing',
+      'Walking shoes',
+      'Hat and sunglasses',
+      'Sunscreen',
+      'Camera or binoculars',
+      'Small personal bag',
+    ],
+    notes: [
+      'This experience is typically operated as a shared safari.',
+      'Private safari arrangements are available upon request.',
+      'Wildlife sightings vary and cannot be guaranteed.',
+      'Flight and safari schedules may vary depending on weather and operational conditions.',
+      'Exact departure times will be confirmed prior to travel.',
+    ],
+    cta: {
+      title: 'Fly Into Tanzania’s Wilderness',
+      text:
+        'Discover the landscapes, wildlife, and atmosphere of Nyerere National Park in a seamless full-day safari experience from Zanzibar.',
+    },
+  },
+  {
+    slug: 'mikumi-safari-from-zanzibar',
+    title: 'Mikumi Safari from Zanzibar',
+    subtitle:
+      'A full-day safari adventure from Zanzibar into the wild landscapes of mainland Tanzania.',
+    categorySlug: 'safari-and-beyond',
+    duration: 'Full Day',
+    experienceType: 'Shared Safari',
+    departure: 'Zanzibar Airport',
+    startTime: 'Early Morning Departure',
+    bestTime: 'Year-round',
+    idealFor: 'Couples, families, groups, and wildlife lovers',
+    image: '/images/experiences/safari/pexels-adrien-olichon-1257089-36702544.jpg',
+    imagePosition: 'center 52%',
+    cardLine: 'A fly-in full-day safari that pairs Zanzibar with mainland wildlife in one clean extension.',
+    intro: [
+      'We all know that feeling — you’ve booked your Zanzibar escape, but the dream of experiencing an African safari is still calling. This full-day safari to Mikumi National Park offers the opportunity to combine both in one unforgettable journey.',
+      'Fly from Zanzibar to mainland Tanzania and spend the day exploring one of the country’s most accessible national parks, home to elephants, giraffes, lions, zebras, buffalo, and a wide variety of birdlife. The experience combines adventure, nature, and comfort, making it an ideal addition to your Zanzibar holiday.',
+    ],
+    highlights: [
+      'Wildlife encounters including elephants, giraffes, lions, and zebras',
+      'Guided safari game drive in a 4x4 vehicle',
+      'Scenic landscapes across Mikumi National Park',
+      'Picnic lunch surrounded by nature',
+      'Fly-in safari experience directly from Zanzibar',
+      'Opportunity to experience Tanzania’s wildlife in a single day',
+    ],
+    narrative: [
+      'The experience begins with an early morning flight from Zanzibar to Mikumi National Park, offering views of the coastline before transitioning into Tanzania’s vast inland landscapes. Upon arrival, you’ll meet your safari guide and begin a game drive through the park’s open savannah and wildlife-rich areas.',
+      'Mikumi is known for its abundant wildlife and expansive plains, providing excellent opportunities to encounter elephants, giraffes, zebras, buffalo, and, with luck, lions resting in the shade. Throughout the journey, your guide will help you understand the ecosystem, wildlife behavior, and the natural beauty of the region.',
+      'Midway through the experience, there is a stop for a scenic picnic lunch within the park before continuing the safari drive through different sections of Mikumi. After a full day immersed in nature, you’ll return to the airstrip for your flight back to Zanzibar.',
+    ],
+    options: [
+      {
+        title: 'Shared Safari Experience',
+        description:
+          'A professionally guided shared safari experience, offering a social and efficient way to explore Mikumi National Park in a single day.',
+      },
+    ],
+    included: [
+      'Return flights between Zanzibar and Mikumi',
+      'National park entry fees',
+      'Guided safari game drive',
+      'Picnic lunch',
+      'Bottled drinking water',
+      'Professional safari guide',
+    ],
+    bring: [
+      'Comfortable lightweight clothing',
+      'Walking shoes',
+      'Hat and sunglasses',
+      'Sunscreen',
+      'Camera or binoculars',
+      'Small personal bag',
+    ],
+    notes: [
+      'This is a shared safari experience.',
+      'Wildlife sightings vary and cannot be guaranteed.',
+      'Flight and safari schedules may vary depending on weather and operational conditions.',
+      'Exact departure times will be confirmed prior to travel.',
+    ],
+    cta: {
+      title: 'Add a Safari to Your Zanzibar Journey',
+      text:
+        'Experience the contrast between Zanzibar’s coastline and Tanzania’s wildlife in one seamless adventure.',
+    },
   },
   {
     slug: 'serengeti-short-extension',
@@ -763,201 +1739,765 @@ const brochureOverrides: Partial<Record<string, ExperienceBrochureOverride>> = {
     notes:
       'Marine sightings are never guaranteed, and this experience may operate on a shared basis unless arranged privately in advance.',
   },
+  'blue-safari': {
+    overview:
+      'Blue Safari is one of Zanzibar’s best-known full-day ocean experiences, combining dhow sailing, snorkeling, sandbanks, seafood lunch, and the island-dotted waters off the southwest coast. It works best when approached as a full-day marine rhythm rather than a sequence of rushed stops.',
+    highlights: [
+      'Traditional dhow sailing from Fumba across Zanzibar’s southwest waters',
+      'Time on a white sandbank for swimming, photos, and a slower ocean pause',
+      'Guided snorkeling above coral reefs and tropical fish',
+      'Seafood BBQ lunch served on Kwale Island',
+      'Possible Blue Lagoon swim depending on tide and sea conditions',
+    ],
+    fullItinerary: [
+      {
+        label: '09:00',
+        title: 'Departure from Fumba',
+        description:
+          'Board a traditional dhow in Fumba and set out along Zanzibar’s southwest coast through calm turquoise water.',
+      },
+      {
+        label: 'Morning',
+        title: 'Sandbank stop',
+        description:
+          'Pause at a sandbank for swimming, relaxing, and taking in the open-water setting before continuing onward.',
+      },
+      {
+        label: 'Late Morning',
+        title: 'Snorkeling session',
+        description:
+          'Join a guided snorkeling stop in clear, shallow water around reef areas known for tropical fish and coral.',
+      },
+      {
+        label: 'Midday',
+        title: 'Kwale Island lunch',
+        description:
+          'Continue to Kwale Island for a freshly prepared seafood BBQ lunch, fruit, and shaded time ashore.',
+      },
+      {
+        label: 'Afternoon',
+        title: 'Blue Lagoon or return sail',
+        description:
+          'Depending on tide and weather, include a Blue Lagoon swim before sailing back toward Fumba later in the day.',
+      },
+      {
+        label: 'Late Afternoon',
+        title: 'Return to Fumba',
+        description:
+          'Close the experience with a relaxed sail back after a full day of reef, island, and ocean time.',
+      },
+    ],
+    includes: [
+      'Traditional dhow trip with crew',
+      'Snorkeling equipment',
+      'Seafood BBQ lunch',
+      'Tropical fruits',
+      'Bottled water and soft drinks',
+      'Marine conservation fees',
+      'Professional guide',
+    ],
+    excludes: ['Personal expenses', 'Tips and gratuities', 'Additional alcoholic drinks'],
+    notes:
+      'This experience is typically operated as a shared tour of around 10 to 14 guests per boat, though private dhow arrangements are available on request. The itinerary and timings vary with tide and sea conditions, and access to the Blue Lagoon depends on water levels and weather.',
+  },
+  'nakupenda-sandbank-experience': {
+    overview:
+      'Nakupenda is one of Zanzibar’s most iconic tide-shaped marine settings: a sandbank that appears and disappears with the ocean, creating a short-lived platform of white sand surrounded by clear turquoise water. The experience works best when built around low tide timing, slower pacing, and the simple contrast between Stone Town’s shoreline and the open sea beyond it.',
+    highlights: [
+      'Boat crossing from Stone Town to a tide-shaped ocean sandbank',
+      'Swimming, relaxation, and shallow-water marine time',
+      'Optional snorkeling near nearby coral areas',
+      'Fruit platter or seafood BBQ depending on package type',
+      'A highly photogenic open-ocean setting that changes with the tide',
+    ],
+    fullItinerary: [
+      {
+        label: 'Morning',
+        title: 'Departure from Stone Town',
+        description:
+          'Leave by boat from Stone Town and cross turquoise water with views of the historic coastline behind you.',
+      },
+      {
+        label: 'Arrival',
+        title: 'Sandbank time',
+        description:
+          'Step onto Nakupenda Sandbank for swimming, sun, photos, and a slower ocean pause in shallow clear water.',
+      },
+      {
+        label: 'Mid-Visit',
+        title: 'Snorkeling and marine exploration',
+        description:
+          'Depending on conditions and package, move to nearby reef areas for a lighter snorkeling stop.',
+      },
+      {
+        label: 'Lunch',
+        title: 'Seafood BBQ or fruit service',
+        description:
+          'Enjoy a fruit platter or seafood BBQ setup directly on the sandbank depending on the arrangement selected.',
+      },
+      {
+        label: 'Return',
+        title: 'Cruise back to Stone Town',
+        description:
+          'Head back as the tide reshapes the sandbank and the open-water chapter closes.',
+      },
+    ],
+    includes: [
+      'Boat transfer from Stone Town',
+      'Visit to Nakupenda Sandbank',
+      'Swimming and relaxation time',
+      'Snorkeling equipment when included',
+      'Fruit platter or seafood BBQ depending on package',
+      'Professional boat crew',
+    ],
+    excludes: ['Personal expenses', 'Tips and gratuities', 'Additional drinks beyond standard setup'],
+    notes:
+      'Timing is tide dependent, and the visible size of the sandbank changes with ocean conditions. Snorkeling visibility and meal setup also depend on weather and package type.',
+  },
   'stone-town-cultural-walk': {
     overview:
-      'Step into the heart of Zanzibar with a guided Stone Town walk shaped around architecture, history, and daily life. Rather than pushing volume, the route focuses on cultural layering, context, and the atmosphere that gives the old town its lasting character.',
+      'Step into the living heart of Zanzibar with a guided Stone Town tour through winding alleys, historic landmarks, markets, and centuries of layered cultural influence. This UNESCO World Heritage Site rewards context, and the experience works best when it balances major landmarks with the smaller details that make the old town feel alive.',
     highlights: [
-      'Visit major cultural and historic landmarks across the old town',
-      'Understand Zanzibar through architecture, trade history, and local context',
-      'Move at a measured pace with time for markets and street atmosphere',
-      'Customizable route depending on interests and energy level',
+      'Visit the Sultan’s Palace and Old Slave Market',
+      'Explore the House of Wonders and Old Fort',
+      'Walk through narrow alleys, carved doors, and market streets',
+      'Optional cafe, rooftop, shopping, or Forodhani extensions depending on timing',
     ],
     fullItinerary: [
       {
         label: 'Flexible Start',
         title: 'Meet your guide',
-        description: 'Begin at a selected point in Stone Town between the morning and late afternoon windows.',
+        description:
+          'Begin at a flexible meeting point in Stone Town and start with an introduction to the city’s layered history.',
       },
       {
         label: 'Historic Core',
-        title: 'Landmarks and city narrative',
-        description: 'Walk through key historical areas and connect the architecture to Zanzibar’s Swahili, Arab, and Indian influences.',
+        title: 'Major landmarks and heritage sites',
+        description:
+          'Walk between key highlights such as the Sultan’s Palace, Old Slave Market, House of Wonders, and Old Fort.',
       },
       {
-        label: 'Markets',
-        title: 'Souks and local movement',
-        description: 'Move through local markets and public spaces to experience the city as it is lived, not just observed.',
+        label: 'Streets & Markets',
+        title: 'Alleys, doors, and daily life',
+        description:
+          'Move through markets, narrow streets, carved wooden doors, and local shopfronts as the city reveals its lived texture.',
       },
       {
         label: 'Optional Continuation',
-        title: 'Lunch, shopping, or cultural extension',
-        description: 'Continue into a local lunch stop or a lighter shopping and exploration chapter if desired.',
+        title: 'Cafe, rooftop, shopping, or evening extension',
+        description:
+          'Add time for photography, shopping, cafe stops, rooftop views, or a later continuation toward Forodhani depending on your pace.',
       },
     ],
-    includes: ['Expert guide', 'Entry fees to main attractions where applicable'],
+    includes: ['Professional local guide', 'Entry fees to main attractions', 'Guided walking tour of Stone Town'],
     excludes: ['Personal expenses', 'Tips and gratuities', 'Meals unless added on'],
     notes:
-      'This walk is fully customizable and works best when adapted to your interests, pace, and the wider rhythm of your stay.',
+      'This is a flexible walking tour that can be customized around interests, pace, and current opening times. Moderate walking is required throughout the experience.',
+  },
+  'prison-island-tour': {
+    overview:
+      'Prison Island, also known as Changuu Island, offers one of Zanzibar’s easiest half-day contrasts to Stone Town: a short boat crossing, layered island history, giant Aldabra tortoises, and clear coastal views back toward the old town. It is most rewarding when treated as a light island chapter rather than a rushed checklist stop.',
+    highlights: [
+      'Short scenic boat ride from Stone Town across turquoise water',
+      'Visit to the historic prison ruins and island heritage site',
+      'Time with giant Aldabra tortoises in the sanctuary area',
+      'Relaxed shoreline atmosphere with strong photography opportunities',
+      'Optional snorkeling or sandbank lunch extension nearby',
+    ],
+    fullItinerary: [
+      {
+        label: 'Departure',
+        title: 'Boat ride from Stone Town',
+        description:
+          'Leave from Stone Town by boat and cross to Prison Island with open-water views and the old town skyline behind you.',
+      },
+      {
+        label: 'Arrival',
+        title: 'Island history and orientation',
+        description:
+          'Arrive on Changuu Island and begin with an introduction to the island’s history and changing role over time.',
+      },
+      {
+        label: 'Exploration',
+        title: 'Prison ruins and tortoise sanctuary',
+        description:
+          'Walk the old prison site and continue to the Aldabra tortoise sanctuary for guided viewing and photos.',
+      },
+      {
+        label: 'Leisure Time',
+        title: 'Shoreline pause',
+        description:
+          'Spend time by the shore enjoying ocean views, taking photographs, or extending the excursion with optional add-ons.',
+      },
+      {
+        label: 'Return',
+        title: 'Boat back to Stone Town',
+        description:
+          'Return to Stone Town after a short island chapter that blends history, wildlife, and coastal atmosphere.',
+      },
+    ],
+    includes: [
+      'Boat transfer between Stone Town and Prison Island',
+      'Entrance fees',
+      'Guided tour of the prison ruins',
+      'Visit to the giant tortoise sanctuary',
+      'Professional local guide',
+    ],
+    excludes: ['Personal expenses', 'Tips and gratuities', 'Optional snorkeling or lunch add-ons'],
+    notes:
+      'This experience may be shared unless booked privately. Boat crossings depend on sea and weather conditions, and wildlife interactions should always remain respectful and guided by local instructions.',
   },
   'spice-farm-and-local-table': {
     overview:
-      'Uncover Zanzibar’s “Spice Island” heritage with a guided visit shaped around cinnamon, cloves, nutmeg, vanilla, and tropical fruits. The experience is strongest when it connects the farm setting to food culture and the table, rather than treating the farm as a novelty stop.',
+      'Uncover Zanzibar’s world-famous Spice Island identity with a guided walk through a local farm in Kijichi, where spices, herbs, and tropical fruits are cultivated as part of everyday life. This is a sensory experience as much as a cultural one, built around aroma, touch, taste, and the stories that connect Zanzibar’s agricultural heritage to its wider identity.',
     highlights: [
-      'Guided walk through a working spice property',
-      'Smell, taste, and handle fresh produce and spices',
-      'Learn culinary, cosmetic, and medicinal uses of Zanzibar’s spices',
-      'Finish with tastings that connect the landscape to everyday food culture',
+      'Guided walk through a local spice farm with a knowledgeable local expert',
+      'Smell, touch, and taste fresh spices, herbs, and tropical fruits',
+      'Learn traditional medicinal, culinary, and cosmetic uses',
+      'Browse locally produced spice products after the tour',
     ],
     fullItinerary: [
       {
         label: 'Arrival',
-        title: 'Welcome briefing at the farm',
-        description: 'Begin with an introduction to the property, seasonal produce, and the rhythm of the visit.',
+        title: 'Welcome at the spice farm',
+        description:
+          'Arrive in Kijichi and begin with an introduction to Zanzibar’s spice history and the role of cultivation on the island.',
       },
       {
         label: 'Farm Walk',
-        title: 'Spices, fruits, and plants',
-        description: 'Walk through the farm with a local guide and learn how ingredients are grown and understood locally.',
+        title: 'Spices, herbs, and tropical plants',
+        description:
+          'Walk through the plantation with your guide and learn how cloves, cinnamon, vanilla, nutmeg, cardamom, and other plants grow and are used.',
       },
       {
         label: 'Tasting',
-        title: 'Fresh fruit, spice, and tea tasting',
-        description: 'Pause for a tasting session that makes the connection between landscape, produce, and the table more tangible.',
+        title: 'Fruit, spice, and tea tasting',
+        description:
+          'Pause for a sensory tasting session featuring fresh fruits, spices, and herbal teas directly from the farm.',
       },
       {
         label: 'Close',
-        title: 'Shopping or return transfer',
-        description: 'Finish with optional browsing at the spice shop before returning onward.',
+        title: 'Spice shop and return',
+        description:
+          'Finish with time to browse local products at the spice shop before the experience concludes.',
       },
     ],
-    includes: ['Guided spice farm tour', 'Fruit and spice tasting', 'Local guide', 'Entrance fees'],
+    includes: ['Guided spice farm tour', 'Fresh fruit and spice tasting', 'Professional local guide', 'Entrance fees'],
     excludes: ['Personal expenses', 'Tips and gratuities', 'Additional meals'],
     notes:
-      'Tour start time is flexible daily, and produce visibility varies slightly by season and harvest conditions.',
+      'This experience may be shared unless booked privately. Spice availability varies by season, and some plants may not be in harvest year-round. Respect for the farm environment and local instructions is expected throughout.',
+  },
+  'swahili-culinary-experience': {
+    overview:
+      'This hands-on Swahili cooking experience is designed as both a food session and a cultural introduction. Rather than only serving a meal, it brings guests directly into the spices, techniques, and storytelling that shape Zanzibar’s cuisine through African, Arab, and Indian influence.',
+    highlights: [
+      'Hands-on preparation of signature Swahili dishes with local chefs',
+      'Ingredient and spice introductions rooted in Zanzibar’s food culture',
+      'Shared meal of the dishes prepared during the session',
+      'Recipe guidance to take home after the class',
+    ],
+    fullItinerary: [
+      {
+        label: 'Arrival',
+        title: 'Welcome at the culinary venue',
+        description:
+          'Arrive in Kijichi and meet your chef for an introduction to the session, ingredients, and cooking plan.',
+      },
+      {
+        label: 'Preparation',
+        title: 'Spices, chopping, and technique',
+        description:
+          'Begin preparing ingredients while learning how spice combinations and cooking methods shape Swahili cuisine.',
+      },
+      {
+        label: 'Cooking',
+        title: 'Guided hands-on dish preparation',
+        description:
+          'Cook step by step with the chef, building dishes such as pilau, coconut curry, and chapati depending on the menu.',
+      },
+      {
+        label: 'Meal',
+        title: 'Shared tasting and dining',
+        description:
+          'Sit down together to enjoy the dishes prepared during the class in a more relaxed communal setting.',
+      },
+      {
+        label: 'Close',
+        title: 'Recipes and wrap-up',
+        description:
+          'Finish with recipe guidance and the chance to ask questions before departing.',
+      },
+    ],
+    includes: ['Guided cooking class with local chef', 'All ingredients provided', 'Meal depending on session', 'Recipe booklet to take home'],
+    excludes: ['Personal expenses', 'Tips and gratuities', 'Additional beverages unless arranged'],
+    notes:
+      'Menus vary slightly with seasonality and ingredient availability, but the emphasis remains on active participation and well-handled food preparation throughout.',
+  },
+  'mamas-of-zanzibar-experience': {
+    overview:
+      'Mamas of Zanzibar is one of the island’s strongest community-based cultural experiences because it takes place inside a real home, with real hosts, and a format built around exchange rather than performance. The value lies in cooking, conversation, and time shared with the women who preserve and pass on everyday Swahili traditions.',
+    highlights: [
+      'Hosted inside a real Zanzibari home by local women',
+      'Hands-on Swahili cooking and shared meal',
+      'Stories, recipes, and cultural context passed on directly by the hosts',
+      'A community-based experience that supports local women and families',
+    ],
+    fullItinerary: [
+      {
+        label: 'Welcome',
+        title: 'Arrival at the home base',
+        description:
+          'Arrive in the Bububu area and receive a warm welcome from the Mamas with an introduction to their initiative.',
+      },
+      {
+        label: 'Cooking Session',
+        title: 'Hands-on preparation with the Mamas',
+        description:
+          'Cook together using local ingredients and spices while learning the family techniques and cultural meaning behind the dishes.',
+      },
+      {
+        label: 'Shared Meal',
+        title: 'Eat together in a family-style setting',
+        description:
+          'Gather around the table to enjoy the meal and let conversation, laughter, and exchange unfold naturally.',
+      },
+      {
+        label: 'Close',
+        title: 'Stories, photos, and reflection',
+        description:
+          'Take time for photos, slower conversation, and a gentle close to the experience before departing.',
+      },
+    ],
+    includes: ['Guided cultural cooking experience', 'All ingredients and cooking materials', 'Home-cooked Swahili meal', 'Local host interaction and storytelling'],
+    excludes: ['Personal expenses', 'Tips or donations beyond what you choose to give', 'Transport unless arranged separately'],
+    notes:
+      'This is a community-based shared experience unless arranged privately. Modest dress and punctual arrival are important, and the experience directly supports local women and families.',
   },
   'dhow-sunset-cruise': {
     overview:
-      'Sail into the softer end of the day on a traditional dhow with a stronger emphasis on atmosphere than entertainment. This is one of Zanzibar’s classic experiences, but it works best when the pacing stays calm and the setting is allowed to carry the evening.',
+      'Sail into the golden Zanzibar sunset aboard a traditional wooden dhow and experience one of the island’s most iconic evening settings. Calm water, open sky, and a slower pace define the experience more than anything else, making it a simple but memorable way to end the day.',
     highlights: [
-      'Traditional dhow sailing along Zanzibar’s coast',
-      'Golden-hour light and open-water sunset views',
-      'Refreshments served on board',
-      'Strong fit for couples, families, or smaller private groups',
+      'Traditional dhow sailing along Zanzibar’s coastline',
+      'Open-water sunset views across the Indian Ocean',
+      'Refreshments served on board during the cruise',
+      'Optional live music to elevate the atmosphere',
+      'Strong fit for couples, honeymooners, families, and small groups',
     ],
     fullItinerary: [
       {
         label: 'Boarding',
-        title: 'Set sail from the coast',
-        description: 'Board your dhow in Stone Town or Kendwa and settle into a slower rhythm on the water.',
+        title: 'Set sail from Stone Town or Kendwa',
+        description:
+          'Board your traditional dhow in the late afternoon and leave the shoreline behind as the evening begins.',
       },
       {
         label: 'Cruise',
-        title: 'Leisurely sailing',
-        description: 'Follow the coastline with sea breeze, refreshments, and optional live music depending on arrangement.',
+        title: 'Relaxed coastal sailing',
+        description:
+          'Glide along the coast with ocean breeze, refreshments, and a calm pace designed for pure relaxation.',
       },
       {
         label: 'Sunset',
-        title: 'Golden-hour viewing',
-        description: 'Pause into the best light of the day for photographs, conversation, and a more atmospheric close to the afternoon.',
+        title: 'Golden-hour and horizon views',
+        description:
+          'Watch the sky transform into gold, orange, and pink as the sun drops over the Indian Ocean.',
       },
       {
         label: 'Return',
         title: 'Back to shore',
-        description: 'Come back in time for dinner or a continuation into the rest of your evening.',
+        description:
+          'Return gently to shore after sunset for a peaceful close to the day.',
       },
     ],
-    includes: ['Private dhow cruise', 'Refreshments on board', 'Professional crew'],
+    includes: [
+      'Traditional dhow cruise',
+      'Professional crew',
+      'Refreshments on board',
+      'Sunset sailing experience',
+      'Optional live band on request',
+    ],
     excludes: ['Personal expenses', 'Tips and gratuities', 'Meals'],
     notes:
-      'Live band entertainment is available on request, and a shared basis can also be arranged if preferred.',
+      'This experience is weather dependent and may be adjusted for safety. Sunset visibility varies by season and conditions, and private upgrades or live music can be arranged on request.',
+  },
+  'jungle-and-coast-bike-experience': {
+    overview:
+      'This quad bike route is designed to show a different side of Zanzibar: villages, rice fields, fishing communities, and the rural spaces between the coastline and the island’s interior. The value is not only in the ride itself, but in how the route reveals everyday island life beyond the resort corridor.',
+    highlights: [
+      'Quad bike departure from Kiwengwa after a full safety briefing',
+      'Ride through Pwani Mchangani and Kinyasini community areas',
+      'Pass rice fields, sandy tracks, mud houses, and rural settlements',
+      'Observe fishing villages and local coastal livelihoods',
+      'A guided route shaped around both scenery and respectful local context',
+    ],
+    fullItinerary: [
+      {
+        label: 'Start',
+        title: 'Safety briefing in Kiwengwa',
+        description:
+          'Begin in Kiwengwa with a full quad introduction, safety briefing, and equipment setup before setting off.',
+      },
+      {
+        label: 'Village Route',
+        title: 'Pwani Mchangani and local community stops',
+        description:
+          'Ride through village routes and community areas where daily life unfolds naturally around the trail.',
+      },
+      {
+        label: 'Interior Landscapes',
+        title: 'Kinyasini and rice field tracks',
+        description:
+          'Continue inland through rice fields, rural settlements, and sandy routes that reveal Zanzibar beyond the beaches.',
+      },
+      {
+        label: 'Coastal Chapter',
+        title: 'Fishing villages and shoreline life',
+        description:
+          'Pass through fishing communities and observe local coastal livelihoods with selected photo and refreshment stops.',
+      },
+      {
+        label: 'Return',
+        title: 'Ride back to the starting point',
+        description:
+          'Complete the route with a return to the base after an off-road journey through the island’s heartland.',
+      },
+    ],
+    includes: [
+      'Quad bike rental',
+      'Professional local guide',
+      'Safety briefing and equipment',
+      'Refreshment stop during the ride',
+    ],
+    excludes: ['Personal expenses', 'Tips and gratuities', 'Optional local purchases'],
+    notes:
+      'All riders must follow guide safety instructions throughout the experience. Routes are selected for safety and community respect, and weather conditions may affect timing or route choice.',
   },
   'jozani-forest-exploration': {
     overview:
-      'Step into Zanzibar’s best-known protected forest for a nature-led inland contrast to the coast. Jozani combines woodland, mangroves, and the chance to encounter the rare Red Colobus monkey in a way that adds ecological depth to an island itinerary.',
+      'Jozani Chwaka Bay National Park offers one of Zanzibar’s clearest ecological contrasts to the coast: shaded trails, mangrove systems, and the chance to encounter the rare Red Colobus monkey in a protected forest setting. The experience works best as a calm, guided nature walk with strong educational value rather than a fast wildlife checklist.',
     highlights: [
-      'Guided forest walk through protected woodland trails',
-      'Chance to spot Red Colobus monkeys and smaller wildlife',
+      'See the endangered Red Colobus monkeys',
+      'Guided walk through shaded forest trails',
       'Mangrove boardwalk and ecosystem interpretation',
-      'A family-friendly inland contrast to beach-based days',
+      'Strong fit for nature lovers, photographers, and families',
     ],
     fullItinerary: [
       {
         label: 'Arrival',
-        title: 'Forest entrance and briefing',
-        description: 'Meet your guide at Jozani and begin with a short introduction to the reserve and route.',
+        title: 'Park welcome and briefing',
+        description:
+          'Arrive at Jozani Chwaka Bay National Park and begin with an introduction to the forest and its ecological importance.',
       },
       {
         label: 'Woodland Route',
-        title: 'Forest trails and wildlife spotting',
-        description: 'Walk through the reserve with a focus on Zanzibar’s endemic Red Colobus monkeys and other wildlife.',
+        title: 'Forest trails and red colobus viewing',
+        description:
+          'Follow shaded trails where red colobus monkeys are often seen while learning about their behavior and conservation.',
       },
       {
         label: 'Mangroves',
-        title: 'Boardwalk and ecosystem context',
-        description: 'Continue into the mangrove environment to understand how Zanzibar’s inland ecology connects to the coast.',
+        title: 'Mangrove boardwalk and coastal ecology',
+        description:
+          'Continue into the mangrove zone to understand how these systems protect shoreline and support biodiversity.',
       },
       {
         label: 'Close',
         title: 'Photos and return',
-        description: 'Wrap with lighter photo time and return onward once the forest chapter is complete.',
+        description:
+          'Finish with time for photographs and a slower return from the forest.',
       },
     ],
-    includes: ['Entrance fees', 'Guided forest walk', 'Mangrove boardwalk visit', 'Professional local guide'],
+    includes: ['Entrance fees to Jozani Forest', 'Guided forest walk', 'Mangrove boardwalk visit', 'Professional local guide'],
     excludes: ['Personal expenses', 'Tips and gratuities', 'Meals'],
     notes:
-      'Wildlife visibility varies by day, and the ground can be damp depending on recent weather conditions.',
+      'Wildlife sightings are natural and cannot be guaranteed. Weather and trail conditions vary, and all visitors should remain on designated routes and follow park guidance.',
   },
-  'selous-fly-in-safari': {
+  'nungwi-aquarium': {
     overview:
-      'Experience mainland wilderness as a clean extension from Zanzibar with a same-day fly-in safari to Nyerere National Park. The shift from island tempo to safari terrain is dramatic, and when the day is well-sequenced it feels like a true second chapter rather than a logistical interruption.',
+      'Nungwi Aquarium is best approached as a conservation-led sanctuary visit rather than a simple swim stop. The natural tidal pool setting, rescue story, and guided turtle interaction create a marine experience that feels more meaningful when guests understand the rehabilitation work behind it.',
     highlights: [
-      'Return flights from Zanzibar to the mainland',
-      'Full-day game drive in Nyerere National Park',
-      'Bush picnic lunch surrounded by wildlife landscapes',
-      'Strong safari contrast without committing to a longer mainland stay',
+      'Swim with rescued sea turtles in a natural tidal pool',
+      'Learn about rescue, rehabilitation, and release efforts',
+      'Feed and observe turtles under supervision',
+      'A family-friendly marine conservation activity in Nungwi village',
     ],
     fullItinerary: [
       {
-        label: '08:00',
+        label: 'Arrival',
+        title: 'Welcome and sanctuary introduction',
+        description:
+          'Arrive at the Nungwi Aquarium and begin with an overview of the sanctuary’s conservation role.',
+      },
+      {
+        label: 'Pool Access',
+        title: 'Guided turtle interaction',
+        description:
+          'Enter the tidal pool area for supervised swimming, observation, and feeding where permitted.',
+      },
+      {
+        label: 'Learning',
+        title: 'Conservation insight',
+        description:
+          'Learn how turtles are rescued, cared for, and protected within the wider marine ecosystem.',
+      },
+      {
+        label: 'Close',
+        title: 'Photos and wind-down',
+        description:
+          'Take photos, relax briefly, and close the experience after your guided session.',
+      },
+    ],
+    includes: ['Entry to Nungwi Aquarium', 'Turtle swim and feeding experience', 'Basic guide and orientation', 'Conservation briefing'],
+    excludes: ['Personal expenses', 'Tips and gratuities', 'Transport unless arranged'],
+    notes:
+      'This is a conservation-focused experience, and all turtle interaction must follow guide instructions closely. Wildlife behavior varies naturally, and respect for the sanctuary environment is essential.',
+  },
+  'sky-diving-zanzibar': {
+    overview:
+      'A tandem skydive over Zanzibar is less about duration than intensity: a short but unforgettable sequence of preparation, ascent, freefall, parachute glide, and beach landing. What makes it exceptional is the contrast between extreme adrenaline and the calm beauty of the coast below.',
+    highlights: [
+      'Tandem jump from 10,000 feet with certified instructor',
+      '30 to 40 seconds of freefall above ocean and beach',
+      'Several minutes of panoramic glide under canopy',
+      'Beach landing at Kendwa with optional media upgrade',
+    ],
+    fullItinerary: [
+      {
+        label: 'Check-In',
+        title: 'Registration and safety briefing',
+        description:
+          'Arrive at the drop zone near Kendwa for check-in, gear fitting, and a full tandem safety briefing.',
+      },
+      {
+        label: 'Ascent',
+        title: 'Scenic climb to altitude',
+        description:
+          'Board the aircraft and climb to 10,000 feet with wide views over Zanzibar’s coast, reefs, and surrounding sea.',
+      },
+      {
+        label: 'Jump',
+        title: 'Freefall and parachute glide',
+        description:
+          'Exit in tandem for a brief but intense freefall, then transition into a calmer canopy glide over the shoreline.',
+      },
+      {
+        label: 'Landing',
+        title: 'Beach touchdown and certificate',
+        description:
+          'Land back near Kendwa, debrief, and collect your completion certificate with optional media afterward.',
+      },
+    ],
+    includes: ['Certified tandem skydiving instructor', 'Full safety briefing and equipment', 'Scenic aircraft ascent', 'Tandem skydive experience', 'Completion certificate'],
+    excludes: ['Personal expenses', 'Tips and gratuities', 'Premium media package unless booked'],
+    notes:
+      'Strict weight, weather, and medical suitability requirements apply. This activity may be rescheduled for safety, and all instructor guidance must be followed without exception.',
+  },
+  'game-fishing-zanzibar': {
+    overview:
+      'Game fishing in Zanzibar combines open-water adventure with real offshore sport. Conditions, species movement, and location all vary, so the best trips are those approached with patience, a good crew, and an understanding that the reward is the whole experience as much as the catch itself.',
+    highlights: [
+      'Deep-sea charter with professional local fishing crew',
+      'Rods, bait, gear, and support provided on board',
+      'Chance to target tuna, marlin, dorado, barracuda, and kingfish',
+      'Half-day and full-day options depending on appetite for time offshore',
+    ],
+    fullItinerary: [
+      {
+        label: 'Early Start',
+        title: 'Meet crew and depart',
+        description:
+          'Meet at the selected departure point and leave early for offshore grounds based on conditions and tide.',
+      },
+      {
+        label: 'Fishing Grounds',
+        title: 'Trolling and casting session',
+        description:
+          'Begin fishing with crew support, adjusting techniques and target species according to the day’s conditions.',
+      },
+      {
+        label: 'Mid-Trip',
+        title: 'Refreshments and reset',
+        description:
+          'Take breaks on board for drinks, snacks, and ocean views between active fishing windows.',
+      },
+      {
+        label: 'Extended Option',
+        title: 'Lunch and continued fishing',
+        description:
+          'On full-day charters, continue into a longer fishing session with a lunch break served on board.',
+      },
+      {
+        label: 'Return',
+        title: 'Back to shore',
+        description:
+          'Return to shore after the session with your crew once the charter window concludes.',
+      },
+    ],
+    includes: ['Boat charter with professional fishing crew', 'Fishing rods, bait, and equipment', 'Soft drinks and snacks for half-day trips', 'Lunch for full-day trips'],
+    excludes: ['Personal expenses', 'Tips and gratuities', 'Catch preparation unless separately arranged'],
+    notes:
+      'Fishing grounds and results vary naturally with sea, weather, and species movement. This is a shared charter unless booked privately, and all crew safety instructions must be followed.',
+  },
+  'cheetahs-rock-zanzibar': {
+    overview:
+      'Cheetah’s Rock is one of Zanzibar’s most distinctive wildlife experiences because it is built around rescue, rehabilitation, and close but controlled educational encounters. It is not a zoo visit in the conventional sense; the value lies in the stories behind the animals and the sanctuary’s welfare-first approach.',
+    highlights: [
+      'Meet rescued cheetahs, lions, zebras, lemurs, and other species',
+      'Guided encounters led by trained caretakers',
+      'Conservation storytelling and rescue insight throughout the visit',
+      'Small-group structure designed around animal welfare',
+    ],
+    fullItinerary: [
+      {
+        label: 'Arrival',
+        title: 'Welcome and sanctuary introduction',
+        description:
+          'Arrive near Kama Village and begin with an introduction to the rescue center’s mission and visitor guidelines.',
+      },
+      {
+        label: 'Guided Tour',
+        title: 'Animal encounters and storytelling',
+        description:
+          'Move through carefully managed encounters with trained staff while learning each animal’s rescue history and care plan.',
+      },
+      {
+        label: 'Immersion',
+        title: 'Photos and conservation context',
+        description:
+          'Continue through selected interaction points where photography and explanation are built around safety and respect.',
+      },
+      {
+        label: 'Close',
+        title: 'Wrap-up and departure',
+        description:
+          'Finish with final questions, reflection, and departure after the guided sanctuary experience.',
+      },
+    ],
+    includes: ['Guided wildlife tour', 'Professional animal caretakers and guides', 'Educational conservation briefing', 'Supervised animal encounters', 'Access to rescued wildlife areas'],
+    excludes: ['Personal expenses', 'Tips and gratuities', 'Special upgrades unless pre-booked'],
+    notes:
+      'Advance booking, age rules, dress guidance, and scent restrictions are strictly enforced for animal welfare and safety. All interactions remain fully controlled by the sanctuary team.',
+  },
+  'selous-fly-in-safari': {
+    overview:
+      'Experience Africa’s wilderness in just one day with a fly-in safari to Selous, now part of Nyerere National Park. This full-day safari connects Zanzibar to one of the continent’s largest protected areas through scenic flights, guided game drives, and a strong sense of scale once you enter the mainland landscape.',
+    highlights: [
+      'Same-day return safari from Zanzibar',
+      'Scenic flight over Tanzania’s coastline and inland terrain',
+      'Game drive through Nyerere National Park',
+      'Chance to encounter elephants, lions, giraffes, zebras, hippos, and crocodiles',
+      'Picnic lunch in the bush before continuing the afternoon drive',
+    ],
+    fullItinerary: [
+      {
+        label: 'Early Morning',
         title: 'Flight from Zanzibar',
-        description: 'Depart Zanzibar in the morning for the short flight to the Selous/Nyerere side of the mainland.',
+        description:
+          'Depart Zanzibar early and fly across the coast toward the Selous/Nyerere side of mainland Tanzania.',
       },
       {
         label: 'Arrival',
         title: 'Meet safari guide',
-        description: 'Land at the airstrip, transfer into the park environment, and begin the safari chapter directly.',
+        description:
+          'Arrive at the Selous airstrip, meet your guide, and transfer directly into the park for the day’s safari chapter.',
       },
       {
         label: 'Morning Drive',
-        title: 'Wildlife viewing',
-        description: 'Explore the park by 4x4 with the chance to encounter elephants, lions, giraffes, zebras, hippos, and more.',
+        title: 'Game drive through Nyerere',
+        description:
+          'Explore the park by 4x4 through riverside areas, open plains, and dense bush with strong wildlife-viewing potential.',
       },
       {
         label: 'Midday',
         title: 'Bush picnic lunch',
-        description: 'Pause for lunch inside the safari environment before continuing deeper into the afternoon drive.',
+        description:
+          'Pause for a picnic lunch in the bush before continuing into a different section of the park.',
       },
       {
         label: 'Afternoon',
         title: 'Second game drive',
-        description: 'Continue exploring the reserve before transferring back toward the airstrip.',
+        description:
+          'Continue the safari drive through different wildlife areas before heading back toward the airstrip.',
       },
       {
         label: 'Return',
         title: 'Flight back to Zanzibar',
-        description: 'Fly back to the island in the evening to close the safari extension cleanly.',
+        description:
+          'Return to Zanzibar in the late afternoon after a full day immersed in the wilderness.',
       },
     ],
     includes: [
       'Return flights Zanzibar to Selous',
       'Park entrance fees',
-      'Full-day game drive in 4x4 vehicle',
-      'Picnic lunch and bottled water',
-      'English-speaking driver guide',
+      'Full-day safari game drive',
+      'Picnic lunch',
+      'Bottled drinking water',
+      'English-speaking safari guide',
+      '4x4 safari vehicle',
     ],
     excludes: ['Personal expenses', 'Tips and gratuities', 'Additional beverages beyond standard inclusions'],
     notes:
-      'This safari often operates on a shared basis unless a private arrangement is requested in advance, and wildlife sightings can never be guaranteed.',
+      'This experience is typically operated as a shared safari, though private arrangements are available on request. Wildlife sightings vary and cannot be guaranteed. Flight and safari schedules may vary depending on weather and operational conditions.',
+  },
+  'mikumi-safari-from-zanzibar': {
+    overview:
+      'A full-day fly-in safari from Zanzibar to Mikumi National Park, designed for travelers who want to experience mainland wildlife without adding a longer overnight chapter to the journey. The contrast is the point: coastline in the morning, open savannah by the day’s main chapter, and a return to the island by evening.',
+    highlights: [
+      'Early morning flight from Zanzibar to Mikumi National Park',
+      'Guided game drive through one of Tanzania’s most accessible safari parks',
+      'Strong chance to encounter elephants, giraffes, zebras, buffalo, and varied birdlife',
+      'Picnic lunch in the park before continuing the afternoon drive',
+      'A clean one-day safari addition to a Zanzibar stay',
+    ],
+    fullItinerary: [
+      {
+        label: 'Early Morning',
+        title: 'Flight from Zanzibar',
+        description:
+          'Depart Zanzibar Airport early and cross to mainland Tanzania as the island coastline gives way to inland landscapes.',
+      },
+      {
+        label: 'Arrival',
+        title: 'Meet your safari guide',
+        description:
+          'Arrive near Mikumi, meet your guide, and transfer directly into the safari chapter for the day.',
+      },
+      {
+        label: 'Morning Drive',
+        title: 'Game drive in Mikumi National Park',
+        description:
+          'Begin exploring Mikumi’s open plains and wildlife-rich areas in a 4x4 vehicle with guiding throughout.',
+      },
+      {
+        label: 'Midday',
+        title: 'Picnic lunch in the park',
+        description:
+          'Pause for a scenic picnic lunch surrounded by nature before continuing into a new section of the park.',
+      },
+      {
+        label: 'Afternoon',
+        title: 'Second safari drive',
+        description:
+          'Continue the game drive with more time to track wildlife movement and experience the wider landscape of Mikumi.',
+      },
+      {
+        label: 'Evening',
+        title: 'Return flight to Zanzibar',
+        description:
+          'Transfer back to the airstrip and fly to Zanzibar after a full day on safari.',
+      },
+    ],
+    includes: [
+      'Return flights between Zanzibar and Mikumi',
+      'National park entry fees',
+      'Guided safari game drive',
+      'Picnic lunch',
+      'Bottled drinking water',
+      'Professional safari guide',
+    ],
+    excludes: ['Personal expenses', 'Tips and gratuities', 'Additional snacks or beverages beyond standard inclusions'],
+    notes:
+      'This is a shared safari experience. Wildlife sightings vary and cannot be guaranteed. Flight and safari schedules may vary depending on weather and operational conditions. Exact departure times will be confirmed prior to travel.',
   },
 };
 
@@ -1002,6 +2542,7 @@ function enrichExperience(experience: ExperienceSeedEntry): ExperienceEntry {
 
   return {
     ...experience,
+    cta: experience.cta || defaultExperienceCta,
     summary: experience.cardLine,
     itinerary: brochure.fullItinerary,
     brochure,
@@ -1012,10 +2553,10 @@ export const experiences: ExperienceEntry[] = experienceSeed.map(enrichExperienc
 
 export const featuredExperienceSlugs = [
   'mnemba-island-marine-experience',
+  'blue-safari',
   'private-sandbank-escape',
   'stone-town-cultural-walk',
-  'dhow-sunset-cruise',
-  'selous-fly-in-safari',
+  'mikumi-safari-from-zanzibar',
 ];
 
 export function getCategoryBySlug(slug: string) {

@@ -149,9 +149,9 @@ export default function ExperienceDetailClient({
 
         <section className="bg-surface-dark py-20 text-center text-white">
           <div className="mx-auto max-w-3xl px-6 lg:px-8">
-            <h2 className="font-heading text-3xl md:text-5xl">Ready To Start Planning?</h2>
+            <h2 className="font-heading text-3xl md:text-5xl">{experience.cta.title}</h2>
             <p className="mt-6 text-base leading-8 text-white/72 md:text-lg">
-              When the experience direction feels right, we can help shape it into a well-paced plan around your timing, style, and wider journey.
+              {experience.cta.text}
             </p>
             <div className="mt-10 flex flex-wrap justify-center gap-4">
               <Link href="/plan-your-trip" className="btn-primary">

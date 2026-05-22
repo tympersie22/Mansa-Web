@@ -261,9 +261,9 @@ export default function ExperienceBrochureDrawer({
 
                   <section className="rounded-[1.75rem] bg-[#23302b] p-6 text-white md:p-8">
                     <p className="text-[11px] uppercase tracking-[0.18em] text-[#f3d071]">Continue</p>
-                    <h3 className="mt-3 font-heading text-3xl">Plan This Experience</h3>
+                    <h3 className="mt-3 font-heading text-3xl">{experience.cta.title}</h3>
                     <p className="mt-4 max-w-2xl text-sm leading-7 text-white/74 md:text-base">
-                      You can keep this as a standalone experience or fold it into a wider Zanzibar journey.
+                      {experience.cta.text}
                     </p>
                     <div className="mt-8 flex flex-wrap gap-4">
                       <AddToJourneyButton item={getJourneyItem(experience)} />
