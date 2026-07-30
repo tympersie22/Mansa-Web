@@ -10,8 +10,9 @@ import {
 } from '@/lib/experience-data';
 import { contactHref } from '@/lib/site-config';
 
-export default function ExperienceSlugPage({ params }: { params: { slug: string[] } }) {
-  const segments = params.slug || [];
+export default async function ExperienceSlugPage({ params }: { params: Promise<{ slug: string[] }> }) {
+  const { slug: routeSlug } = await params;
+  const segments = routeSlug || [];
   if (segments.length !== 1) notFound();
 
   const slug = segments[0];

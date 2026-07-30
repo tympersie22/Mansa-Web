@@ -1,5 +1,3 @@
-import { isSupabaseConfigured, supabase } from '@/lib/supabase';
-
 export interface ItineraryContact {
   phone: string;
   email: string;
@@ -260,145 +258,12 @@ export function cloneItinerary(itinerary: ItineraryDocument = sampleItinerary): 
   return JSON.parse(JSON.stringify(itinerary)) as ItineraryDocument;
 }
 
-function getFallbackItinerary(slug?: string) {
-  if (!slug || slug === sampleItinerary.slug) return cloneItinerary(sampleItinerary);
-  return null;
-}
-
-function groupItems<T extends { sort_order?: number | null }>(items: T[]) {
-  return items.slice().sort((a, b) => (a.sort_order || 0) - (b.sort_order || 0));
-}
-
-export async function fetchItineraryBySlug(slug: string): Promise<ItineraryDocument | null> {
-  if (!isSupabaseConfigured || !supabase) return getFallbackItinerary(slug);
-
-  try {
-    const { data: itinerary, error } = await supabase
-      .from('itineraries')
-      .select('*')
-      .eq('slug', slug)
-      .single();
-
-    if (error || !itinerary) return getFallbackItinerary(slug);
-
-    const itineraryId = itinerary.id as string;
-
-    const [
-      highlightsRes,
-      groupsRes,
-      exclusionsRes,
-      notesRes,
-      daysRes,
-    ] = await Promise.all([
-      supabase.from('itinerary_highlights').select('*').eq('itinerary_id', itineraryId).order('sort_order'),
-      supabase.from('itinerary_inclusion_groups').select('*').eq('itinerary_id', itineraryId).order('sort_order'),
-      supabase.from('itinerary_exclusions').select('*').eq('itinerary_id', itineraryId).order('sort_order'),
-      supabase.from('itinerary_notes').select('*').eq('itinerary_id', itineraryId).order('sort_order'),
-      supabase.from('itinerary_days').select('*').eq('itinerary_id', itineraryId).order('sort_order'),
-    ]);
-
-    const days = daysRes.data || [];
-    const dayIds = days.map((day) => day.id as string);
-    const groupIds = (groupsRes.data || []).map((group) => group.id as string);
-
-    const [
-      inclusionItemsRes,
-      staysRes,
-      activitiesRes,
-      mealsRes,
-      transfersRes,
-      dayNotesRes,
-    ] = await Promise.all([
-      groupIds.length
-        ? supabase.from('itinerary_inclusion_items').select('*').in('group_id', groupIds).order('sort_order')
-        : Promise.resolve({ data: [], error: null }),
-      dayIds.length
-        ? supabase.from('itinerary_day_stays').select('*').in('itinerary_day_id', dayIds).order('sort_order')
-        : Promise.resolve({ data: [], error: null }),
-      dayIds.length
-        ? supabase.from('itinerary_day_activities').select('*').in('itinerary_day_id', dayIds).order('sort_order')
-        : Promise.resolve({ data: [], error: null }),
-      dayIds.length
-        ? supabase.from('itinerary_day_meals').select('*').in('itinerary_day_id', dayIds).order('sort_order')
-        : Promise.resolve({ data: [], error: null }),
-      dayIds.length
-        ? supabase.from('itinerary_day_transfers').select('*').in('itinerary_day_id', dayIds).order('sort_order')
-        : Promise.resolve({ data: [], error: null }),
-      dayIds.length
-        ? supabase.from('itinerary_day_notes').select('*').in('itinerary_day_id', dayIds).order('sort_order')
-        : Promise.resolve({ data: [], error: null }),
-    ]);
-
-    const inclusionItems = inclusionItemsRes.data || [];
-    const stays = staysRes.data || [];
-    const activities = activitiesRes.data || [];
-    const meals = mealsRes.data || [];
-    const transfers = transfersRes.data || [];
-    const dayNotes = dayNotesRes.data || [];
-
-    const inclusionGroups: ItineraryInclusionGroup[] = groupItems(groupsRes.data || []).map((group) => ({
-      title: String(group.title || ''),
-      items: groupItems(
-        inclusionItems.filter((item) => item.group_id === group.id)
-      ).map((item) => String(item.content || '')),
-    }));
-
-    return {
-      slug: String(itinerary.slug),
-      title: String(itinerary.title || ''),
-      travelDates: String(itinerary.travel_dates_label || ''),
-      durationLabel: String(itinerary.duration_label || ''),
-      groupLabel: String(itinerary.group_label || ''),
-      heroImage: String(itinerary.hero_image_url || sampleItinerary.heroImage),
-      contact: {
-        phone: String(itinerary.contact_phone || ''),
-        email: String(itinerary.contact_email || ''),
-        website: String(itinerary.contact_website || ''),
-        address: Array.isArray(itinerary.contact_address_lines)
-          ? (itinerary.contact_address_lines as string[])
-          : [],
-      },
-      overview: String(itinerary.overview || ''),
-      published: Boolean(itinerary.published),
-      travelersSummary: groupItems(highlightsRes.data || []).map((item) => String(item.content || '')),
-      inclusions: inclusionGroups,
-      exclusions: groupItems(exclusionsRes.data || []).map((item) => String(item.content || '')),
-      importantNotes: groupItems(notesRes.data || []).map((item) => String(item.content || '')),
-      days: groupItems(days).map((day) => ({
-        id: String(day.id),
-        dayNumber: Number(day.day_number || 0),
-        dateLabel: String(day.date_label || ''),
-        title: String(day.title || ''),
-        location: String(day.location || ''),
-        summary: String(day.summary || ''),
-        heroImage: String(day.hero_image_url || itinerary.hero_image_url || sampleItinerary.heroImage),
-        stays: groupItems(stays.filter((item) => item.itinerary_day_id === day.id)).map((item) => ({
-          name: String(item.name || ''),
-          location: String(item.location || ''),
-          nights: Number(item.nights || 1),
-          roomType: item.room_type ? String(item.room_type) : undefined,
-        })),
-        activities: groupItems(activities.filter((item) => item.itinerary_day_id === day.id)).map((item) => ({
-          timeLabel: item.time_label ? String(item.time_label) : undefined,
-          title: String(item.title || ''),
-          description: String(item.description || ''),
-        })),
-        meals: groupItems(meals.filter((item) => item.itinerary_day_id === day.id)).map((item) =>
-          String(item.content || '')
-        ),
-        transfers: groupItems(transfers.filter((item) => item.itinerary_day_id === day.id)).map((item) =>
-          String(item.content || '')
-        ),
-        notes: groupItems(dayNotes.filter((item) => item.itinerary_day_id === day.id)).map((item) =>
-          String(item.content || '')
-        ),
-      })),
-    };
-  } catch {
-    return getFallbackItinerary(slug);
-  }
-}
-
 export async function fetchPrimaryItinerary(): Promise<ItineraryDocument> {
-  return (await fetchItineraryBySlug(sampleItinerary.slug)) || cloneItinerary(sampleItinerary);
+  try {
+    const response = await fetch(`/api/admin/itineraries/${sampleItinerary.slug}`, { credentials: 'same-origin' });
+    const payload = (await response.json()) as { itinerary?: ItineraryDocument };
+    return response.ok && payload.itinerary ? cloneItinerary(payload.itinerary) : cloneItinerary(sampleItinerary);
+  } catch {
+    return cloneItinerary(sampleItinerary);
+  }
 }

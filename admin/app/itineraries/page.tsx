@@ -3,8 +3,9 @@
 import { useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { ExternalLink, Plus, Wand2 } from 'lucide-react';
-import { supabaseAdminApi } from '@/lib/supabase-admin-api';
+import { ExternalLink, Eye, FileEdit, Plus, Search, Wand2 } from 'lucide-react';
+import { MediaUploadField } from '@/components/MediaUploadField';
+import { adminApi } from '@/lib/admin-api';
 import {
   cloneItinerary,
   fetchPrimaryItinerary,
@@ -40,6 +41,22 @@ function serializeList(items?: string[]) {
   return (items || []).join('\n');
 }
 
+function validateItinerary(document: ItineraryDocument) {
+  const errors: string[] = [];
+  if (!document.title.trim()) errors.push('Trip title is required.');
+  if (!document.slug.trim()) errors.push('Itinerary slug is required.');
+  if (!document.travelDates.trim()) errors.push('Travel dates are required.');
+  if (!document.overview.trim()) errors.push('Overview is required.');
+  if (!document.days.length) errors.push('Add at least one itinerary day.');
+  const dayNumbers = document.days.map((day) => day.dayNumber);
+  if (new Set(dayNumbers).size !== dayNumbers.length) errors.push('Day numbers must be unique.');
+  document.days.forEach((day, index) => {
+    if (!day.title.trim()) errors.push(`Day ${index + 1} needs a title.`);
+    if (!day.activities.length) errors.push(`Day ${index + 1} needs at least one activity.`);
+  });
+  return errors;
+}
+
 function updateLineBlock(
   setter: React.Dispatch<React.SetStateAction<ItineraryDocument>>,
   key: 'travelersSummary' | 'exclusions' | 'importantNotes',
@@ -54,9 +71,9 @@ function updateLineBlock(
 function SectionTitle({ eyebrow, title, description }: { eyebrow: string; title: string; description?: string }) {
   return (
     <div>
-      <p className="text-[11px] uppercase tracking-[0.18em] text-[#7d907f]">{eyebrow}</p>
-      <h2 className="mt-2 text-xl font-semibold text-[#243226]">{title}</h2>
-      {description ? <p className="mt-2 text-sm leading-7 text-[#708072]">{description}</p> : null}
+      <p className="text-[11px] uppercase tracking-[0.18em] text-[#a56f1b]">{eyebrow}</p>
+      <h2 className="mt-2 text-xl font-semibold text-[#383836]">{title}</h2>
+      {description ? <p className="mt-2 text-sm leading-7 text-[#716e68]">{description}</p> : null}
     </div>
   );
 }
@@ -69,7 +86,7 @@ function FieldLabel({
   children: React.ReactNode;
 }) {
   return (
-    <label className="grid gap-2 text-sm text-[#5a6b5d]">
+    <label className="grid gap-2 text-sm text-[#6b6964]">
       <span>{label}</span>
       {children}
     </label>
@@ -80,7 +97,7 @@ function Input(props: React.InputHTMLAttributes<HTMLInputElement>) {
   return (
     <input
       {...props}
-      className={`rounded-xl border border-[#d6e0d5] bg-[#fafcf9] px-4 py-3 text-sm outline-none focus:border-[#b9cdb7] ${
+      className={`rounded-xl border border-[#ded8cf] bg-[#faf7f2] px-4 py-3 text-sm outline-none focus:border-[#fbb040] ${
         props.className || ''
       }`}
     />
@@ -91,7 +108,7 @@ function Textarea(props: React.TextareaHTMLAttributes<HTMLTextAreaElement>) {
   return (
     <textarea
       {...props}
-      className={`min-h-[120px] rounded-xl border border-[#d6e0d5] bg-[#fafcf9] px-4 py-3 text-sm leading-7 outline-none focus:border-[#b9cdb7] ${
+      className={`min-h-[120px] rounded-xl border border-[#ded8cf] bg-[#faf7f2] px-4 py-3 text-sm leading-7 outline-none focus:border-[#fbb040] ${
         props.className || ''
       }`}
     />
@@ -104,11 +121,25 @@ export default function ItinerariesPage() {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [saveMessage, setSaveMessage] = useState('');
+  const [validationErrors, setValidationErrors] = useState<string[]>([]);
+  const [dirty, setDirty] = useState(false);
+  const [viewMode, setViewMode] = useState<'editor' | 'preview'>('editor');
+  const [itineraryQuery, setItineraryQuery] = useState('');
+  const [itineraryIndex, setItineraryIndex] = useState<Array<Record<string, unknown>>>([]);
 
   useEffect(() => {
     let active = true;
 
-    fetchPrimaryItinerary()
+    const requestedSlug = typeof window !== 'undefined' ? new URLSearchParams(window.location.search).get('slug') : null;
+    const loadItinerary = requestedSlug
+      ? fetch(`/api/admin/itineraries/${encodeURIComponent(requestedSlug)}`).then(async (response) => {
+          const payload = await response.json();
+          if (!response.ok || !payload.itinerary) throw new Error('Itinerary not found');
+          return payload.itinerary as ItineraryDocument;
+        })
+      : fetchPrimaryItinerary();
+
+    loadItinerary
       .then((data) => {
         if (!active || !data) return;
         setItinerary(cloneItinerary(data));
@@ -122,6 +153,22 @@ export default function ItinerariesPage() {
       active = false;
     };
   }, []);
+
+  useEffect(() => {
+    void adminApi.listItineraries().then((result) => {
+      if (result.data?.itineraries) setItineraryIndex(result.data.itineraries);
+    });
+  }, []);
+
+  useEffect(() => {
+    const handleBeforeUnload = (event: BeforeUnloadEvent) => {
+      if (!dirty) return;
+      event.preventDefault();
+      event.returnValue = '';
+    };
+    window.addEventListener('beforeunload', handleBeforeUnload);
+    return () => window.removeEventListener('beforeunload', handleBeforeUnload);
+  }, [dirty]);
 
   const activeDay = useMemo(
     () => itinerary.days.find((day) => day.id === activeDayId) || itinerary.days[0],
@@ -141,10 +188,12 @@ export default function ItinerariesPage() {
   );
 
   const updateTripField = (field: keyof ItineraryDocument, value: string | boolean) => {
+    setDirty(true);
     setItinerary((current) => ({ ...current, [field]: value }));
   };
 
   const updateContactField = (field: keyof ItineraryDocument['contact'], value: string | string[]) => {
+    setDirty(true);
     setItinerary((current) => ({
       ...current,
       contact: {
@@ -156,6 +205,7 @@ export default function ItinerariesPage() {
 
   const updateActiveDay = (patch: Partial<ItineraryDay>) => {
     if (!activeDay) return;
+    setDirty(true);
     setItinerary((current) => ({ ...current, days: updateDay(current.days, activeDay.id, patch) }));
   };
 
@@ -183,25 +233,34 @@ export default function ItinerariesPage() {
 
     setItinerary((current) => ({ ...current, days: [...current.days, newDay] }));
     setActiveDayId(newDay.id);
+    setDirty(true);
   };
 
   const handleSave = async () => {
+    const errors = validateItinerary(itinerary);
+    setValidationErrors(errors);
+    if (errors.length) {
+      setSaveMessage('Resolve the validation issues before saving.');
+      return;
+    }
     setSaving(true);
     setSaveMessage('');
 
-    const response = await supabaseAdminApi.saveItinerary(
+    const response = await adminApi.saveItinerary(
       itinerary.slug,
       itinerary as unknown as Record<string, unknown>
     );
-    if (response?.ok) {
+    if (response.data?.ok) {
       setSaveMessage(
-        response.published
-          ? 'Saved and available for the guest-facing itinerary page.'
-          : 'Saved.'
+        response.data.published
+        ? `Saved as ${response.data.status}.`
+          : 'Saved as draft.'
       );
+      setDirty(false);
+      setValidationErrors([]);
     } else {
       setSaveMessage(
-        'Unable to save itinerary. Check Supabase service role configuration and admin auth.'
+        response.error || 'Unable to save itinerary. Check Prisma database configuration and admin auth.'
       );
     }
 
@@ -212,18 +271,16 @@ export default function ItinerariesPage() {
     <div className="mx-auto max-w-[1560px]">
       <div className="mb-6 flex items-start justify-between gap-4">
         <div>
-          <p className="text-[11px] uppercase tracking-[0.18em] text-[#7d907f]">Travel Design</p>
-          <h1 className="mt-2 text-[38px] font-semibold leading-none text-[#1f2d23]">
+          <p className="text-[11px] uppercase tracking-[0.18em] text-[#a56f1b]">Travel Design</p>
+          <h1 className="mt-2 text-[38px] font-semibold leading-none text-[#383836]">
             Itinerary Builder
           </h1>
-          <p className="mt-3 max-w-3xl text-sm leading-7 text-[#708072]">
+          <p className="mt-3 max-w-3xl text-sm leading-7 text-[#716e68]">
             Build the guest-facing itinerary from one structured workspace: trip setup, highlights,
             inclusions, day flow, and live preview.
           </p>
-          <p className="mt-3 text-xs uppercase tracking-[0.16em] text-[#8b9a8d]">
-            {loading
-              ? 'Loading itinerary data...'
-              : 'Loaded from Supabase when available, with local fallback.'}
+          <p className="mt-3 text-xs uppercase tracking-[0.16em] text-[#88837b]">
+            {loading ? 'Loading itinerary data...' : dirty ? 'Draft changes not saved' : 'Prisma workspace'}
           </p>
         </div>
         <div className="flex items-center gap-3">
@@ -231,14 +288,14 @@ export default function ItinerariesPage() {
             type="button"
             onClick={handleSave}
             disabled={saving}
-            className="inline-flex items-center gap-2 rounded-xl bg-[#24352a] px-4 py-2.5 text-sm font-semibold text-white disabled:opacity-60"
+            className="inline-flex items-center gap-2 rounded-xl bg-[#383836] px-4 py-2.5 text-sm font-semibold text-white disabled:opacity-60"
           >
-            {saving ? 'Saving...' : 'Save to Supabase'}
+            {saving ? 'Saving...' : itinerary.published ? 'Save & publish' : 'Save draft'}
           </button>
           <button
             type="button"
             onClick={addDay}
-            className="inline-flex items-center gap-2 rounded-xl border border-[#d9e3d8] bg-white px-4 py-2.5 text-sm font-medium text-[#2f4232]"
+            className="inline-flex items-center gap-2 rounded-xl border border-[#ded8cf] bg-white px-4 py-2.5 text-sm font-medium text-[#383836]"
           >
             <Plus className="h-4 w-4" />
             Add Day
@@ -255,15 +312,52 @@ export default function ItinerariesPage() {
       </div>
 
       {saveMessage ? (
-        <div className="mb-4 rounded-2xl border border-[#dfe6dd] bg-[#f9fbf8] px-4 py-3 text-sm text-[#556559]">
+        <div className="mb-4 rounded-2xl border border-[#ded8cf] bg-[#faf7f2] px-4 py-3 text-sm text-[#6b6964]">
           {saveMessage}
         </div>
       ) : null}
 
-      <div className="grid gap-6 xl:grid-cols-[520px_minmax(0,1fr)]">
-        <section className="space-y-5">
-          <div className="rounded-[24px] border border-[#dfe6dd] bg-white p-5 shadow-[0_8px_22px_rgba(39,53,43,0.06)]">
-            <div className="mb-4 flex items-center gap-2 text-[#648067]">
+      {validationErrors.length ? (
+        <div role="alert" className="mb-4 rounded-2xl border border-[#ebcbc5] bg-[#fff7f5] px-4 py-3 text-sm text-[#a84739]">
+          {validationErrors.join(' ')}
+        </div>
+      ) : null}
+
+      <section className="mb-6 rounded-[24px] border border-[#ded8cf] bg-white p-4 shadow-[0_8px_22px_rgba(39,53,43,0.05)]">
+        <div className="flex flex-wrap items-center justify-between gap-4">
+          <div className="flex min-w-0 flex-1 items-center gap-3">
+            <Search className="h-4 w-4 text-[#88837b]" />
+            <input
+              value={itineraryQuery}
+              onChange={(event) => setItineraryQuery(event.target.value)}
+              onKeyDown={(event) => {
+                if (event.key === 'Enter') void adminApi.listItineraries(itineraryQuery).then((result) => result.data?.itineraries && setItineraryIndex(result.data.itineraries));
+              }}
+              placeholder="Search itineraries by title or slug"
+              className="min-w-0 flex-1 bg-transparent text-sm outline-none"
+            />
+          </div>
+          <div className="flex items-center gap-2 rounded-xl bg-[#f6f4ee] p-1">
+            <button type="button" onClick={() => setViewMode('editor')} className={`inline-flex items-center gap-2 rounded-lg px-3 py-2 text-xs font-semibold ${viewMode === 'editor' ? 'bg-white text-[#383836] shadow-sm' : 'text-[#88837b]'}`}><FileEdit className="h-3.5 w-3.5" />Editor</button>
+            <button type="button" onClick={() => setViewMode('preview')} className={`inline-flex items-center gap-2 rounded-lg px-3 py-2 text-xs font-semibold ${viewMode === 'preview' ? 'bg-white text-[#383836] shadow-sm' : 'text-[#88837b]'}`}><Eye className="h-3.5 w-3.5" />Preview</button>
+          </div>
+        </div>
+        {itineraryIndex.length ? (
+          <div className="mt-4 flex gap-3 overflow-x-auto pb-1">
+            {itineraryIndex.map((entry) => (
+              <button key={String(entry.id)} type="button" onClick={() => { if (dirty && !window.confirm('Discard unsaved changes?')) return; window.location.assign(`/itineraries?slug=${encodeURIComponent(String(entry.slug))}`); }} className="min-w-[220px] rounded-2xl border border-[#e5dfd6] bg-[#faf7f2] px-4 py-3 text-left hover:border-[#f1c167]">
+                <p className="truncate text-sm font-semibold text-[#383836]">{String(entry.title)}</p>
+                <p className="mt-1 text-xs uppercase tracking-[0.12em] text-[#8d7a43]">{String(entry.status)}</p>
+              </button>
+            ))}
+          </div>
+        ) : <p className="mt-3 text-xs text-[#88837b]">No saved itineraries yet. Save this document to create the first Mansa OS record.</p>}
+      </section>
+
+      <div className="grid gap-6">
+        <section className={viewMode === 'preview' ? 'hidden' : 'space-y-5'}>
+          <div className="rounded-[24px] border border-[#ded8cf] bg-white p-5 shadow-[0_8px_22px_rgba(39,53,43,0.06)]">
+            <div className="mb-4 flex items-center gap-2 text-[#a56f1b]">
               <Wand2 className="h-4 w-4" />
               <p className="text-xs uppercase tracking-[0.18em]">Trip Setup</p>
             </div>
@@ -304,12 +398,11 @@ export default function ItinerariesPage() {
                   />
                 </FieldLabel>
               </div>
-              <FieldLabel label="Hero Image URL">
-                <Input
-                  value={itinerary.heroImage}
-                  onChange={(event) => updateTripField('heroImage', event.target.value)}
-                />
-              </FieldLabel>
+              <MediaUploadField
+                label="Hero Image"
+                value={itinerary.heroImage}
+                onChange={(value) => updateTripField('heroImage', value)}
+              />
               <FieldLabel label="Overview">
                 <Textarea
                   className="min-h-[150px]"
@@ -317,7 +410,7 @@ export default function ItinerariesPage() {
                   onChange={(event) => updateTripField('overview', event.target.value)}
                 />
               </FieldLabel>
-              <label className="flex items-center gap-3 text-sm text-[#5a6b5d]">
+              <label className="flex items-center gap-3 text-sm text-[#6b6964]">
                 <input
                   type="checkbox"
                   checked={!!itinerary.published}
@@ -328,7 +421,7 @@ export default function ItinerariesPage() {
             </div>
           </div>
 
-          <div className="rounded-[24px] border border-[#dfe6dd] bg-white p-5 shadow-[0_8px_22px_rgba(39,53,43,0.06)]">
+          <div className="rounded-[24px] border border-[#ded8cf] bg-white p-5 shadow-[0_8px_22px_rgba(39,53,43,0.06)]">
             <SectionTitle
               eyebrow="Contact"
               title="Guest-facing contact block"
@@ -365,7 +458,7 @@ export default function ItinerariesPage() {
             </div>
           </div>
 
-          <div className="rounded-[24px] border border-[#dfe6dd] bg-white p-5 shadow-[0_8px_22px_rgba(39,53,43,0.06)]">
+          <div className="rounded-[24px] border border-[#ded8cf] bg-white p-5 shadow-[0_8px_22px_rgba(39,53,43,0.06)]">
             <SectionTitle
               eyebrow="Highlights"
               title="Journey summary blocks"
@@ -402,7 +495,7 @@ export default function ItinerariesPage() {
             </div>
           </div>
 
-          <div className="rounded-[24px] border border-[#dfe6dd] bg-white p-5 shadow-[0_8px_22px_rgba(39,53,43,0.06)]">
+          <div className="rounded-[24px] border border-[#ded8cf] bg-white p-5 shadow-[0_8px_22px_rgba(39,53,43,0.06)]">
             <SectionTitle
               eyebrow="Inclusions"
               title="Inclusion groups"
@@ -410,7 +503,7 @@ export default function ItinerariesPage() {
             />
             <div className="mt-5 space-y-4">
               {itinerary.inclusions.map((group, groupIndex) => (
-                <div key={`${group.title}-${groupIndex}`} className="rounded-2xl border border-[#e3e9e1] bg-[#fafcf9] p-4">
+                <div key={`${group.title}-${groupIndex}`} className="rounded-2xl border border-[#e5dfd6] bg-[#faf7f2] p-4">
                   <FieldLabel label="Group Title">
                     <Input
                       value={group.title}
@@ -449,7 +542,7 @@ export default function ItinerariesPage() {
             </div>
           </div>
 
-          <div className="rounded-[24px] border border-[#dfe6dd] bg-white p-5 shadow-[0_8px_22px_rgba(39,53,43,0.06)]">
+          <div className="rounded-[24px] border border-[#ded8cf] bg-white p-5 shadow-[0_8px_22px_rgba(39,53,43,0.06)]">
             <SectionTitle
               eyebrow="Day Structure"
               title="Day navigator"
@@ -464,14 +557,14 @@ export default function ItinerariesPage() {
                   className={`w-full rounded-2xl border px-4 py-4 text-left transition ${
                     day.id === activeDay?.id
                       ? 'border-[#f1c167] bg-[#fff8e8]'
-                      : 'border-[#dfe6dd] bg-[#fafcf9]'
+                      : 'border-[#ded8cf] bg-[#faf7f2]'
                   }`}
                 >
                   <p className="text-[11px] uppercase tracking-[0.18em] text-[#8d7a43]">
                     Day {day.dayNumber}
                   </p>
-                  <h3 className="mt-2 text-lg font-semibold text-[#243226]">{day.title}</h3>
-                  <p className="mt-1 text-sm text-[#66776a]">
+                  <h3 className="mt-2 text-lg font-semibold text-[#383836]">{day.title}</h3>
+                  <p className="mt-1 text-sm text-[#716e68]">
                     {day.dateLabel} • {day.location}
                   </p>
                 </button>
@@ -480,7 +573,7 @@ export default function ItinerariesPage() {
           </div>
 
           {activeDay ? (
-            <div className="rounded-[24px] border border-[#dfe6dd] bg-white p-5 shadow-[0_8px_22px_rgba(39,53,43,0.06)]">
+            <div className="rounded-[24px] border border-[#ded8cf] bg-white p-5 shadow-[0_8px_22px_rgba(39,53,43,0.06)]">
               <SectionTitle
                 eyebrow={`Day ${activeDay.dayNumber}`}
                 title="Active day editor"
@@ -508,12 +601,11 @@ export default function ItinerariesPage() {
                       onChange={(event) => updateActiveDay({ dateLabel: event.target.value })}
                     />
                   </FieldLabel>
-                  <FieldLabel label="Hero Image URL">
-                    <Input
-                      value={activeDay.heroImage}
-                      onChange={(event) => updateActiveDay({ heroImage: event.target.value })}
-                    />
-                  </FieldLabel>
+                  <MediaUploadField
+                    label="Hero Image"
+                    value={activeDay.heroImage}
+                    onChange={(value) => updateActiveDay({ heroImage: value })}
+                  />
                 </div>
                 <FieldLabel label="Day Summary">
                   <Textarea
@@ -601,12 +693,12 @@ export default function ItinerariesPage() {
           ) : null}
         </section>
 
-        <section className="rounded-[32px] border border-[#dfe6dd] bg-white p-5 shadow-[0_10px_28px_rgba(39,53,43,0.08)] md:p-8">
-          <div className="overflow-hidden rounded-[28px] border border-[#e3e8df] bg-[#fcfcfa]">
+        <section className={viewMode === 'editor' ? 'hidden' : 'rounded-[32px] border border-[#ded8cf] bg-white p-5 shadow-[0_10px_28px_rgba(39,53,43,0.08)] md:p-8'}>
+          <div className="overflow-hidden rounded-[28px] border border-[#e5dfd6] bg-[#fcfcfa]">
             <div className="grid gap-6 p-6 md:p-8">
-              <div className="flex items-start justify-between gap-6 text-[#34484b]">
+              <div className="flex items-start justify-between gap-6 text-[#4b4a47]">
                 <div className="flex items-start gap-4">
-                  <div className="flex h-12 w-12 items-center justify-center rounded-xl border border-[#dfe4df] bg-white text-sm font-semibold">
+                  <div className="flex h-12 w-12 items-center justify-center rounded-xl border border-[#ded8cf] bg-white text-sm font-semibold">
                     MANSA
                   </div>
                   <div className="space-y-1 text-sm leading-6">
@@ -628,6 +720,7 @@ export default function ItinerariesPage() {
                   alt={itinerary.title}
                   width={1600}
                   height={900}
+                  priority
                   className="h-[340px] w-full object-cover"
                 />
               </div>
@@ -640,20 +733,20 @@ export default function ItinerariesPage() {
                 </p>
               </div>
 
-              <div className="grid gap-6 xl:grid-cols-[1.1fr_0.9fr]">
+              <div className="grid min-w-0 gap-6 lg:grid-cols-1 2xl:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)]">
                 <div className="rounded-[24px] bg-[#f6f4ee] p-6">
                   <p className="text-[11px] uppercase tracking-[0.18em] text-[#8d7a43]">Overview</p>
-                  <p className="mt-4 text-sm leading-7 text-[#4f5c54]">{itinerary.overview}</p>
+                  <p className="mt-4 text-sm leading-7 text-[#6b6964]">{itinerary.overview}</p>
                 </div>
-                <div className="rounded-[24px] bg-[#f8faf7] p-6">
-                  <p className="text-[11px] uppercase tracking-[0.18em] text-[#7d907f]">
+                <div className="rounded-[24px] bg-[#faf7f2] p-6">
+                  <p className="text-[11px] uppercase tracking-[0.18em] text-[#a56f1b]">
                     Journey Highlights
                   </p>
                   <ul className="mt-4 space-y-3">
                     {itinerary.travelersSummary.map((item) => (
                       <li
                         key={item}
-                        className="flex items-start gap-3 text-sm leading-7 text-[#4f5c54]"
+                        className="flex items-start gap-3 text-sm leading-7 text-[#6b6964]"
                       >
                         <span className="mt-3 h-1.5 w-1.5 rounded-full bg-[#fbb040]" />
                         <span>{item}</span>
@@ -663,13 +756,13 @@ export default function ItinerariesPage() {
                 </div>
               </div>
 
-              <div className="grid gap-5 xl:grid-cols-3">
+              <div className="grid min-w-0 gap-5 sm:grid-cols-2 2xl:grid-cols-3">
                 {itinerary.inclusions.map((group) => (
-                  <div key={group.title} className="rounded-[22px] bg-[#f8faf7] p-5">
-                    <p className="text-[11px] uppercase tracking-[0.18em] text-[#7d907f]">
+                  <div key={group.title} className="rounded-[22px] bg-[#faf7f2] p-5">
+                    <p className="text-[11px] uppercase tracking-[0.18em] text-[#a56f1b]">
                       {group.title}
                     </p>
-                    <ul className="mt-4 space-y-2 text-sm leading-7 text-[#4f5c54]">
+                    <ul className="mt-4 space-y-2 text-sm leading-7 text-[#6b6964]">
                       {group.items.map((item) => (
                         <li key={item}>{item}</li>
                       ))}
@@ -681,7 +774,7 @@ export default function ItinerariesPage() {
                     <p className="text-[11px] uppercase tracking-[0.18em] text-[#8d7a43]">
                       Exclusions
                     </p>
-                    <ul className="mt-4 space-y-2 text-sm leading-7 text-[#4f5c54]">
+                    <ul className="mt-4 space-y-2 text-sm leading-7 text-[#6b6964]">
                       {itinerary.exclusions.map((item) => (
                         <li key={item}>{item}</li>
                       ))}
@@ -694,7 +787,7 @@ export default function ItinerariesPage() {
                 {sortedDays.map((day) => (
                   <article
                     key={day.id}
-                    className="grid gap-5 rounded-[28px] border border-[#e3e8df] p-5 xl:grid-cols-[220px_minmax(0,1fr)] xl:p-6"
+                    className="grid min-w-0 gap-5 rounded-[28px] border border-[#e5dfd6] p-5 lg:grid-cols-1 2xl:grid-cols-[220px_minmax(0,1fr)] 2xl:p-6"
                   >
                     <div className="space-y-4 self-start">
                       <div className="relative overflow-hidden rounded-[20px]">
@@ -716,9 +809,9 @@ export default function ItinerariesPage() {
                             {day.stays.map((stay) => (
                               <div
                                 key={`${stay.name}-${stay.location}`}
-                                className="text-sm leading-7 text-[#4f5c54]"
+                                className="text-sm leading-7 text-[#6b6964]"
                               >
-                                <p className="font-semibold text-[#25362a]">{stay.name}</p>
+                                <p className="font-semibold text-[#383836]">{stay.name}</p>
                                 <p>{stay.location}</p>
                                 <p>
                                   {stay.nights} night{stay.nights > 1 ? 's' : ''}
@@ -731,11 +824,11 @@ export default function ItinerariesPage() {
                       ) : null}
 
                       {day.transfers?.length ? (
-                        <div className="rounded-[22px] bg-[#f8faf7] p-5">
-                          <p className="text-[11px] uppercase tracking-[0.18em] text-[#7d907f]">
+                        <div className="rounded-[22px] bg-[#faf7f2] p-5">
+                          <p className="text-[11px] uppercase tracking-[0.18em] text-[#a56f1b]">
                             Transfers
                           </p>
-                          <ul className="mt-3 space-y-2 text-sm leading-7 text-[#4f5c54]">
+                          <ul className="mt-3 space-y-2 text-sm leading-7 text-[#6b6964]">
                             {day.transfers.map((transfer) => (
                               <li key={transfer}>{transfer}</li>
                             ))}
@@ -744,11 +837,11 @@ export default function ItinerariesPage() {
                       ) : null}
 
                       {day.meals?.length ? (
-                        <div className="rounded-[22px] bg-[#f8faf7] p-5">
-                          <p className="text-[11px] uppercase tracking-[0.18em] text-[#7d907f]">
+                        <div className="rounded-[22px] bg-[#faf7f2] p-5">
+                          <p className="text-[11px] uppercase tracking-[0.18em] text-[#a56f1b]">
                             Meals
                           </p>
-                          <ul className="mt-3 space-y-2 text-sm leading-7 text-[#4f5c54]">
+                          <ul className="mt-3 space-y-2 text-sm leading-7 text-[#6b6964]">
                             {day.meals.map((item) => (
                               <li key={item}>{item}</li>
                             ))}
@@ -761,7 +854,7 @@ export default function ItinerariesPage() {
                           <p className="text-[11px] uppercase tracking-[0.18em] text-[#8d7a43]">
                             Notes
                           </p>
-                          <ul className="mt-3 space-y-2 text-sm leading-7 text-[#4f5c54]">
+                          <ul className="mt-3 space-y-2 text-sm leading-7 text-[#6b6964]">
                             {day.notes.map((note) => (
                               <li key={note} className="flex items-start gap-3">
                                 <span className="mt-3 h-1.5 w-1.5 rounded-full bg-[#8d7a43]" />
@@ -777,25 +870,25 @@ export default function ItinerariesPage() {
                         <p className="text-[11px] uppercase tracking-[0.18em] text-[#8d7a43]">
                           Day {day.dayNumber}
                         </p>
-                        <h3 className="mt-2 text-2xl font-semibold text-[#223329] lg:text-[2rem]">
+                        <h3 className="mt-2 text-2xl font-semibold text-[#383836] lg:text-[2rem]">
                           {day.title}
                         </h3>
-                        <div className="mt-3 flex flex-wrap gap-3 text-xs uppercase tracking-[0.16em] text-[#6d7d71]">
+                        <div className="mt-3 flex flex-wrap gap-3 text-xs uppercase tracking-[0.16em] text-[#716e68]">
                           <span className="rounded-full bg-[#f6f4ee] px-3 py-1">{day.dateLabel}</span>
-                          <span className="rounded-full bg-[#f8faf7] px-3 py-1">{day.location}</span>
+                          <span className="rounded-full bg-[#faf7f2] px-3 py-1">{day.location}</span>
                         </div>
-                        <p className="mt-4 text-sm leading-7 text-[#526157]">{day.summary}</p>
+                        <p className="mt-4 text-sm leading-7 text-[#6b6964]">{day.summary}</p>
                       </div>
 
-                      <div className="rounded-[22px] bg-[#f8faf7] p-5">
-                        <p className="text-[11px] uppercase tracking-[0.18em] text-[#7d907f]">
+                      <div className="rounded-[22px] bg-[#faf7f2] p-5">
+                        <p className="text-[11px] uppercase tracking-[0.18em] text-[#a56f1b]">
                           Experience Flow
                         </p>
                         <div className="mt-4 space-y-4">
                           {day.activities.map((activity) => (
                             <div
                               key={`${activity.timeLabel}-${activity.title}`}
-                              className="rounded-[18px] border border-[#dfe6dd] bg-white/70 p-4"
+                              className="rounded-[18px] border border-[#ded8cf] bg-white/70 p-4"
                             >
                               <div className="inline-flex rounded-full bg-[#f6f4ee] px-3 py-1.5">
                                 <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[#8d7a43]">
@@ -803,10 +896,10 @@ export default function ItinerariesPage() {
                                 </p>
                               </div>
                               <div className="min-w-0">
-                                <p className="mt-3 break-words text-base font-semibold leading-6 text-[#25362a]">
+                                <p className="mt-3 break-words text-base font-semibold leading-6 text-[#383836]">
                                   {activity.title}
                                 </p>
-                                <p className="mt-2 break-words text-sm leading-7 text-[#526157]">
+                                <p className="mt-2 break-words text-sm leading-7 text-[#6b6964]">
                                   {activity.description}
                                 </p>
                               </div>

@@ -4,11 +4,98 @@
 
 :root {
   color-scheme: light;
+  --font-heading: 'Cinzel', serif;
+  --font-body: 'Lato', 'Segoe UI', sans-serif;
+  --os-charcoal: #383836;
+  --os-charcoal-soft: #4b4a47;
+  --os-ivory: #faf7f2;
+  --os-stone: #f1eeea;
+  --os-border: rgba(56, 56, 54, 0.12);
+  --os-gold: #fbb040;
+  --os-gold-dark: #dd931e;
+  --os-copy: rgba(56, 56, 54, 0.76);
+  --os-muted: rgba(56, 56, 54, 0.56);
 }
 
-body {
-  font-family: 'Manrope', 'Avenir Next', 'SF Pro Text', 'Segoe UI', sans-serif;
-  @apply antialiased;
-  background: radial-gradient(circle at top right, #f8fbf6 0%, #f0f4ef 48%, #ecf1eb 100%);
-  color: #1f2d23;
+@layer base {
+  html {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    @apply bg-surface-light font-body text-text-primary antialiased;
+    background-image:
+      radial-gradient(circle at 88% -10%, rgba(251, 176, 64, 0.16), transparent 32rem),
+      linear-gradient(145deg, #faf7f2 0%, #f1eeea 58%, #ece6dd 100%);
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply font-heading;
+  }
+
+  ::selection {
+    background-color: rgba(251, 176, 64, 0.32);
+    color: var(--os-charcoal);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--os-gold);
+    outline-offset: 3px;
+  }
+
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: #ece6dd;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: rgba(56, 56, 54, 0.25);
+    border-radius: 999px;
+  }
+}
+
+@layer components {
+  .os-panel {
+    @apply rounded-[1.75rem] border border-surface-border backdrop-blur-sm;
+    background: rgba(255, 255, 255, 0.78);
+    box-shadow: 0 18px 48px rgba(56, 56, 54, 0.07);
+  }
+
+  .os-kicker {
+    @apply inline-flex items-center gap-3 text-[10px] font-bold uppercase tracking-[0.28em] text-accent-dark;
+  }
+
+  .os-kicker::before {
+    content: '';
+    @apply h-px w-8 bg-accent;
+  }
+
+  .os-page-enter {
+    animation: osReveal 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+
+  .btn-primary {
+    @apply inline-flex items-center justify-center gap-2 rounded-full bg-accent px-7 py-3.5 text-sm font-bold uppercase tracking-[0.14em] text-surface-dark transition-all duration-300 hover:bg-accent-light;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }

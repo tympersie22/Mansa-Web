@@ -2,9 +2,8 @@
 
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Lock, Mail, Eye, EyeOff, AlertCircle } from 'lucide-react';
-import { isSupabaseConfigured, supabase } from '@/lib/supabase';
-import { useRouter } from 'next/navigation';
+import { AlertCircle, ArrowRight, Eye, EyeOff, Lock, Mail } from 'lucide-react';
+import { signIn } from 'next-auth/react';
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');
@@ -12,113 +11,166 @@ export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
-  const router = useRouter();
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  async function handleSubmit(event: React.FormEvent) {
+    event.preventDefault();
     setError('');
-
-    if (!isSupabaseConfigured || !supabase) {
-      setError('Supabase is not configured. Add environment variables and try again.');
-      return;
-    }
-
     if (!email || !password) {
-      setError('Please fill in all fields');
+      setError('Enter your email and password.');
       return;
     }
 
     setLoading(true);
     try {
-      const { error: signInError } = await supabase.auth.signInWithPassword({ email, password });
-      if (signInError) {
-        setError(signInError.message || 'Invalid email or password');
+      const result = await signIn('credentials', {
+        email,
+        password,
+        redirect: false,
+        callbackUrl: '/itineraries',
+      });
+      if (!result?.ok) {
+        setError('Invalid credentials or Mansa OS access has not been provisioned.');
         return;
       }
-      router.push('/');
+      // Force a fresh session read after Auth.js writes the JWT cookie.
+      window.location.assign(result.url || '/itineraries');
     } catch {
-      setError('Login failed. Please try again.');
+      setError('Mansa OS could not sign you in. Please retry.');
     } finally {
       setLoading(false);
     }
-  };
+  }
 
   return (
-    <div className="min-h-screen bg-[#161715] flex items-center justify-center p-4">
-      <motion.div className="w-full max-w-md" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
-        <div className="text-center mb-8">
-          <div className="w-16 h-16 bg-[#fbb040] rounded-2xl flex items-center justify-center mx-auto mb-4">
-            <span className="text-[#2a2417] font-bold text-2xl">M</span>
+    <main className="relative min-h-screen overflow-hidden bg-surface-dark text-white">
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_78%_18%,rgba(251,176,64,0.18),transparent_28rem),linear-gradient(135deg,#2f302d_0%,#383836_52%,#242522_100%)]" />
+      <div className="absolute -left-24 top-1/3 h-80 w-80 rounded-full border border-white/[0.06]" />
+      <div className="absolute -left-8 top-[42%] h-52 w-52 rounded-full border border-accent/15" />
+
+      <div className="relative grid min-h-screen lg:grid-cols-[1.05fr_0.95fr]">
+        <section className="hidden flex-col justify-between border-r border-white/10 p-12 lg:flex xl:p-16">
+          <div>
+            <p className="font-heading text-2xl tracking-[0.2em]">MANSA OS</p>
+            <p className="mt-2 text-[10px] uppercase tracking-[0.32em] text-white/42">
+              Travel operating system
+            </p>
           </div>
-          <h1 className="text-2xl font-bold text-white">Mansa Tours & Travel</h1>
-          <p className="text-gray-400 mt-1">Itinerary Builder Admin</p>
-        </div>
 
-        <div className="bg-[#22231f] rounded-xl border border-[#3a3d36] p-8">
-          <h2 className="text-xl font-semibold text-white mb-6">Sign in to your account</h2>
+          <motion.div
+            initial={{ opacity: 0, y: 24 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
+            className="max-w-xl"
+          >
+            <p className="os-kicker">Built for considered travel</p>
+            <h1 className="mt-6 text-5xl leading-[1.08] xl:text-6xl">
+              Every journey,
+              <br />
+              held in one place.
+            </h1>
+            <p className="mt-6 max-w-lg text-base leading-8 text-white/55">
+              Mansa OS connects guest relationships, trusted partners, itinerary design, and
+              commercial decisions into one controlled operational workspace.
+            </p>
+          </motion.div>
 
-          <form onSubmit={handleSubmit} className="space-y-5">
-            <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">Email Address</label>
-              <div className="relative">
-                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-                <input
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder="admin@mansa.travel"
-                  className="w-full bg-[#2d302a] border border-[#484c44] rounded-lg pl-10 pr-4 py-3 text-white placeholder-gray-400 focus:ring-2 focus:ring-[#fbb040] focus:border-transparent"
-                />
-              </div>
+          <p className="text-[10px] uppercase tracking-[0.22em] text-white/30">
+            Mansa Tours & Travel · Zanzibar
+          </p>
+        </section>
+
+        <section className="flex items-center justify-center p-5 sm:p-10 lg:p-14">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.08, ease: [0.22, 1, 0.36, 1] }}
+            className="w-full max-w-md"
+          >
+            <div className="mb-9 lg:hidden">
+              <p className="font-heading text-xl tracking-[0.18em]">MANSA OS</p>
+              <p className="mt-1 text-[9px] uppercase tracking-[0.28em] text-white/42">
+                Travel operating system
+              </p>
             </div>
 
-            <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">Password</label>
-              <div className="relative">
-                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-                <input
-                  type={showPassword ? 'text' : 'password'}
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  placeholder="Enter your password"
-                  className="w-full bg-[#2d302a] border border-[#484c44] rounded-lg pl-10 pr-12 py-3 text-white placeholder-gray-400 focus:ring-2 focus:ring-[#fbb040] focus:border-transparent"
-                />
+            <div className="rounded-[2rem] border border-white/10 bg-white/[0.07] p-6 shadow-2xl backdrop-blur-xl sm:p-9">
+              <p className="text-[10px] font-bold uppercase tracking-[0.28em] text-accent">
+                Secure workspace
+              </p>
+              <h2 className="mt-4 text-3xl">Welcome back</h2>
+              <p className="mt-3 text-sm leading-6 text-white/48">
+                Sign in with your provisioned Mansa OS account.
+              </p>
+
+              <form onSubmit={handleSubmit} className="mt-8 space-y-5">
+                <label className="block">
+                  <span className="mb-2 block text-[10px] font-bold uppercase tracking-[0.18em] text-white/52">
+                    Email address
+                  </span>
+                  <span className="relative block">
+                    <Mail className="absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-white/35" />
+                    <input
+                      type="email"
+                      autoComplete="email"
+                      value={email}
+                      onChange={(event) => setEmail(event.target.value)}
+                      placeholder="admin@mansa.travel"
+                      className="w-full rounded-2xl border border-white/12 bg-black/10 py-3.5 pl-11 pr-4 text-sm text-white outline-none placeholder:text-white/26 focus:border-accent focus:ring-2 focus:ring-accent/15"
+                    />
+                  </span>
+                </label>
+
+                <label className="block">
+                  <span className="mb-2 block text-[10px] font-bold uppercase tracking-[0.18em] text-white/52">
+                    Password
+                  </span>
+                  <span className="relative block">
+                    <Lock className="absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-white/35" />
+                    <input
+                      type={showPassword ? 'text' : 'password'}
+                      autoComplete="current-password"
+                      value={password}
+                      onChange={(event) => setPassword(event.target.value)}
+                      placeholder="Enter your password"
+                      className="w-full rounded-2xl border border-white/12 bg-black/10 py-3.5 pl-11 pr-12 text-sm text-white outline-none placeholder:text-white/26 focus:border-accent focus:ring-2 focus:ring-accent/15"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowPassword((current) => !current)}
+                      aria-label={showPassword ? 'Hide password' : 'Show password'}
+                      className="absolute right-4 top-1/2 -translate-y-1/2 text-white/35 transition hover:text-white"
+                    >
+                      {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                    </button>
+                  </span>
+                </label>
+
+                {error ? (
+                  <div
+                    role="alert"
+                    className="flex items-start gap-3 rounded-2xl border border-red-300/20 bg-red-400/10 px-4 py-3"
+                  >
+                    <AlertCircle className="mt-0.5 h-4 w-4 shrink-0 text-red-300" />
+                    <p className="text-sm leading-6 text-red-200">{error}</p>
+                  </div>
+                ) : null}
+
                 <button
-                  type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-white transition"
+                  type="submit"
+                  disabled={loading}
+                  className="flex w-full items-center justify-center gap-3 rounded-full bg-accent px-6 py-3.5 text-sm font-bold uppercase tracking-[0.14em] text-surface-dark transition duration-300 hover:bg-accent-light disabled:cursor-wait disabled:opacity-60"
                 >
-                  {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                  {loading ? (
+                    <span className="h-4 w-4 animate-spin rounded-full border-2 border-surface-dark/30 border-t-surface-dark" />
+                  ) : null}
+                  {loading ? 'Signing in' : 'Enter Mansa OS'}
+                  {!loading ? <ArrowRight className="h-4 w-4" /> : null}
                 </button>
-              </div>
+              </form>
             </div>
-
-            {error && (
-              <div className="flex items-center space-x-2 bg-red-500/10 border border-red-500/30 rounded-lg px-4 py-3">
-                <AlertCircle className="w-5 h-5 text-red-400 flex-shrink-0" />
-                <p className="text-red-400 text-sm">{error}</p>
-              </div>
-            )}
-
-            <button
-              type="submit"
-              disabled={loading}
-              className="w-full bg-[#fbb040] hover:bg-[#f1a52f] text-[#241f15] py-3 rounded-lg font-semibold transition disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              {loading ? (
-                <span className="flex items-center justify-center space-x-2">
-                  <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                  <span>Signing in...</span>
-                </span>
-              ) : (
-                'Sign In'
-              )}
-            </button>
-          </form>
-        </div>
-
-        <p className="text-center text-gray-500 text-sm mt-6">Mansa itinerary and journey planning workspace</p>
-      </motion.div>
-    </div>
+          </motion.div>
+        </section>
+      </div>
+    </main>
   );
 }

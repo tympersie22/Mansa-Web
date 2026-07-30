@@ -16,15 +16,16 @@ export function generateStaticParams() {
   }));
 }
 
-export default function DestinationRegionSlugPage({
+export default async function DestinationRegionSlugPage({
   params,
 }: {
-  params: { region: string; slug: string };
+  params: Promise<{ region: string; slug: string }>;
 }) {
-  const destination = getDestinationByRegionAndSlug(params.region, params.slug);
+  const { region, slug } = await params;
+  const destination = getDestinationByRegionAndSlug(region, slug);
 
   if (!destination) {
-    const fallback = getDestinationBySlug(params.slug);
+    const fallback = getDestinationBySlug(slug);
     if (fallback) {
       redirect(`/destinations/${fallback.routeSegment || fallback.region}/${fallback.slug}`);
     }

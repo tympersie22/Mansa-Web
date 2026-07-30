@@ -3,8 +3,9 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { fetchPublishedItineraryBySlug } from '@/lib/itinerary-data';
 
-export default async function ItineraryPage({ params }: { params: { slug: string } }) {
-  const itinerary = await fetchPublishedItineraryBySlug(params.slug);
+export default async function ItineraryPage({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params;
+  const itinerary = await fetchPublishedItineraryBySlug(slug);
   if (!itinerary) notFound();
   const sortedDays = itinerary.days.slice().sort((a, b) => a.dayNumber - b.dayNumber);
 

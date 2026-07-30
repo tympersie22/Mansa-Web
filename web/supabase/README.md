@@ -1,18 +1,30 @@
 ## MANSA Supabase Setup
 
-Run these files in order inside Supabase:
+Apply every file in `supabase/migrations` in filename order. Prefer the
+Supabase CLI so the remote migration history remains synchronized with the
+repository. Apply `supabase/seed.sql` and `supabase/itinerary-seed.sql` only
+when sample content is required.
 
-1. `supabase/migrations/20260403_create_mansa_backend.sql`
-2. `supabase/migrations/20260403_create_mansa_itineraries.sql`
-3. `supabase/seed.sql`
-4. `supabase/itinerary-seed.sql`
+After applying migrations, verify the authorization boundary:
+
+```bash
+psql "$DATABASE_URL" \
+  --set ON_ERROR_STOP=1 \
+  --file supabase/verify/verify_mansa_authorization.sql
+```
+
+The verification fails if any operations table is missing RLS, if direct
+operations writes are exposed to `authenticated`, or if users can provision
+or elevate their own admin profile.
 
 What they do:
 
 - create the MANSA experience CMS tables
 - create journey and planning inquiry tables
 - create itinerary builder tables for admin and guest-facing itineraries
+- create the customer, supplier, trip, live itinerary, and quotation operations schema
 - enable RLS policies for public website access
+- restrict operations mutations to the role-checked server API
 - seed the six experience categories
 - seed core sample experiences including Mnemba Island Marine Experience
 - seed the sample MIS Group Trip itinerary used by the new builder

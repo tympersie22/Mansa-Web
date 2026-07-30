@@ -105,7 +105,7 @@ export default function ExperienceBrochureDrawer({
           />
 
           <div
-            className="absolute inset-0 flex items-end justify-center"
+            className="absolute inset-0 flex items-end justify-center px-0 pt-4 md:px-4 md:pt-6"
             onMouseDown={(event) => {
               if (event.target === event.currentTarget) onClose();
             }}
@@ -115,7 +115,7 @@ export default function ExperienceBrochureDrawer({
               role="dialog"
               aria-modal="true"
               aria-labelledby="experience-brochure-title"
-              className="flex max-h-[92vh] w-full max-w-5xl flex-col overflow-hidden rounded-t-[2rem] bg-[#f5f1e8] shadow-[0_-18px_60px_rgba(13,19,15,0.28)] md:mb-6 md:rounded-[2rem]"
+              className="flex max-h-[calc(100vh-1rem)] w-full max-w-5xl flex-col overflow-hidden rounded-t-[2rem] bg-[#f5f1e8] shadow-[0_-18px_60px_rgba(13,19,15,0.28)] md:max-h-[calc(100vh-3rem)] md:rounded-[2rem]"
               initial={{ y: '100%' }}
               animate={{ y: 0 }}
               exit={{ y: '100%' }}
@@ -132,7 +132,7 @@ export default function ExperienceBrochureDrawer({
                 <div className="h-1.5 w-14 rounded-full bg-[#d4cab5]" />
               </div>
 
-              <div className="overflow-y-auto px-4 pb-5 md:px-6 md:pb-6">
+              <div className="overflow-y-auto px-4 pb-5 pt-2 md:px-6 md:pb-6 md:pt-3">
                 <div className="relative overflow-hidden rounded-[1.9rem] bg-[#23302b] text-white">
                   <div className="absolute inset-0">
                     <Image

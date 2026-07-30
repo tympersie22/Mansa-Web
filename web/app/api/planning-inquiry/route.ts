@@ -75,7 +75,9 @@ async function createJourneySnapshot(input: PlanningInquiryInput) {
           experience_id: experienceId,
         };
       })
-      .filter(Boolean);
+      .filter(
+        (item): item is { journey_id: string; experience_id: string } => item !== null
+      );
 
     if (journeyItems.length) {
       const { error: itemsError } = await supabase.from('journey_items').insert(journeyItems);

@@ -1,0 +1,292 @@
+import type { OperationResource } from './operations-config';
+
+export type OperationField = {
+  name: string;
+  label: string;
+  type?: 'text' | 'email' | 'number' | 'date' | 'time' | 'textarea' | 'select' | 'checkbox';
+  required?: boolean;
+  placeholder?: string;
+  options?: Array<{ value: string; label: string }>;
+};
+
+export type OperationPageDefinition = {
+  resource: OperationResource;
+  eyebrow: string;
+  title: string;
+  description: string;
+  singular: string;
+  columns: Array<{ name: string; label: string }>;
+  fields: OperationField[];
+};
+
+const statusOptions = (values: string[]) =>
+  values.map((value) => ({
+    value,
+    label: value.replaceAll('_', ' ').replace(/\b\w/g, (letter) => letter.toUpperCase()),
+  }));
+
+export const operationPages: Record<OperationResource, OperationPageDefinition> = {
+  customers: {
+    resource: 'customers',
+    eyebrow: 'CRM',
+    title: 'Customers',
+    description: 'Keep guest contact details, preferences, source, and relationship history in one place.',
+    singular: 'customer',
+    columns: [
+      { name: 'full_name', label: 'Customer' },
+      { name: 'email', label: 'Email' },
+      { name: 'phone_whatsapp', label: 'Phone / WhatsApp' },
+      { name: 'status', label: 'Status' },
+      { name: 'source', label: 'Source' },
+    ],
+    fields: [
+      { name: 'full_name', label: 'Full name', required: true },
+      { name: 'email', label: 'Email', type: 'email' },
+      { name: 'phone_whatsapp', label: 'Phone / WhatsApp' },
+      { name: 'nationality', label: 'Nationality' },
+      { name: 'source', label: 'Source' },
+      { name: 'status', label: 'Status', type: 'select', options: statusOptions(['lead', 'active', 'past_guest', 'inactive']) },
+      { name: 'tags', label: 'Tags', placeholder: 'honeymoon, repeat guest, VIP' },
+      { name: 'notes', label: 'Notes', type: 'textarea' },
+    ],
+  },
+  inquiries: {
+    resource: 'inquiries',
+    eyebrow: 'CRM',
+    title: 'Planning Inquiries',
+    description: 'Qualify incoming travel requests, manage follow-ups, and prepare them for conversion into trips.',
+    singular: 'inquiry',
+    columns: [
+      { name: 'full_name', label: 'Guest' },
+      { name: 'email', label: 'Email' },
+      { name: 'status', label: 'Stage' },
+      { name: 'priority', label: 'Priority' },
+      { name: 'guest_count', label: 'Guests' },
+      { name: 'travel_start_date', label: 'Travel start' },
+    ],
+    fields: [
+      { name: 'full_name', label: 'Full name', required: true },
+      { name: 'email', label: 'Email', type: 'email', required: true },
+      { name: 'phone_whatsapp', label: 'Phone / WhatsApp' },
+      { name: 'status', label: 'Stage', type: 'select', options: statusOptions(['new', 'contacted', 'qualified', 'proposal_sent', 'converted', 'closed']) },
+      { name: 'priority', label: 'Priority', type: 'select', options: statusOptions(['low', 'normal', 'high', 'urgent']) },
+      { name: 'travel_start_date', label: 'Travel start', type: 'date' },
+      { name: 'travel_end_date', label: 'Travel end', type: 'date' },
+      { name: 'guest_count', label: 'Guests', type: 'number' },
+      { name: 'budget_min', label: 'Budget from', type: 'number' },
+      { name: 'budget_max', label: 'Budget to', type: 'number' },
+      { name: 'destinations', label: 'Destinations', placeholder: 'Zanzibar, Serengeti' },
+      { name: 'travel_style', label: 'Travel style' },
+      { name: 'next_follow_up_at', label: 'Next follow-up', type: 'date' },
+      { name: 'internal_notes', label: 'Internal notes', type: 'textarea' },
+    ],
+  },
+  suppliers: {
+    resource: 'suppliers',
+    eyebrow: 'Partner Network',
+    title: 'Suppliers',
+    description: 'Manage the trusted operators, guides, transport teams, restaurants, and service partners behind each trip.',
+    singular: 'supplier',
+    columns: [
+      { name: 'name', label: 'Supplier' },
+      { name: 'supplier_type', label: 'Type' },
+      { name: 'contact_name', label: 'Contact' },
+      { name: 'phone_whatsapp', label: 'Phone' },
+      { name: 'status', label: 'Status' },
+    ],
+    fields: [
+      { name: 'name', label: 'Supplier name', required: true },
+      { name: 'supplier_type', label: 'Type', type: 'select', required: true, options: statusOptions(['hotel', 'transport', 'experience', 'guide', 'restaurant', 'flight', 'other']) },
+      { name: 'contact_name', label: 'Contact name' },
+      { name: 'email', label: 'Email', type: 'email' },
+      { name: 'phone_whatsapp', label: 'Phone / WhatsApp' },
+      { name: 'location', label: 'Location' },
+      { name: 'website', label: 'Website' },
+      { name: 'payment_terms', label: 'Payment terms' },
+      { name: 'status', label: 'Status', type: 'select', options: statusOptions(['active', 'preferred', 'inactive']) },
+      { name: 'notes', label: 'Notes', type: 'textarea' },
+    ],
+  },
+  hotels: {
+    resource: 'hotels',
+    eyebrow: 'Partner Network',
+    title: 'Hotels',
+    description: 'Maintain a structured accommodation directory with contacts, operational details, and commercial notes.',
+    singular: 'hotel',
+    columns: [
+      { name: 'name', label: 'Hotel' },
+      { name: 'location', label: 'Location' },
+      { name: 'star_rating', label: 'Rating' },
+      { name: 'contact_name', label: 'Contact' },
+      { name: 'status', label: 'Status' },
+    ],
+    fields: [
+      { name: 'name', label: 'Hotel name', required: true },
+      { name: 'location', label: 'Location', required: true },
+      { name: 'supplier_id', label: 'Supplier ID', placeholder: 'Optional linked supplier UUID' },
+      { name: 'star_rating', label: 'Star rating', type: 'number' },
+      { name: 'contact_name', label: 'Contact name' },
+      { name: 'email', label: 'Email', type: 'email' },
+      { name: 'phone_whatsapp', label: 'Phone / WhatsApp' },
+      { name: 'website', label: 'Website' },
+      { name: 'amenities', label: 'Amenities', placeholder: 'pool, spa, beachfront' },
+      { name: 'status', label: 'Status', type: 'select', options: statusOptions(['active', 'preferred', 'inactive']) },
+      { name: 'notes', label: 'Notes', type: 'textarea' },
+    ],
+  },
+  'room-types': {
+    resource: 'room-types',
+    eyebrow: 'Accommodation',
+    title: 'Room Types',
+    description: 'Store room configurations and baseline commercial details for each hotel.',
+    singular: 'room type',
+    columns: [
+      { name: 'name', label: 'Room type' },
+      { name: 'hotel_id', label: 'Hotel ID' },
+      { name: 'max_adults', label: 'Adults' },
+      { name: 'meal_plan', label: 'Meal plan' },
+      { name: 'default_sell_price', label: 'Sell price' },
+    ],
+    fields: [
+      { name: 'hotel_id', label: 'Hotel ID', required: true },
+      { name: 'name', label: 'Room type name', required: true },
+      { name: 'description', label: 'Description', type: 'textarea' },
+      { name: 'max_adults', label: 'Maximum adults', type: 'number' },
+      { name: 'max_children', label: 'Maximum children', type: 'number' },
+      { name: 'bed_configuration', label: 'Bed configuration' },
+      { name: 'meal_plan', label: 'Meal plan' },
+      { name: 'default_cost', label: 'Default cost', type: 'number' },
+      { name: 'default_sell_price', label: 'Default sell price', type: 'number' },
+      { name: 'status', label: 'Status', type: 'select', options: statusOptions(['active', 'inactive']) },
+    ],
+  },
+  trips: {
+    resource: 'trips',
+    eyebrow: 'Operations',
+    title: 'Trips',
+    description: 'Convert qualified inquiries into operational journeys while preserving the original customer and inquiry context.',
+    singular: 'trip',
+    columns: [
+      { name: 'title', label: 'Trip' },
+      { name: 'status', label: 'Status' },
+      { name: 'start_date', label: 'Start' },
+      { name: 'end_date', label: 'End' },
+      { name: 'guest_count', label: 'Guests' },
+    ],
+    fields: [
+      { name: 'customer_id', label: 'Customer ID', required: true },
+      { name: 'inquiry_id', label: 'Inquiry ID' },
+      { name: 'title', label: 'Trip title', required: true },
+      { name: 'status', label: 'Status', type: 'select', options: statusOptions(['planning', 'quoted', 'confirmed', 'in_progress', 'completed', 'cancelled']) },
+      { name: 'start_date', label: 'Start date', type: 'date' },
+      { name: 'end_date', label: 'End date', type: 'date' },
+      { name: 'guest_count', label: 'Guests', type: 'number' },
+      { name: 'currency', label: 'Currency' },
+      { name: 'internal_notes', label: 'Internal notes', type: 'textarea' },
+    ],
+  },
+  'trip-days': {
+    resource: 'trip-days',
+    eyebrow: 'Live Itinerary',
+    title: 'Trip Days',
+    description: 'Build the day-by-day operational structure for active trips.',
+    singular: 'trip day',
+    columns: [
+      { name: 'trip_id', label: 'Trip ID' },
+      { name: 'day_number', label: 'Day' },
+      { name: 'trip_date', label: 'Date' },
+      { name: 'title', label: 'Title' },
+      { name: 'location', label: 'Location' },
+    ],
+    fields: [
+      { name: 'trip_id', label: 'Trip ID', required: true },
+      { name: 'day_number', label: 'Day number', type: 'number', required: true },
+      { name: 'trip_date', label: 'Date', type: 'date' },
+      { name: 'title', label: 'Day title', required: true },
+      { name: 'location', label: 'Location' },
+      { name: 'summary', label: 'Summary', type: 'textarea' },
+      { name: 'notes', label: 'Operations notes', type: 'textarea' },
+    ],
+  },
+  'itinerary-items': {
+    resource: 'itinerary-items',
+    eyebrow: 'Live Itinerary',
+    title: 'Itinerary Items',
+    description: 'Coordinate accommodation, experiences, transfers, flights, meals, and guide services in execution order.',
+    singular: 'itinerary item',
+    columns: [
+      { name: 'title', label: 'Item' },
+      { name: 'item_type', label: 'Type' },
+      { name: 'start_time', label: 'Start' },
+      { name: 'status', label: 'Status' },
+      { name: 'sell_amount', label: 'Sell' },
+    ],
+    fields: [
+      { name: 'trip_day_id', label: 'Trip day ID', required: true },
+      { name: 'item_type', label: 'Type', type: 'select', required: true, options: statusOptions(['accommodation', 'experience', 'transfer', 'flight', 'meal', 'guide', 'note', 'other']) },
+      { name: 'title', label: 'Title', required: true },
+      { name: 'supplier_id', label: 'Supplier ID' },
+      { name: 'hotel_id', label: 'Hotel ID' },
+      { name: 'room_type_id', label: 'Room type ID' },
+      { name: 'start_time', label: 'Start time', type: 'time' },
+      { name: 'end_time', label: 'End time', type: 'time' },
+      { name: 'location', label: 'Location' },
+      { name: 'status', label: 'Status', type: 'select', options: statusOptions(['planned', 'requested', 'confirmed', 'cancelled', 'completed']) },
+      { name: 'quantity', label: 'Quantity', type: 'number' },
+      { name: 'cost_amount', label: 'Cost', type: 'number' },
+      { name: 'sell_amount', label: 'Sell', type: 'number' },
+      { name: 'description', label: 'Description', type: 'textarea' },
+      { name: 'notes', label: 'Operations notes', type: 'textarea' },
+    ],
+  },
+  quotations: {
+    resource: 'quotations',
+    eyebrow: 'Commercial',
+    title: 'Quotations',
+    description: 'Create revisioned quotations from immutable trip and customer snapshots.',
+    singular: 'quotation',
+    columns: [
+      { name: 'quotation_number', label: 'Quotation' },
+      { name: 'revision', label: 'Revision' },
+      { name: 'status', label: 'Status' },
+      { name: 'total_amount', label: 'Total' },
+      { name: 'valid_until', label: 'Valid until' },
+    ],
+    fields: [
+      { name: 'trip_id', label: 'Trip ID', required: true },
+      { name: 'customer_id', label: 'Customer ID', required: true },
+      { name: 'revision', label: 'Revision', type: 'number' },
+      { name: 'status', label: 'Status', type: 'select', options: statusOptions(['draft', 'issued', 'accepted', 'declined', 'expired', 'superseded']) },
+      { name: 'currency', label: 'Currency' },
+      { name: 'subtotal', label: 'Subtotal', type: 'number' },
+      { name: 'tax_amount', label: 'Tax', type: 'number' },
+      { name: 'total_amount', label: 'Total', type: 'number' },
+      { name: 'valid_until', label: 'Valid until', type: 'date' },
+      { name: 'terms', label: 'Terms', type: 'textarea' },
+    ],
+  },
+  'quotation-items': {
+    resource: 'quotation-items',
+    eyebrow: 'Commercial',
+    title: 'Quotation Items',
+    description: 'Capture priced line items and their source snapshots for each draft quotation.',
+    singular: 'quotation item',
+    columns: [
+      { name: 'description', label: 'Item' },
+      { name: 'category', label: 'Category' },
+      { name: 'quantity', label: 'Quantity' },
+      { name: 'unit_price', label: 'Unit price' },
+      { name: 'total_amount', label: 'Total' },
+    ],
+    fields: [
+      { name: 'quotation_id', label: 'Quotation ID', required: true },
+      { name: 'trip_day_id', label: 'Trip day ID' },
+      { name: 'itinerary_item_id', label: 'Itinerary item ID' },
+      { name: 'category', label: 'Category', required: true },
+      { name: 'description', label: 'Description', required: true },
+      { name: 'quantity', label: 'Quantity', type: 'number' },
+      { name: 'unit_price', label: 'Unit price', type: 'number' },
+      { name: 'sort_order', label: 'Sort order', type: 'number' },
+    ],
+  },
+};
