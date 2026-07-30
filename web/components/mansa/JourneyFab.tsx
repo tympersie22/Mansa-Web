@@ -7,6 +7,7 @@ import { readJourney, subscribeJourney } from '@/lib/journey-storage';
 
 export default function JourneyFab() {
   const pathname = usePathname();
+  const currentPathname = pathname ?? '';
   const [count, setCount] = useState(0);
 
   useEffect(() => {
@@ -16,11 +17,11 @@ export default function JourneyFab() {
   }, []);
 
   const shouldShow =
-    pathname.startsWith('/experiences') ||
-    pathname.startsWith('/journeys') ||
-    pathname.startsWith('/destinations') ||
-    pathname === '/your-journey' ||
-    pathname === '/plan-your-trip';
+    currentPathname.startsWith('/experiences') ||
+    currentPathname.startsWith('/journeys') ||
+    currentPathname.startsWith('/destinations') ||
+    currentPathname === '/your-journey' ||
+    currentPathname === '/plan-your-trip';
 
   if (!shouldShow) return null;
 
